@@ -25,6 +25,10 @@ commands:
                 default: GOOGLE_PROJECT_ID
                 description: The Google project ID to connect with via the gcloud CLI.
                 type: env_var_name
+            google-bucket-name:
+                default: GOOGLE_BUCKET_NAME
+                description: The Google bucket name to upload to.
+                type: env_var_name
         steps:
             - run:
                 command: |
@@ -43,6 +47,7 @@ commands:
                       echo "ERROR: Set <<parameters.google-compute-zone>> or <<parameters.google-compute-region>> env variable" >&2
                       exit 1
                     fi
+                    gsutil -m cp -r src/* gs://$<< parameters.google-bucket-name >>/
                 name: Initialize gcloud CLI to connect to Google Cloud
     install:
         description: |
@@ -175,5 +180,5 @@ jobs:
                 google-compute-region: <<parameters.google-compute-region>>
                 google-compute-zone: <<parameters.google-compute-zone>>
                 google-project-id: <<parameters.google-project-id>>
-            - copy-to-gcp-bucket:
-                google-bucket-name: << parameters.google-bucket-name >>
+            #- copy-to-gcp-bucket:
+            #    google-bucket-name: << parameters.google-bucket-name >>
