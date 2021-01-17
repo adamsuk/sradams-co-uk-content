@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  orb-tools: circleci/orb-tools@10.0
+
 commands:
     initialize:
         description: Initilize the gcloud CLI.
