@@ -83,6 +83,18 @@ commands:
             - run:
                 command: gcloud version
                 name: gcloud CLI version
+    copy-to-gcp-bucket:
+        description: Copy to a gcloud bucket.
+        parameters:
+            google-bucket-name:
+                default: GOOGLE_BUCKET_NAME
+                description: The Google bucket name to upload to.
+                type: env_var_name
+        steps:
+            - run:
+                command: |
+                    gsutil -m cp -r ./src/* gs://${<< parameters.google-bucket-name >>}
+                name: Copy repo folder to gcloud bucket
 
 workflows:
     install_and_configure_cli:
@@ -152,6 +164,10 @@ jobs:
                 default: GOOGLE_PROJECT_ID
                 description: The Google project ID to connect with via the gcloud CLI
                 type: env_var_name
+            google-bucket-name:
+                default: GOOGLE_BUCKET_NAME
+                description: The Google bucket name to upload to.
+                type: env_var_name
         steps:
             - install
             - initialize:
@@ -159,3 +175,5 @@ jobs:
                 google-compute-region: <<parameters.google-compute-region>>
                 google-compute-zone: <<parameters.google-compute-zone>>
                 google-project-id: <<parameters.google-project-id>>
+            - copy-to-gcp-bucket:
+                google-bucket-name: << parameters.google-bucket-name >>
