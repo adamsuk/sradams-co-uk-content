@@ -25,10 +25,6 @@ commands:
                 default: GOOGLE_PROJECT_ID
                 description: The Google project ID to connect with via the gcloud CLI.
                 type: env_var_name
-            google-bucket-name:
-                default: GOOGLE_BUCKET_NAME
-                description: The Google bucket name to upload to.
-                type: env_var_name
         steps:
             - run:
                 command: |
@@ -47,7 +43,6 @@ commands:
                       echo "ERROR: Set <<parameters.google-compute-zone>> or <<parameters.google-compute-region>> env variable" >&2
                       exit 1
                     fi
-                    gsutil -m cp -r src/* gs://$<< parameters.google-bucket-name >>/
                 name: Initialize gcloud CLI to connect to Google Cloud
     install:
         description: |
@@ -57,7 +52,7 @@ commands:
             install the version specified by this orb.
         parameters:
             version:
-                default: 283.0.0
+                default: 323.0.0
                 description: 'Version of the CLI to install. Must contain the full version number as it appears in the URL on this page: https://cloud.google.com/sdk/docs/downloads-versioned-archives'
                 type: string
         steps:
@@ -92,13 +87,12 @@ commands:
         description: Copy to a gcloud bucket.
         parameters:
             google-bucket-name:
-                default: GOOGLE_BUCKET_NAME
                 description: The Google bucket name to upload to.
-                type: env_var_name
+                type: string
         steps:
             - run:
                 command: |
-                    gsutil -m cp -r src/* gs://$<< parameters.google-bucket-name >>/
+                    gsutil -m cp -r src/* gs://<< parameters.google-bucket-name >>/
                 name: Copy repo folder to gcloud bucket
 
 workflows:
@@ -106,6 +100,7 @@ workflows:
         jobs:
             - install_and_initialize_cli:
                 context: gcp-bucket-build
+                google-bucket-name: sradams.co.uk
 
 executors:
     default:
@@ -170,9 +165,8 @@ jobs:
                 description: The Google project ID to connect with via the gcloud CLI
                 type: env_var_name
             google-bucket-name:
-                default: GOOGLE_BUCKET_NAME
                 description: The Google bucket name to upload to.
-                type: env_var_name
+                type: string
         steps:
             - install
             - initialize:
@@ -180,5 +174,5 @@ jobs:
                 google-compute-region: <<parameters.google-compute-region>>
                 google-compute-zone: <<parameters.google-compute-zone>>
                 google-project-id: <<parameters.google-project-id>>
-            #- copy-to-gcp-bucket:
-            #    google-bucket-name: << parameters.google-bucket-name >>
+            - copy-to-gcp-bucket:
+                google-bucket-name: << parameters.google-bucket-name >>
