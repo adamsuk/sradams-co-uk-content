@@ -26,9 +26,6 @@ commands:
                 description: The Google project ID to connect with via the gcloud CLI.
                 type: env_var_name
         steps:
-            - orb-tools/check-env-var-param:
-                command-name: Checking whether required env vars are set to initialize gcloud CLI...
-                param: <<parameters.gcloud-service-key>>,<<parameters.google-project-id>>
             - run:
                 command: |
                     # Store service account
