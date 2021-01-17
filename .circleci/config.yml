@@ -174,5 +174,6 @@ jobs:
                 google-compute-region: <<parameters.google-compute-region>>
                 google-compute-zone: <<parameters.google-compute-zone>>
                 google-project-id: <<parameters.google-project-id>>
+            - checkout
             - copy-to-gcp-bucket:
                 google-bucket-name: << parameters.google-bucket-name >>
