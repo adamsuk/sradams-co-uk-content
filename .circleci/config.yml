@@ -92,7 +92,7 @@ commands:
         steps:
             - run:
                 command: |
-                    gsutil -m cp -r src/* gs://<< parameters.google-bucket-name >>/
+                    gsutil -m cp -r out/* gs://<< parameters.google-bucket-name >>/
                 name: Copy repo folder to gcloud bucket
 
 workflows:
