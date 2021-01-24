@@ -103,6 +103,11 @@ workflows:
                 google-bucket-name: sradams.co.uk
 
 executors:
+    docker-publisher:
+        environment:
+            IMAGE_NAME: adamsuk/sradams-co-uk-content
+        docker:
+            - image: circleci/buildpack-deps:stretch
     default:
         description: The default executor is the CircleCI Python Convenience Image.
         docker:
@@ -138,6 +143,8 @@ executors:
                     Which machine executor image to use. For details, see
                     https://circleci.com/docs/2.0/configuration-reference/#machine
                 type: string
+                
+
 jobs:
     install_and_initialize_cli:
         description: Install gcloud CLI and initialize to connect to Google Cloud.
@@ -175,5 +182,52 @@ jobs:
                 google-compute-zone: <<parameters.google-compute-zone>>
                 google-project-id: <<parameters.google-project-id>>
             - checkout
-            - copy-to-gcp-bucket:
-                google-bucket-name: << parameters.google-bucket-name >>
+            #- copy-to-gcp-bucket:
+            #    google-bucket-name: << parameters.google-bucket-name >>
+
+    build:
+        executor: docker-publisher
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run:
+                name: Build Docker image
+                command: |
+                    docker build -t $IMAGE_NAME:latest .
+            - run:
+                name: Archive Docker image
+                command: docker save -o image.tar $IMAGE_NAME
+            - persist_to_workspace:
+                root: .
+                paths:
+                    - ./image.tar
+    publish-latest:
+        executor: docker-publisher
+        steps:
+            - attach_workspace:
+                at: /tmp/workspace
+            - setup_remote_docker
+            - run:
+                name: Load archived Docker image
+                command: docker load -i /tmp/workspace/image.tar
+            - run:
+                name: Publish Docker Image to Docker Hub
+                command: |
+                    echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                    docker push $IMAGE_NAME:latest
+
+
+workflows:
+  version: 2
+  build-main:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: main
+      - publish-latest:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
