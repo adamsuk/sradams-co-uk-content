@@ -95,12 +95,6 @@ commands:
                     gsutil -m cp -r out/* gs://<< parameters.google-bucket-name >>/
                 name: Copy repo folder to gcloud bucket
 
-workflows:
-    install_and_configure_cli:
-        jobs:
-            - install_and_initialize_cli:
-                context: gcp-bucket-build
-                google-bucket-name: sradams.co.uk
 
 executors:
     docker-publisher:
@@ -219,6 +213,11 @@ jobs:
 
 workflows:
   version: 2
+  install_and_configure_cli:
+    jobs:
+      - install_and_initialize_cli:
+          context: gcp-bucket-build
+          google-bucket-name: sradams.co.uk
   build-main:
     jobs:
       - build:
@@ -226,6 +225,7 @@ workflows:
             branches:
               only: main
       - publish-latest:
+          context: gcp-bucket-build
           requires:
             - build
           filters:
