@@ -2,8 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@10.0
-  gcp-gke: circleci/gcp-gke@0.1
-
+  kubernetes: circleci/kubernetes@0.11
 
 commands:
     initialize:
@@ -96,6 +95,16 @@ commands:
                 command: |
                     gsutil -m cp -r out/* gs://<< parameters.google-bucket-name >>/
                 name: Copy repo folder to gcloud bucket
+    kubectl-replace:
+        description: Replace k8s manifest
+        parameters:
+            k8s-manifest:
+                description: location of file or folder being reapplied
+                type: string
+        steps:
+           - run:
+               command: |
+                    kubectl replace --force -f << parameters.k8s-manifest >>
 
 
 executors:
@@ -170,8 +179,12 @@ jobs:
             google-bucket-name:
                 description: The Google bucket name to upload to.
                 type: string
+            k8s-manifest:
+                description: Location of file or folder being applied
+                type: string
         steps:
             - install
+            - kubernetes/install-kubectl
             - initialize:
                 gcloud-service-key: <<parameters.gcloud-service-key>>
                 google-compute-region: <<parameters.google-compute-region>>
@@ -180,6 +193,8 @@ jobs:
             - checkout
             #- copy-to-gcp-bucket:
             #    google-bucket-name: << parameters.google-bucket-name >>
+            - kubectl-replace:
+                k8s-manifest: << parameters.k8s-manifest >>
 
     build:
         executor: docker-publisher
@@ -215,11 +230,6 @@ jobs:
 
 workflows:
   version: 2
-  install_and_configure_cli:
-    jobs:
-      - install_and_initialize_cli:
-          context: gcp-bucket-build
-          google-bucket-name: sradams.co.uk
   build-main:
     jobs:
       - build:
@@ -230,6 +240,15 @@ workflows:
           context: gcp-bucket-build
           requires:
             - build
+          filters:
+            branches:
+              only: main
+      - install_and_initialize_cli: 
+          context: gcp-bucket-build
+          google-bucket-name: sradams.co.uk
+          k8s-manifest: k8s/deployment.yml
+          requires:
+            - publish-latest
           filters:
             branches:
               only: main
