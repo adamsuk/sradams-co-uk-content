@@ -109,11 +109,16 @@ commands:
                 default: GOOGLE_CLUSTER
                 description: The Google cluster to connect with via the gcloud CLI.
                 type: env_var_name
+            namespace:
+                default: NAMESPACE
+                description: Namespace used for kubernetes.
+                type: env_var_name
         steps:
            - run:
                command: |
                     gcloud components install kubectl
                     gcloud container clusters get-credentials $<< parameters.google-cluster >> --zone=$<< parameters.google-compute-zone >>
+                    kubectl config set-context --current --namespace $<< parameters.namespace >>
                     kubectl replace --force -f << parameters.k8s-manifest >>
 
 
