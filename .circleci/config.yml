@@ -101,9 +101,19 @@ commands:
             k8s-manifest:
                 description: location of file or folder being reapplied
                 type: string
+            google-compute-zone:
+                default: GOOGLE_COMPUTE_ZONE
+                description: The Google compute zone to connect with via the gcloud CLI.
+                type: env_var_name
+            google-cluster:
+                default: GOOGLE_CLUSTER
+                description: The Google cluster to connect with via the gcloud CLI.
+                type: env_var_name
         steps:
            - run:
                command: |
+                    gcloud components install kubectl
+                    gcloud container clusters get-credentials $<< parameters.google-cluster >> --zone=$<< parameters.google-compute-zone >>
                     kubectl replace --force -f << parameters.k8s-manifest >>
 
 
