@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@10.0
-  kubernetes: circleci/kubernetes@0.11
+  gcp-gke: circleci/gcp-gke@0.1
 
 
 commands:
@@ -233,9 +233,3 @@ workflows:
           filters:
             branches:
               only: main
-      - kubernetes/install-kubectl 
-      - kubernetes/create-or-update-resource: 
-          get-rollout-status: true 
-          resource-file-path: k8s/deployment.yaml 
-          resource-name: deployment/sradams-deployment
-          show-kubectl-command: true
