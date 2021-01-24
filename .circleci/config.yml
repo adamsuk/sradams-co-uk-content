@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@10.0
-  kubernetes: circleci/kubernetes@0.11
+  #kubernetes: circleci/kubernetes@0.11
 
 commands:
     initialize:
@@ -194,7 +194,6 @@ jobs:
                 type: string
         steps:
             - install
-            - kubernetes/install-kubectl
             - initialize:
                 gcloud-service-key: <<parameters.gcloud-service-key>>
                 google-compute-region: <<parameters.google-compute-region>>
