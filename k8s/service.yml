@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sradams-service
+  labels:
+    app: sradams-co-uk-service
+spec:
+  ports:
+    - port: 3000
+  selector:
+    app: sradams-co-uk-content
+    tier: backend
+  type: LoadBalancer
