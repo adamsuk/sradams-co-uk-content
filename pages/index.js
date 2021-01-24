@@ -7,7 +7,7 @@ import Layout from '../components/Layout'
 
 const Index = () => <Layout>
     <Image
-        src="/../public/me.jpg"
+        src="/me.jpg"
         alt="Picture of ME!"
         width={500}
         height={500}

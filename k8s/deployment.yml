@@ -1,20 +1,20 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prod-sradams-co-uk
+  name: prod-sradams
   labels:
     app: sradams-backend
 spec:
   selector:
     matchLabels:
-      app: sradams-co-uk-content
+      app: sradams-co-uk
       tier: backend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: sradams-co-uk-content
+        app: sradams-co-uk
         tier: backend
     spec:
       containers:
@@ -22,4 +22,4 @@ spec:
           name: sradams-co-uk
           ports:
             - containerPort: 3000
-              name: sradams-co-uk-content
+              name: sradams-co-uk

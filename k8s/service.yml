@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: sradams-service
   labels:
-    app: sradams-co-uk-service
+    app: sradams-co-uk
 spec:
   ports:
     - port: 3000
   selector:
-    app: sradams-co-uk-content
+    app: sradams-co-uk
     tier: backend
   type: LoadBalancer
