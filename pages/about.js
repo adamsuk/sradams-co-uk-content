@@ -7,7 +7,7 @@ const About = () => <Layout title="About Me">
   <div>
   <p>
     <br></br>
-    Hello World.
+    Hello World!
     <br></br>
     <br></br>
     So I'm new to JavaScript, Next.js and most things front-end.<br></br>

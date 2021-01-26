@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@10.0
-  kubernetes: circleci/kubernetes@0.11
+  #kubernetes: circleci/kubernetes@0.11
 
 commands:
     initialize:
@@ -101,9 +101,24 @@ commands:
             k8s-manifest:
                 description: location of file or folder being reapplied
                 type: string
+            google-compute-zone:
+                default: GOOGLE_COMPUTE_ZONE
+                description: The Google compute zone to connect with via the gcloud CLI.
+                type: env_var_name
+            google-cluster:
+                default: GOOGLE_CLUSTER
+                description: The Google cluster to connect with via the gcloud CLI.
+                type: env_var_name
+            kubernetes-namespace:
+                default: KUBERNETES_NAMESPACE
+                description: The kubernetes namespace to connect with via the kubectl CLI.
+                type: env_var_name
         steps:
            - run:
                command: |
+                    gcloud components install kubectl
+                    gcloud container clusters get-credentials $<< parameters.google-cluster >> --zone=$<< parameters.google-compute-zone >>
+                    kubectl config set-context --current --namespace $<< parameters.kubernetes-namespace >>
                     kubectl replace --force -f << parameters.k8s-manifest >>
 
 
@@ -184,7 +199,6 @@ jobs:
                 type: string
         steps:
             - install
-            - kubernetes/install-kubectl
             - initialize:
                 gcloud-service-key: <<parameters.gcloud-service-key>>
                 google-compute-region: <<parameters.google-compute-region>>
