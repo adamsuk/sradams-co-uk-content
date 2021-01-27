@@ -1,6 +1,6 @@
 ## Static content for sradams.co.uk
 
-Build found [here](http://www.sradams.co.uk)
+Build found [here](https://www.sradams.co.uk)
 
 # TODOs
 - https (nginx forwarding)
