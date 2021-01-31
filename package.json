@@ -17,12 +17,14 @@
     "postcss-nested": "2.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "styled-jsx-plugin-postcss": "0.1.0"
+    "styled-jsx-plugin-postcss": "0.1.0",
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^2.0.2",
-    "webpack": "^5.19.0"
+    "webpack": "^5.19.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "postcss": {
     "plugins": {
