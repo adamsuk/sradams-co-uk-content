@@ -1,6 +1,6 @@
 {
-  "name": "learn-starter",
-  "version": "0.1.0",
+  "name": "sradams-co-uk",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,19 +9,22 @@
     "start": "next start"
   },
   "dependencies": {
-    "@zeit/next-sass": "^1.0.1",
+    "gray-matter": "^4.0.2",
     "lost": "8.2.0",
     "next": "^10.0.5",
     "next-page-transitions": "1.0.0-beta.2",
-    "node-sass": "^5.0.0",
     "postcss-nested": "2.1.2",
+    "raw-loader": "^4.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-markdown": "^5.0.3",
+    "reactstrap": "^8.9.0",
     "styled-jsx-plugin-postcss": "0.1.0",
     "webpack": "^4.0.0"
   },
   "devDependencies": {
     "postcss-preset-env": "^6.7.0",
+    "sass": "^1.32.5",
     "tailwindcss": "^2.0.2",
     "webpack": "^5.19.0",
     "webpack-dev-server": "^3.11.2"

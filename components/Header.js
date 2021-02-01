@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import "./Header.scss";
+import style from "./Header.module.scss";
 
 const headerStyle = {
     backgroundColor: "blue",
@@ -9,15 +9,15 @@ const headerStyle = {
 };
   
 const Header = () => (
-    <div className="Header">
+    <div className={style.Header}>
         <header>
           <nav>
             <Link href="/">
                 <a>Home</a>
             </Link>{' '}
             |
-            <Link href="/about">
-                <a>About</a>
+            <Link href="/blog">
+                <a>Blog</a>
             </Link>{' '}
           </nav>
         </header>

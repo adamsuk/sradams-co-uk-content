@@ -1,7 +1,7 @@
-import "./NavBar.scss";
+import style from "./NavBar.module.scss";
   
 const NavBar = () => (
-    <div className="NavBar">
+    <div className={style.NavBar}>
     </div>
 );
 
