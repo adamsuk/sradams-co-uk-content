@@ -19,6 +19,10 @@ const Header = () => (
             <Link href="/blog">
                 <a>Blog</a>
             </Link>{' '}
+            |
+            <Link href="/sandbox">
+                <a>Sandbox</a>
+            </Link>{' '}
           </nav>
         </header>
     </div>
