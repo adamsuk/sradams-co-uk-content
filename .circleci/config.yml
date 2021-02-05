@@ -47,7 +47,7 @@ workflows:
   vercel-deploy:
     jobs:
       - setup
-      - deploy: vercel-build
-          context: 
+      - deploy:
+          context: vercel-build
           requires:
             - setup
