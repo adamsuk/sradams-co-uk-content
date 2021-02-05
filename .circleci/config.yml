@@ -34,14 +34,14 @@ jobs:
           at: ~/tmp/circleci-now
       - run:
           name: Deploy
-            command: |
-              ./.now/linkproject.sh
-              if [ "${CIRCLE_BRANCH}" == "main" ];
-              then
-                npx now --token $ZEIT_TOKEN --scope $ZEIT_ORG_ID --confirm --prod
-              else
-                npx now --token $ZEIT_TOKEN --scope $ZEIT_ORG_ID --confirm
-              fi
+          command: |
+            ./.now/linkproject.sh
+            if [ "${CIRCLE_BRANCH}" == "main" ];
+            then
+              npx now --token $VERCEL_API_TOKEN --scope $VERCEL_ORG_ID --confirm --prod
+            else
+              npx now --token $VERCEL_API_TOKEN --scope $VERCEL_ORG_ID --confirm
+            fi
 
 workflows:
   version: 2
