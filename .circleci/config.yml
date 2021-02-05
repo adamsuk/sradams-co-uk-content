@@ -45,7 +45,7 @@ jobs:
 
 workflows:
   version: 2
-    vercel-deploy:
-      jobs:
-        - checkout
-        - deploy
+  vercel-deploy:
+    jobs:
+      - checkout
+      - deploy
