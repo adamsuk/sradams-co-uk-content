@@ -5,7 +5,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  checkout:
+  setup:
     <<: *defaults
     steps:
       - checkout
@@ -35,7 +35,6 @@ jobs:
       - run:
           name: Deploy
           command: |
-            ./.now/linkproject.sh
             if [ "${CIRCLE_BRANCH}" == "main" ];
             then
               npx now --token $VERCEL_API_TOKEN --scope $VERCEL_ORG_ID --confirm --prod
@@ -47,7 +46,7 @@ workflows:
   version: 2
   vercel-deploy:
     jobs:
-      - checkout
+      - setup
       - deploy:
           requires:
-            - checkout
+            - setup
