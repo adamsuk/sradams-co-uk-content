@@ -48,4 +48,6 @@ workflows:
   vercel-deploy:
     jobs:
       - checkout
-      - deploy
+      - deploy:
+          requires:
+            - checkout
