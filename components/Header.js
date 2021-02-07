@@ -20,6 +20,10 @@ const Header = () => (
                 <a>Blog</a>
             </Link>{' '}
             |
+            <Link href="/music">
+                <a>Music</a>
+            </Link>{' '}
+            |
             <Link href="/sandbox">
                 <a>Sandbox</a>
             </Link>{' '}
