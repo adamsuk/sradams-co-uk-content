@@ -24,6 +24,10 @@ function Blog(props) {
         <Link href="/posts/its-been-a-while">
           <a>Its Been a While</a>
         </Link>{' '}
+        <br></br><br></br>
+        <Link href="/posts/cv">
+          <a>WIP CV</a>
+        </Link>{' '}
       </div>
     </Layout>
   )
