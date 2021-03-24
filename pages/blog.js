@@ -20,6 +20,10 @@ function Blog(props) {
         <Link href="/posts/music-music-music">
           <a>Music iFrames</a>
         </Link>{' '}
+        <br></br><br></br>
+        <Link href="/posts/its-been-a-while">
+          <a>Its Been a While</a>
+        </Link>{' '}
       </div>
     </Layout>
   )
