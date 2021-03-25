@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import matter from 'gray-matter'
 import ReactMarkdown from 'react-markdown/with-html';
 
@@ -11,7 +12,7 @@ function PostTemplate({ content, data }) {
     return (
       <>
         <Header />
-        <h1>{frontmatter.title}</h1>
+        <h1><center>{frontmatter.title}</center></h1>
         <ReactMarkdown source={content} />
       </>
   )
