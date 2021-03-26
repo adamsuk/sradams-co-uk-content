@@ -2,6 +2,7 @@
 title: "Gitlab Commit 2020 Proposal"
 date: "2021-03-26"
 ---
+```
 scott@rolls-royce:~$ ./introduction.sh
 Hi, I'm Scott. I'm a Physicst by education, engineer on paper, and software 
 developer in practice. My current position is Performance Methods Lead for the 
@@ -111,3 +112,4 @@ scott@home:~/initial_devops$ curl --header "PRIVATE-TOKEN: WorthMoreThanMyPIN"
 "Bring everyone else along with us"
 scott@home:~$ echo HAPPINESS
 Extremely, thanks to GitLab.
+```
