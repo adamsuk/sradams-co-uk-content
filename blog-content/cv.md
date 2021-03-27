@@ -1,11 +1,10 @@
 ---
 title: "Scott Adams – Curriculum Vitae"
-image: /me_200px.jpg
-date: "2020-03-24"
+date: "2021-03-27"
 layout: cv
 ---
 ___
-Platform Engineer, Python Developer, Physicist, DevOps Avocate
+Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate
 ### Skills (TLDR)
 Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Helm
 ___
