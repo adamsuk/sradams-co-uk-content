@@ -7,7 +7,7 @@ layout: cv
 ___
 Platform Engineer, Python Developer, Physicist, DevOps Avocate
 ### Skills (TLDR)
-Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, GCP
+Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Helm
 ___
 ## Personal Profile
 I'm currently a Platform Engineer at [Koodoo](https://koodoo.io/). This has allowed me to focus solely on tools and approaches used in a modern technology stack.
@@ -21,13 +21,17 @@ ___
 ## Education and Work Experience
 ### Platform Engineer, Koodoo (11/2020 - Present)
 #### Fully Remote
-
-TBC
+- Responsible for provisioning and maintaining the businesses cloud infrastructure (predominantly GCP but includes resources in AWS and Azure).
+- I provisioned the infrastructure from initial development to production for two major projects in the company (including terraform for GCP resources and 3rd party products such as Auth0 and Sentry).
+- Responsible for the CI/CD pipelines across the business.
+- I wrote the whole pipeline for the adoption of Next.js and Helm in CircleCI utilising the Orb structure and introduced significant improvements to existing pipelines (automation of terraform repositories, pipeline image generation/push to a private registry and tag based deployments for front and backend repositories).
+- Produced proof-of-concepts for new tools and services such as Pulumi, Helm, Lighthouse, Github Actions and Netlify.
+- Assisted GCP cluster migration (staging and production). This included transfer of deployments using Velero and updating pipelines to populate a new private container registry and update front and backend services.
 ***
 ### Performance Methods Lead, Rolls-Royce - UK SMR (02/2020 - 11/2020)
 #### Rolls-Royce, Jubilee House, Derby.
-- Responsible for the development, maintenance and integration of the SMR thermal hydraulic analysis method. This predominantly includes the expansion of the overarching programme methods framework (of which the thermal hydraulic method is the most mature and leading the way), integrate with other methods and expanding our code base (with soft and hard coupled techniques).
-- As a result of COVID-19 I implemented and distributed 7 development machines and maintained the server machine (utilising Ubuntu, Puppet, GitLab, Docker, MySQL and OpenSSL).
+- Responsible for the development, maintenance and integration of the Small Modular Reactor (SMR) thermal hydraulic analysis method. This predominantly includes the expansion of the overarching programme methods framework (of which the thermal hydraulic method was the most mature and leading the way), integrate with other methods and expanding our code base (with soft and hard coupled techniques).
+- As a result of COVID-19 I implemented and distributed 7 development machines and maintained the server machine (utilising Ubuntu, Puppet, GitLab, Docker, MySQL and OpenSSL) enabling a team to continue as normal through the first year of the pandemic.
 - Authored two workstream strategies, one for Thermal Hydraulic analysis/methods and another for Modelling and Analytics (detailing the route to cloud computing, from defining how to develop a discipline specific analysis method to integrating and coupling to other methods).
 ***
 ### Section Lead - Fatigue and Fracture Framework (02/2018 - 02/2020)
@@ -61,24 +65,25 @@ Throughout my academic and professional experiences, I have developed transferab
 __Computing__: DevOps champion by embracing modern tools and techniques. I scoped, implement and maintained server-side Docker, Gitlab, Puppet and MySQL instances.
 Extensive knowledge of programming languages such as Python and MATLAB, intermediate knowledge of C, C#, SQL and Fortran, working knowledge of C++, JavaScript and AWK.
 Modelling experience using codes such as RELAP5-3D, COBRA and MCNP as well as experience developing in-house codes.
-Use of operating systems such as Windows, Linux (Ubuntu, RedHat and SuSE) and OSX.
+Extensive use of various operating systems such as Windows, Linux (Ubuntu, RedHat and SuSE) and OSX.
 
-__Communication__: Verbal; with the ability to confidently express complex ideas to people of different specialisms.
+__Communication__: Ability to confidently express complex ideas to people of different specialisms.
 Experience in presenting to academic specialists, company directors, external conferences.
 Teaching cross-discipline areas with training materials to broaden knowledge.
-Written; experience with a wide range of scientific writing, report writing, presentation slides.
+Experience with a wide range of scientific writing, report writing, presentation slides.
 
 __Teamwork__: Enabling individuals and teamwork by embracing principles and practices through implementation of agile planning, continuous feedback and deploying tools to enable multi-engineer developments and targeted peer reviews.
 Experience as a team member and leading a team during all analysis method life-cycles (analysis and method development).
 Advocate of the ‘broken squares’ philosophy which actively encourages a supportive team structure.
 
-__Engineering__: Continuously aiming to further engineering output by automating processes, implement continuous testing (from unit to integrated), automate documentation (from description memos to testing evidence), and deploy CD/CI solutions.
+__Engineering__: Architecting cloud infrastructure based on project needs and interfaces with existing infrastructure (both to enable initial development and to productionise a solution).
+Continuously aiming to further engineering output by automating processes, implement continuous testing (from unit to integrated and user acceptance), automate documentation (from description memos to testing evidence), and deploy CD/CI solutions.
 Common industry approaches for design such as robust design (Taguchi method) and analytical methods such as Best Estimate Plus Uncertainty (BEPU).
 Physical phenomena assessed from first principles for validation and analysis purposes.
 Extensive thermal hydraulic used to determine fluid properties, flow and heat transfer regimes.
 ___
 ## Further Details
-- Conferences – ICONE 26 presenter (robust design approaches) and co-author (two-staged validation), Microsoft Build 2020 (attendee), GitLab Commit 2020 presenter, DevOps Live 2020 panelist.
-- Interviewer – organising, application reviewer and lead interviewer for four successful MSc placement students.
+- Conferences – ICONE 26 presenter (robust design approaches) and co-author (two-staged validation), Microsoft Build 2020 (attendee), GitLab Commit 2020 (presenter), DevOps Live 2020 (panelist).
+- Interviewer – Enabling a start-up to ramp up by supporting various stages of the interview process. Organising, reviewing applications and leading interviews for four successful MSc placement students.
 - Home automation hobbyist – Ubuntu media server, Home Assistant smart device integration, NFS server for centralised storage, puppet server for cross-network software installation/updates.
 - Classic car enthusiast – owner of a 1978 MG BGT.
