@@ -2,9 +2,14 @@
 title: "Scott Adams – Curriculum Vitae"
 date: "2021-03-27"
 layout: cv
+Scott Adams – Curriculum Vitae
 ---
-___
 Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate
+
+Email: sra405@protonmail.com
+
+Phone: 07840579704
+___
 ### Skills (TLDR)
 Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Helm
 ___
@@ -18,7 +23,7 @@ My career to date has benefited significantly from the transferable skills I obt
 This has allowed me present to various levels of senior management, apply coaching techniques to peers and efficiently inform and engage stakeholders.
 ___
 ## Education and Work Experience
-### Platform Engineer, Koodoo (11/2020 - Present)
+### Platform Engineer, Koodoo - Mortgage Power Ltd (11/2020 - Present)
 #### Fully Remote
 - Responsible for provisioning and maintaining the businesses cloud infrastructure (predominantly GCP but includes resources in AWS and Azure).
 - I provisioned the infrastructure from initial development to production for two major projects in the company (including terraform for GCP resources and 3rd party products such as Auth0 and Sentry).
