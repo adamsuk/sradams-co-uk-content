@@ -1,8 +1,7 @@
 ---
-title: "Scott Adams – Curriculum Vitae"
 date: "2021-03-27"
 layout: cv
-Scott Adams – Curriculum Vitae
+title: "Scott Adams – Curriculum Vitae"
 ---
 Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate
 
