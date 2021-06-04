@@ -32,6 +32,10 @@ function Blog(props) {
         <Link href="/posts/gitlab-commit-2020">
           <a>Gitlab Commit 2020 Proposal</a>
         </Link>{' '}
+        <br></br><br></br>
+        <Link href="/posts/devops-and-me">
+          <a>DevOps and Me</a>
+        </Link>{' '}
       </div>
     </Layout>
   )
