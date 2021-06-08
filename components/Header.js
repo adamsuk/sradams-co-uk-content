@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from 'next/link';
 import style from "./Header.module.scss";
 
 const headerStyle = {
@@ -16,7 +16,7 @@ const Header = () => (
                 <a>Home</a>
             </Link>{' '}
             |
-            <Link href="/blog">
+            <Link href="/posts">
                 <a>Blog</a>
             </Link>{' '}
             |

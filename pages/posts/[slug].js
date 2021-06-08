@@ -25,11 +25,11 @@ PostTemplate.getInitialProps = async (context) => {
   const content = await import(`../../blog-content/${slug}.md`)
 
   // Parse .md data through `matter`
-   const data = matter(content.default)
-   // Pass data to our component props
-   return { ...data } 
-  
-  return { slug }
+  const data = matter(content.default)
+
+
+  // Pass data to our component props
+  return { ...data }
 }
 
 export default PostTemplate
