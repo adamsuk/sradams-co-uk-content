@@ -19,7 +19,7 @@ function Index(props) {
                 <br></br>
                 <br></br>
                 </a>
-            ))};
+            ))}
         </div>
         </Layout>
     )
