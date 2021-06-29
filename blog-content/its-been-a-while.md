@@ -1,6 +1,6 @@
 ---
 title: "Its Been a While"
-date: "2020-03-24"
+date: "2021-03-24"
 ---
 
 I want to get back into this keep pushing forward with front-end tech. Its been too long since I worked on a personal project.

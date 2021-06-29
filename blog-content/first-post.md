@@ -1,6 +1,6 @@
 ---
 title: "Welcome to my Next.js blog"
-date: "2020-01-31"
+date: "2021-01-31"
 ---
 
 So this is going to detail aspects I've learnt on my Next.js, frontend, fullstack journey. 
