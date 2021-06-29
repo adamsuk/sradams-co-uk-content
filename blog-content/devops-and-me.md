@@ -1,6 +1,6 @@
 ---
 title: "DevOps and Me"
-date: "2020-06-04"
+date: "2021-06-04"
 ---
 
 I've been making random entries into this blog for a while now. That and conference season is coming back around I'm in full nostalgia mode. This post is personal and based on my professional experiences to date about how I am where I am.

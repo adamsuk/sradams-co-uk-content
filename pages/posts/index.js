@@ -1,35 +1,40 @@
-import React from 'react'
-import Router from 'next/router'
-import Layout from '../../components/Layout'
+import { useState, useEffect } from 'react';
+import Layout from '../../components/Layout';
 import style from "../../components/blog.module.scss";
-import matter from 'gray-matter'
-import Link from 'next/link'
+import matter from 'gray-matter';
+import Link from 'next/link';
+import path from 'path';
+import fs from 'fs';
 
-function Index(props) {
+var Index = (props) => {
+    // decending
+    var publishDateSort = (a, b) => {
+        b = b.published_date.split('-').join();
+        a = a.published_date.split('-').join();
+        return a > b ? -1 : a < b ? 1 : 0;
+    };
+
     return (
         <Layout title="Blog">
         <h1>{props.blogTitle}</h1>
         <br></br><br></br>
-        <div class={style.item}> 
-            {props.posts_metadata.map((post) => (
-                <a key={post.id}>
-                <Link href={`/posts/${encodeURIComponent(post.slug)}`}>
-                    <a>{post.title}</a>
+        <div className={style.item}> 
+            {props.posts_metadata.sort(publishDateSort).map((post) => (
+                <div key={`${post.slug}-a`}>
+                <Link key={post.id} href={`/posts/${encodeURIComponent(post.slug)}`}>
+                    {post.title}
                 </Link>
                 <br></br>
                 <br></br>
-                </a>
+                </div>
             ))}
         </div>
         </Layout>
     )
 }
 
-Index.getInitialProps = async () => {
+export async function getStaticProps() {
     // find all files in the post directory
-    const path = require('path');
-    // TODO: breaks on backs
-    var fs = require('fs');
     // find all files in post location
     // TODO: make this more defensive and check path first
     var files = fs.readdirSync("./blog-content");
@@ -48,19 +53,18 @@ Index.getInitialProps = async () => {
             posts_metadata.push({
                 'title': data.title,
                 'slug': path.parse(file).name,
-                'last_edited': stats.mtime,
+                //'last_edited': stats.mtime,
+                'published_date': data.date,
             });
         };
     };
-    // decending
-    posts_metadata.sort(function(a,b){
-        return b.last_edited - a.last_edited;
-    });
 
     return {
-      blogTitle: 'Welcome to my blog!',
-      posts_metadata: posts_metadata,
-    }
+        'props': {
+            blogTitle: 'Welcome to my blog!',
+            posts_metadata: await Promise.all(posts_metadata),
+            }
+        };
 }
 
 export default Index

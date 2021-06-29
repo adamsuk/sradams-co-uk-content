@@ -1,11 +1,10 @@
-import Link from 'next/link'
 import Head from "next/head";
 import NavBar from './NavBar'
 import Header from './Header'
 
 import style from "./Layout.module.scss";
 
-const Layout = props => (
+const Layout = pageProps => (
   <div className={style.Layout}>
     <Head>
       <title>Scott Adams</title>
@@ -14,7 +13,7 @@ const Layout = props => (
     </Head>
     <Header />
     <div className={style.Content}>
-      {props.children}
+      {pageProps.children}
     </div>
     <NavBar />
   </div>

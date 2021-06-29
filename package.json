@@ -27,6 +27,7 @@
     "webpack": "^4.0.0"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "postcss-preset-env": "^6.7.0",
     "sass": "^1.32.5",
     "tailwindcss": "^2.0.2",
@@ -37,6 +38,11 @@
     "plugins": {
       "lost": {},
       "postcss-nested": {}
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }

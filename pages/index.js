@@ -13,7 +13,7 @@ const Index = () => <Layout>
         width={500}
         height={500}
     />
-  <div class={style.item}> 
+  <div className={style.item}> 
     <p>
       <br></br>
         Hello World!
