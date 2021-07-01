@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import Image from 'next/image'
 
 import Layout from '../components/Layout'
