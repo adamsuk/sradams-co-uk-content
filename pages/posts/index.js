@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import style from "../../components/blog.module.scss";
 import matter from 'gray-matter';

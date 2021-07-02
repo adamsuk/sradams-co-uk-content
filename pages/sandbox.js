@@ -1,88 +1,97 @@
 import React from 'react'
 import Layout from '../components/Layout'
+import globalStyles from "../components/sandbox/Calculator.js";
+import { evaluate } from 'mathjs';
 
-function calc() {
-    // +  -  *  /   %  ^   SQRT.
-    var ans = "TBC";
-    var [val1, val2, op] = getVals();
-    ans = perf_calc(val1, val2, op);
-    setAns(ans);
+var display_val = "";
+var saved_val = 0;
+var op = "";
+
+var math_eval = (val1, val2, op) => {
+    // string display trick from
+    // https://flaviocopes.com/how-to-convert-string-to-number-javascript/
+    var ans = evaluate(+val1 + op + +val2);
+    return (+ans);
 }
 
-function perf_calc(val1, val2, op) {
-    // use a switch to determine the maths func
-    var ans;
-    switch (op) {
-        case 'add':
-        ans = (val1 + val2).toString();
-        break;
-        case 'sub':
-        ans = (val1 - val2).toString();
-        break;
-        case 'mult':
-        ans = (val1 * val2).toString();
-        break;
-        case 'div':
-        ans = (val1 / val2).toString();
-        break;
-        case 'mod':
-        ans = (val1 % val2).toString();
-        break;
-        case 'pow':
-        ans = (Math.pow(val1, val2)).toString();
-        break;
-        case 'sqrt':
-        ans = (Math.sqrt(val1)).toString();
-        break;
-        default:
-        ans = "Unsupported Operation"
+const handleClick = ((event) => {
+    const isButton = event.target.nodeName === 'BUTTON';
+    if (!isButton) {
+        return;
     }
-    return ans;
-}
 
-function getVals() {
-    var val1 = parseFloat(document.getElementById("val1").value);
-    var val2 = parseFloat(document.getElementById("val2").value);
-    var mathsOp = document.getElementById("mathsOp").value;
-    return [val1, val2, mathsOp];
-}
+    const className = event.target.className;
+    console.log(className);
 
-function setAns(val="TBC") {
-    document.getElementById("ansText").innerHTML = val; //number;
-}
-
-function assessSelects() {
-    // obtain current values
-    var [val1, val2, op] = getVals();
-    if (op == 'sqrt') {
-        document.getElementById("val2").disabled = true;
-    } else {
-        document.getElementById("val2").disabled = false;
+    if (className === 'digit') {
+        display_val += event.target.value;
+        setScreenVal(display_val);
+    } else if (className === 'operator') {
+        saved_val = display_val;
+        display_val = "";
+        op = event.target.value;
+    } else if (className === "equal-sign") {
+        if (display_val && saved_val && op) {
+            display_val = math_eval(saved_val, display_val, op);
+            saved_val = "";
+            setScreenVal(+display_val);
+        } else {
+            return
+        }
+    } else if (className === "all-clear") {
+        display_val = "";
+        saved_val = "";
+        op = "";
+        setScreenVal("0");
     }
+    console.log(`saved_val: ${saved_val}`);
+    console.log(`display_val: ${display_val}`);
+    console.log(`op: ${op}`);
+})
+
+const setScreenVal = (val) => {
+    document.getElementById("calculator-screen").value = +val;
 }
 
-const Calculator = () => <Layout title="Calculator">
-    <body onLoad={setAns}>
-        <form>
-        Input Value 1: <input type="number" id="val1"></input>
-        <br></br>
-        Input Value 2: <input type="number" id="val2"></input>
-        <br></br>
-        <select id="mathsOp" onChange={assessSelects}>
-                <option selected disabled>Maths Operator</option>
-                <option value="add">add</option>
-                <option value="sub">sub</option>
-                <option value="mult">mult</option>
-                <option value="div">div</option>
-                <option value="mod">mod</option>
-                <option value="pow">pow</option>
-                <option value="sqrt">sqrt</option>
-        </select>
-        <br></br>
-        <input type="button" value="Submit" id="submit" onClick={calc}></input>
-        </form>
-        <p>ANSWER: <span id="ansText"></span></p>
-    </body>
-    </Layout>
 
-export default Calculator
+var calculator = () => {
+    return (
+        <Layout title="Calculator">
+            <div className="calculator" onClick={handleClick}>
+                <input type="text" className="calculator-screen" id="calculator-screen" value="0" disabled />
+
+                <div className="calculator-keys">
+
+                    <button type="button" className="operator" value="+">+</button>
+                    <button type="button" className="operator" value="-">-</button>
+                    <button type="button" className="operator" value="*">&times;</button>
+                    <button type="button" className="operator" value="/">&divide;</button>
+
+                    <button type="button" className="digit" value="7">7</button>
+                    <button type="button" className="digit" value="8">8</button>
+                    <button type="button" className="digit" value="9">9</button>
+
+                    <button type="button" className="digit" value="4">4</button>
+                    <button type="button" className="digit" value="5">5</button>
+                    <button type="button" className="digit" value="6">6</button>
+
+                    <button type="button" className="digit" value="1">1</button>
+                    <button type="button" className="digit" value="2">2</button>
+                    <button type="button" className="digit" value="3">3</button>
+
+                    <button type="button" className="digit" value="0">0</button>
+                    <button type="button" className="digit" value=".">.</button>
+                    <button type="button" className="all-clear" value="all-clear">AC</button>
+
+                    <button type="button" className="equal-sign" value="=">=</button>
+
+                </div>
+            </div>
+            <style jsx global>
+                {globalStyles}
+            </style>
+        </Layout>
+    )
+};
+
+export default calculator
