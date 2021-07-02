@@ -13,15 +13,50 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto;
 
+    height: 100%;
     width: 100%;
 
     background: $secondary;
     color: $on-secondary;
     font-family: $core-font;
-
+    
     a {
       color: inherit;
+      position: relative;
+      display: inherit;
+    }
+
+    a img {
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      float: center;
+    }
+
+    a p {
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      background: $secondary;
+      color: $on-secondary;
+      opacity:0;
+      transition:1s;
+      font-family: $core-font;
+      vertical-align: middle;
+      align-items:center;
+      text-align: center;
+      overflow-wrap: break-word;
+      font-size: 22px;
+    }
+
+    a:hover p {
+        opacity:1;
     }
   }
 }
