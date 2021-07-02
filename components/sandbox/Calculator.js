@@ -9,12 +9,15 @@ export default css.global`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 500px;
+    max-width: 100%;
+    height:auto;
   }
 
   .calculator-screen {
     width: 100%;
     font-size: 5rem;
     height: 80px;
+    max-height: 10%;
     border: none;
     background-color: #252525;
     color: #fff;

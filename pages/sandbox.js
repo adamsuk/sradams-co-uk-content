@@ -33,6 +33,7 @@ const handleClick = ((event) => {
     } else if (className === "equal-sign") {
         if (display_val && saved_val && op) {
             display_val = math_eval(saved_val, display_val, op);
+            saved_val = "";
             setScreenVal(+display_val);
         } else {
             return
