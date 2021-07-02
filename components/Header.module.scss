@@ -3,6 +3,9 @@
 .Header {
   display: flex;
   justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
   align-items: center;
 
   height: 50px;
@@ -19,4 +22,16 @@
   background: $highlight;
 
   cursor: pointer;
+
+  a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    background-color: #777;
+  }
 }

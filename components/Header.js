@@ -7,30 +7,20 @@ const headerStyle = {
     width: "100%",
     height: "50px"
 };
-  
+
 const Header = () => (
     <div className={style.Header}>
         <header>
           <nav>
-            <Link href="/">
-                <a>Home</a>
-            </Link>{' '}
+            <a href="/">Home</a>
             |
-            <Link href="/posts">
-                <a>Blog</a>
-            </Link>{' '}
+            <a href="/posts">Blog</a>
             |
-            <Link href="/music">
-                <a>Music</a>
-            </Link>{' '}
+            <a href="/music">Music</a>
             |
-            <Link href="/sandbox">
-                <a>Sandbox</a>
-            </Link>{' '}
+            <a href="/sandbox">Sandbox</a>
             |
-            <Link href="/posts/cv">
-              <a>CV</a>
-            </Link>{' '}
+            <a href="/posts/cv">CV</a>
           </nav>
         </header>
     </div>
