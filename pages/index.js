@@ -1,32 +1,15 @@
-import Image from 'next/image'
+import Index from "../components/Index";
 
-import Layout from '../components/Layout'
-import style from "../components/index.module.scss";
+const welcome_txt = `Hello World!
 
+  So I'm new to JavaScript, Next.js and most things front-end.
 
-const Index = () => <Layout>
-  <div className={style.item}>
-    <a>
-    <img
-        src="https://github.com/adamsuk.png"
-        alt="Picture of ME!"
-    />
-    <p>
-      Hello World!
-      <br></br>
-      <br></br>
-      So I'm new to JavaScript, Next.js and most things front-end.
-      <br></br>
-      This is a little personal project of mine to get up to speed.
-      <br></br>
-      <br></br>
-      Feel free to snoop around and by all means keep coming back, I'm learning daily!
-      <br></br>
-      <br></br>
-      See you soon
-    </p>
-    </a>
-  </div>
-  </Layout>;
+  This is a little personal project of mine to get up to speed.
 
-export default Index
+  Feel free to snoop around and by all means keep coming back, I'm learning daily!
+  
+  See you soon`;
+
+const Homepage = () => <Index img={"https://github.com/adamsuk.png"} welcome_txt={welcome_txt}></Index>;
+
+export default Homepage
