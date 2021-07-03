@@ -5,8 +5,10 @@ import style from "../components/index.module.scss";
 const Index = pageProps => {
 
   useEffect(() => {
-    var elem = document.getElementById('welcome-txt');
-    elem.innerText = pageProps.welcome_txt;
+    const delay_render = setTimeout(() => {
+      var elem = document.getElementById('welcome-txt');
+      elem.innerText = pageProps.welcome_txt;
+    }, 1000);
   }, [])
 
   return (<Layout>
