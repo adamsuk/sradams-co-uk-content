@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown/with-html';
 
-import style from "./../styles/Blog.module.scss";
+import style from "../styles/Blog.module.scss";
 
 function Post({ content, data }) {
     // This holds the data between `---` from the .md file

@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import Layout from './Layout'
-import style from "./../styles/Homepage.module.scss";
+import style from "../styles/Homepage.module.scss";
 
 const Homepage = pageProps => {
 

@@ -1,4 +1,4 @@
-import style from "./../styles/NavBar.module.scss";
+import style from "../styles/NavBar.module.scss";
   
 const NavBar = () => (
     <div className={style.NavBar}>

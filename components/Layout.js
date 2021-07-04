@@ -1,4 +1,4 @@
-import style from "./../styles/Layout.module.scss";
+import style from "../styles/Layout.module.scss";
 
 const Layout = pageProps => (
   <div className={style.Content}>

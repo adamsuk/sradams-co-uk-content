@@ -1,6 +1,6 @@
-import './../../styles/global-styles/main.scss'
-import './../../styles/style.scss'
-import style from "./../../styles/Blog.module.scss";
+import '../../styles/global-styles/main.scss'
+import '../../styles/style.scss'
+import style from "../../styles/Blog.module.scss";
 
 import Head from "next/head";
 import NavBar from '../../components/NavBar'
