@@ -8,6 +8,9 @@ const NavBar = () => (
         <a href="https://linkedin.com/in/scott-adams-a3b070192">
             <img src="/Navbar/LinkedIn/LI-In-Bug.png" alt="linkedin" />
         </a>
+        <a href="mailto:sra405@protonmail.com">
+            <img src="/Navbar/email.png" alt="email" />
+        </a>
     </div>
 );
 
