@@ -1,5 +1,87 @@
+@import "../global-styles/main";
 
-.item {
-    padding-left: 40px;
-}
+.List {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    font-family: $core-font;
   
+    height: 100%;
+    width: 100%;
+  
+    overflow: auto;
+    
+    h1 {
+      align-items: center;
+      text-align: center;
+    }
+    
+    button {
+      background: $secondary;
+      color: $on-secondary;
+      font-family: $core-font;
+      align-items: left;
+      text-align: left;
+      outline:none;
+      border: 0;
+      box-shadow: 0 0 0 2px $secondary;
+    
+      height: 100%;
+      width: 100%;
+  
+      h3 {
+          font-size: 18px;
+        }
+      
+      h4 {
+        font-size: 16px;
+        display: inline;
+      }
+      
+      p {
+        font-size: 16px;
+        display: inline;
+      }
+    }
+  
+    button:hover {
+      box-shadow: 0 0 0 2px $on-secondary;
+    }
+}
+
+.Blog {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  
+    height: 100%;
+    width: 100%;
+  
+    overflow: auto;
+
+    @media print {
+      display: block;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .Post {
+      flex: 1;
+      //display: inline;
+      flex-direction: column;
+    
+      height: 100%;
+      width: 100%;
+    
+      overflow: auto;
+  
+      padding-left: 5%;
+      padding-right: 5%;
+      padding-top: 1%;
+      padding-bottom: 1%;
+    }
+}

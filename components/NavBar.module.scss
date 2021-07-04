@@ -1,5 +1,6 @@
 @import "../global-styles/main";
 
+
 .NavBar {
   display: flex;
   justify-content: space-around;
@@ -20,6 +21,10 @@
   color: $on-primary-light;
 
   box-shadow: 0px -2px 15px rgba(50, 50, 50, 0.45);
+
+  @media print {
+    display: none !important;
+  }
 
   img {
     height: 50px;

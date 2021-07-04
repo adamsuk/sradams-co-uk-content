@@ -1,34 +1,12 @@
-import Layout from '../../components/Layout';
-import style from "../../components/blog.module.scss";
-import matter from 'gray-matter';
-import Link from 'next/link';
+import Blog from '../../components/Blog';
 import path from 'path';
 import fs from 'fs';
+import matter from 'gray-matter';
 
-var Index = (props) => {
-    // decending
-    var publishDateSort = (a, b) => {
-        b = b.published_date.split('-').join();
-        a = a.published_date.split('-').join();
-        return a > b ? -1 : a < b ? 1 : 0;
-    };
 
+var Index = props => {
     return (
-        <Layout title="Blog">
-        <h1>{props.blogTitle}</h1>
-        <br></br><br></br>
-        <div className={style.item}> 
-            {props.posts_metadata.sort(publishDateSort).map((post) => (
-                <div key={`${post.slug}-a`}>
-                <Link key={post.id} href={`/posts/${encodeURIComponent(post.slug)}`}>
-                    {post.title}
-                </Link>
-                <br></br>
-                <br></br>
-                </div>
-            ))}
-        </div>
-        </Layout>
+        <Blog title="Blog" props={props}></Blog>
     )
 }
 
@@ -52,8 +30,8 @@ export async function getStaticProps() {
             posts_metadata.push({
                 'title': data.title,
                 'slug': path.parse(file).name,
-                //'last_edited': stats.mtime,
                 'published_date': data.date,
+                ... data
             });
         };
     };
