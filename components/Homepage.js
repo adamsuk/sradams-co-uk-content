@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 import Layout from '../components/Layout'
-import style from "../components/index.module.scss";
+import style from "../components/homepage.module.scss";
 
-const Index = pageProps => {
+const Homepage = pageProps => {
 
   useEffect(() => {
     const delay_render = setTimeout(() => {
@@ -25,4 +25,4 @@ const Index = pageProps => {
 };
 
 
-export default Index
+export default Homepage
