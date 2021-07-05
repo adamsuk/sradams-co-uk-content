@@ -1,6 +1,8 @@
 ---
 title: "Its Been a While"
 date: "2021-03-24"
+tags: ["Ramblings", "Todo"]
+tldr: "A little catch up on all things relating to this site and tech. A post early days in the Tech industry and what I'm looking forward to digging into."
 ---
 
 I want to get back into this keep pushing forward with front-end tech. Its been too long since I worked on a personal project.

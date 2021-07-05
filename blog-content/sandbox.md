@@ -1,6 +1,8 @@
 ---
 title: "My Sandbox is HERE"
 date: "2021-02-02"
+tags: ["Ramblings"]
+tldr: "Part of my drive for making this site was to provide myself with a little safe space to try new things. My initial component being a calculator to trial things like grids, button mechanisms and user input/feedback."
 ---
 
 I wanted to give myself a little space to deploy some small, potentially bug filled nuggets... welcome MY SANDBOX!

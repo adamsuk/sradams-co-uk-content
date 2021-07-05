@@ -29,13 +29,13 @@
 
   a {
     display: inline-block;
-    color: white;
+    color: $primary;
     text-align: center;
     padding: 14px;
     text-decoration: none;
   }
   
   a:hover {
-    background-color: #777;
+    background-color: $on-primary-light;
   }
 }
