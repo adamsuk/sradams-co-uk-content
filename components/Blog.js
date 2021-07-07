@@ -26,7 +26,7 @@ var Blog = ({ props }) => {
         })
         return all_unique_tags
     }
-
+    
     console.log(getUniqueTagsFromMeta(props.posts_metadata))
 
     return (
@@ -36,8 +36,8 @@ var Blog = ({ props }) => {
                 <hr></hr>
             </div>
             {props.posts_metadata.sort(publishDateSort).map((post) => (
-                <div>
-                    <div>
+                <div key={`${post.slug}-div1`}>
+                    <div key={`${post.slug}-div2`}>
                         <a key={`${post.slug}-a`} href={`/posts/${encodeURIComponent(post.slug)}`}>
                             <button type="button">
                                 <h3>{post.title}</h3>
