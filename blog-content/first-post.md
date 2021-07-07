@@ -1,6 +1,8 @@
 ---
 title: "Welcome to my Next.js blog"
 date: "2021-01-31"
+tags: ["Ramblings", "Todo"]
+tldr: "Initial thoughts and feelings kick starting this site."
 ---
 
 So this is going to detail aspects I've learnt on my Next.js, frontend, fullstack journey. 

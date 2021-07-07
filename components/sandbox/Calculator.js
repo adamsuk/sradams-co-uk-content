@@ -35,23 +35,15 @@ export default css.global`
 
   button {
     height: 60px;
-    background-color: #fff;
     border-radius: 3px;
     border: 1px solid #c4c4c4;
-    background-color: transparent;
     font-size: 2rem;
-    color: #333;
-    background-image: linear-gradient(to bottom,transparent,transparent 50%,rgba(0,0,0,.04));
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 0 rgba(255,255,255,.45), inset 0 -1px 0 0 rgba(255,255,255,.15), 0 1px 0 0 rgba(255,255,255,.15);
     text-shadow: 0 1px rgba(255,255,255,.4);
   }
 
   button:hover {
-    background-color: #eaeaea;
-  }
-
-  .operator {
-    color: #337cac;
+    background-color: $on-secondary;
   }
 
   .all-clear {
@@ -62,6 +54,28 @@ export default css.global`
 
   .all-clear:hover {
     background-color: #f17377;
+  }
+
+  .digit {
+    background-color: #2a3747;
+    border-color: #2a3747;
+    color: #fff;
+  }
+
+  .digit:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .operator {
+    background-color: #fff;
+    border-color: #fff;
+    color: #000;
+  }
+
+  .operator:hover {
+    background-color: #2a3747;
+    color: #fff;
   }
 
   .equal-sign {

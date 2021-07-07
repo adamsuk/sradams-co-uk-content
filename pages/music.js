@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import Link from 'next/link'
 import Layout from '../components/Layout'
 
 const Music = () => <Layout title="Music">

@@ -1,7 +1,8 @@
-import Blog from '../../components/Blog';
+import Blog from '../components/Blog';
 import path from 'path';
 import fs from 'fs';
 import matter from 'gray-matter';
+import style from "../styles/Blog.module.scss";
 
 
 var Index = props => {
@@ -22,7 +23,7 @@ export async function getStaticProps() {
     for (var file of files) {
         if (path.parse(file).ext == '.md') {
             // Import our .md file using the `slug` from the URL
-            var content = await import(`./../../blog-content/${file}`);
+            var content = await import(`./../blog-content/${file}`);
             var stats = fs.statSync(`./blog-content/${file}`);
             // Parse .md data through `matter`
             const { data } = matter(content.default)

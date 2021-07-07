@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import style from "./Header.module.scss";
+import style from "../styles/Header.module.scss";
 
 const headerStyle = {
     backgroundColor: "blue",
