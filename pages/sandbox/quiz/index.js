@@ -6,7 +6,7 @@ const { first_question, question_set } = require("./questions.json")
 const Quiz = props => {
   var [output, setOutput] = React.useState({});
   var [next_question, setNextQuestion] = React.useState(first_question);
-  const QuestionComponent = require("./" + props.component).default
+  const QuestionComponent = require("./../../../components/sandbox/" + props.component).default
   
   const renderNextQuestion = (event) => {
     props = question_set[next_question]
