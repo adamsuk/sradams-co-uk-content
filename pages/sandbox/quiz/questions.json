@@ -1,0 +1,45 @@
+{
+  "first_question": "name",
+  "question_set": {
+    "name": {
+      "title": "First Name",
+      "inputName": "name",
+      "component": "FormText",
+      "nextQuestion": {
+        "default": "address"
+      }
+    },
+    "address": {
+      "title": "Address",
+      "inputName": "adress",
+      "component": "FormText",
+      "nextQuestion": {
+        "default": "bankrupt"
+      }
+    },
+    "bankrupt": {
+      "title": "Are You Bankrupt?!",
+      "inputName": "bankrupcy",
+      "component": "FormText",
+      "nextQuestion": {
+        "exact_answer": {
+          "yes": "bankrupcy_duration",
+          "no": "monthly_spend"
+        }
+      }
+    },
+    "monthly_spend": {
+      "title": "How much you spending",
+      "inputName": "spend",
+      "component": "FormText"
+    },
+    "bankrupcy_duration": {
+      "title": "How long for",
+      "inputName": "bankrupcy_duration",
+      "component": "FormText",
+      "nextQuestion": {
+        "default": "monthly_spend"
+      }
+    }
+  }    
+}
