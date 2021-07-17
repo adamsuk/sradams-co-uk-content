@@ -5,5 +5,5 @@ const Layout = pageProps => (
     {pageProps.children}
   </div>
 );
-  
+
 export default Layout;

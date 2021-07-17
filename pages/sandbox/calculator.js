@@ -53,7 +53,6 @@ const setScreenVal = (val) => {
     document.getElementById("calculator-screen").value = +val;
 }
 
-
 var calculator = () => {
     return (
         <Layout title="Calculator">

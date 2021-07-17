@@ -14,16 +14,16 @@
       "inputName": "adress",
       "component": "FormText",
       "nextQuestion": {
-        "default": "bankrupt"
+        "default": "sanity"
       }
     },
-    "bankrupt": {
-      "title": "Are You Bankrupt?!",
-      "inputName": "bankrupcy",
+    "sanity": {
+      "title": "Are You Sane?!",
+      "inputName": "sanity",
       "component": "FormText",
       "nextQuestion": {
         "exact_answer": {
-          "yes": "bankrupcy_duration",
+          "yes": "sanity_duration",
           "no": "monthly_spend"
         }
       }
@@ -33,9 +33,9 @@
       "inputName": "spend",
       "component": "FormText"
     },
-    "bankrupcy_duration": {
+    "sanity_duration": {
       "title": "How long for",
-      "inputName": "bankrupcy_duration",
+      "inputName": "sanity_duration",
       "component": "FormText",
       "nextQuestion": {
         "default": "monthly_spend"

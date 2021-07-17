@@ -1,7 +1,7 @@
 ---
 title: "What I'm Loving About JavaScript"
 date: "2021-07-04"
-tags: ["javascript", "tech", "learning", "python"]
+tags: ["Javascript", "Tech", "Learning", "Python"]
 tldr: "With a move over to web development I've been studying up on my JavaScript. Having mostly developed in Python I've been pondering on the differences and loving all things JS right about now."
 ---
 

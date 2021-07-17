@@ -2,8 +2,6 @@ import Blog from '../components/Blog';
 import path from 'path';
 import fs from 'fs';
 import matter from 'gray-matter';
-import style from "../styles/Blog.module.scss";
-
 
 var Index = props => {
     return (

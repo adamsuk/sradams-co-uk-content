@@ -1,6 +1,8 @@
 import React from 'react'
 import * as R from 'ramda'
 
+import style from "./../../../styles/Quiz.module.scss";
+
 const { first_question, question_set } = require("./questions.json")
 
 const Quiz = props => {
@@ -38,5 +40,7 @@ const Quiz = props => {
 Quiz.getInitialProps = () => {
   return question_set[first_question];
 };
+
+Quiz.Layout = style.Container;
 
 export default Quiz

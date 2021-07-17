@@ -9,7 +9,7 @@ Email: sra405@protonmail.com
 
 Phone: 07840579704
 ___
-### Skills (TLDR)
+### Skills (TL;DR)
 Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Helm
 ___
 ## Personal Profile
@@ -22,6 +22,7 @@ My career to date has benefited significantly from the transferable skills I obt
 This has allowed me present to various levels of senior management, apply coaching techniques to peers and efficiently inform and engage stakeholders.
 ___
 ## Education and Work Experience
+***
 ### Platform Engineer, Koodoo - Mortgage Power Ltd (11/2020 - Present)
 #### Fully Remote
 - Responsible for provisioning and maintaining the businesses cloud infrastructure (predominantly GCP but includes resources in AWS and Azure).
