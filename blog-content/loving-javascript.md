@@ -1,6 +1,6 @@
 ---
 title: "What I'm Loving About JavaScript"
-date: "2021-07-04"
+date: "2021-07-21"
 tags: ["Javascript", "Tech", "Learning", "Python"]
 tldr: "With a move over to web development I've been studying up on my JavaScript. Having mostly developed in Python I've been pondering on the differences and loving all things JS right about now."
 ---
@@ -76,4 +76,17 @@ With JS (ES6 in particular) introduces some pretty awesome variable definitions.
 
 
 ## What I Miss
+
 ### MATHS!
+
+I never thought I'd say this because learning it was like hell (it's basically a language in its owlanguage but I miss pandas. Most of my experience with Python was due to the need to deal with large amounts of data. From large amounts of pre-processing to manipulation of time series datasets... pandas made it easy! With JS trying to implement a simple equation is a nightmare.
+
+But it's the right tool for what I'm doing now. It's just a pitfall for an otherwise awesome language.
+
+## Summary
+
+There's a lot of stuff here. Some of it opinion and personal preference so just try it for yourself.
+
+I'm loving JS now but would I have used it previously in place of Python ... now. Python was the right tool for the job for a data-heavy solution. Would I trade JS for Python (utilising some web framework like Django) ... hell no!
+
+JavaScript is cool as.
