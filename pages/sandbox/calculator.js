@@ -1,6 +1,6 @@
 import React from 'react'
-import Layout from '../components/Layout'
-import globalStyles from "../components/sandbox/Calculator.js";
+import Layout from '../../components/Layout'
+import globalStyles from "../../components/sandbox/Calculator.js";
 import { evaluate } from 'mathjs';
 
 var display_val = "";
@@ -52,7 +52,6 @@ const handleClick = ((event) => {
 const setScreenVal = (val) => {
     document.getElementById("calculator-screen").value = +val;
 }
-
 
 var calculator = () => {
     return (
