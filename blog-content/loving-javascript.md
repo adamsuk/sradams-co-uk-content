@@ -79,7 +79,7 @@ With JS (ES6 in particular) introduces some pretty awesome variable definitions.
 
 ### MATHS!
 
-I never thought I'd say this because learning it was like hell (it's basically a language in its owlanguage but I miss pandas. Most of my experience with Python was due to the need to deal with large amounts of data. From large amounts of pre-processing to manipulation of time series datasets... pandas made it easy! With JS trying to implement a simple equation is a nightmare.
+I never thought I'd say this because learning it was like hell (it's basically a language of its own) but I miss pandas. Most of my experience with Python was due to the need to deal with large amounts of data. From large amounts of pre-processing to manipulation of time series datasets... pandas made it easy! With JS trying to implement a simple equation is a nightmare.
 
 But it's the right tool for what I'm doing now. It's just a pitfall for an otherwise awesome language.
 
