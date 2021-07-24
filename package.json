@@ -11,6 +11,7 @@
     "ci": "next build && next start"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "commitizen": "^4.2.4",
     "gray-matter": "^4.0.3",
     "lost": "8.2.0",

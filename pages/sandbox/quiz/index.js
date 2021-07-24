@@ -32,7 +32,8 @@ const Quiz = props => {
         output={output}
         setOutput={setOutput} >
       </QuestionComponent>
-      <pre>{JSON.stringify(output, null, 2)}</pre>
+      <pre>INPUT:{JSON.stringify(question_set[next_question], null, 2)}</pre>
+      <pre style={{textAlign: "right", right: "0px"}}>OUTPUT:{JSON.stringify(output, null, 2)}</pre>
     </>
   )
 }
