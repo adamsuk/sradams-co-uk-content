@@ -5,7 +5,6 @@ import Player from '../../components/sandbox/MediaPlayer.js';
 import axios from 'axios';
 
 const Music = (props) => {
-  console.log(props)
   return (
     <Layout title="Music-Player">
       <Player props={props}></Player>

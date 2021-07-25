@@ -3,13 +3,27 @@ import React, { useState, useEffect } from 'react'
 const useAudio = props => {
   const [audio, setState] = useState();
   const [playing, setPlaying] = useState(false);
+  const [random, setRandom] = useState(false);
   const [next, setNext] = useState(false);
   const [counter, setCounter] = useState(0);
   const [song, setSong] = useState(props[counter]);
 
   const toggle = () => setPlaying(!playing);
-  const nextSong = () => setCounter((counter >= props.length -1) ? props.length - 1 : counter + 1);
-  const previousSong = () => setCounter((counter <= 0) ? 0 : counter - 1);
+  const randomise = () => setRandom(!random);
+  const nextSong = () => {
+    if (random) {
+      setCounter(Math.floor(Math.random() * Object.keys(props).length));
+    } else {
+      setCounter((counter >= Object.keys(props).length -1) ? Object.keys(props).length - 1 : counter + 1);
+    }
+  };
+  const previousSong = () => {
+    if (random) {
+      setCounter(Math.floor(Math.random() * Object.keys(props).length));
+    } else {
+      setCounter((counter <= 0) ? 0 : counter - 1);
+    }
+  };
 
   useEffect(() => {
     console.log(song)
@@ -52,7 +66,9 @@ const useAudio = props => {
 
   return {
     playing,
+    random,
     toggle,
+    randomise,
     previousSong,
     nextSong,
     counter
@@ -60,21 +76,28 @@ const useAudio = props => {
 };
 
 const Player = ({ props }) => {
-  const { playing, toggle, previousSong, nextSong, counter } = useAudio(props);
+  const { playing, toggle, random, randomise, previousSong, nextSong, counter } = useAudio(props);
 
   return (
-    <div style={{height: "80%", width: "80%", position: "relative", justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
-      <div>
-        <img
-          src={props[counter].image}
-          style={{height: "100%", width: "100%", borderRadius: "50%"}}/>
-      </div>
-      <div style={{position: "relative", display: "flex", justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
+    <>
+    <div style={{height: "80%", width: "80%", justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
+      {props[counter]?.image !== undefined &&
+      <>
+        <div>
+          <img src={props[counter].image} style={{height: "50%", width: "50%", borderRadius: "50%", justifyContent: "center", alignItems: "center"}}/>
+        </div>
+        <br></br>
+      </>
+      }
+      <div style={{justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
         <button onClick={previousSong}>Previous</button>
         <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
         <button onClick={nextSong}>Next</button>
       </div>
+      <button onClick={randomise}>{random ? "Standardise" : "Randomise"}</button>
     </div>
+    <pre>PODCAST:{JSON.stringify({...props[counter]}, null, '\t')}</pre>
+    </>
   );
 };
 
