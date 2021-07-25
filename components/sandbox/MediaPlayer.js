@@ -26,7 +26,6 @@ const useAudio = props => {
   };
 
   useEffect(() => {
-    console.log(song)
     setSong(props[counter]);
   }, [counter])
 
@@ -38,7 +37,6 @@ const useAudio = props => {
     } else {
       setState(new Audio(song.url))
     }
-    console.dir(audio)
   }, [song])
 
   useEffect(() => {
@@ -80,23 +78,21 @@ const Player = ({ props }) => {
 
   return (
     <>
-    <div style={{height: "80%", width: "80%", justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
-      {props[counter]?.image !== undefined &&
-      <>
-        <div>
-          <img src={props[counter].image} style={{height: "50%", width: "50%", borderRadius: "50%", justifyContent: "center", alignItems: "center"}}/>
-        </div>
-        <br></br>
-      </>
-      }
-      <div style={{justifyContent: "center", alignItems: "center", verticalAlign: "middle"}}>
-        <button onClick={previousSong}>Previous</button>
-        <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
-        <button onClick={nextSong}>Next</button>
+      <div style={{position: "relative", display: "inherit"}}>
+        {props[counter]?.image !== undefined &&
+            <img src={props[counter].image} style={{height: "80%", width: "80%", maxHeight: "500px", maxWidth: "500px", borderRadius: "50%"}}/>
+        }
       </div>
-      <button onClick={randomise}>{random ? "Standardise" : "Randomise"}</button>
-    </div>
-    <pre>PODCAST:{JSON.stringify({...props[counter]}, null, '\t')}</pre>
+      <div>
+        <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
+        <br></br><hr></hr>
+        <button onClick={nextSong}>Next</button>
+        <br></br>
+        <button onClick={previousSong}>Previous</button>
+        <br></br><hr></hr>
+        <button onClick={randomise}>{random ? "Standardise" : "Randomise"}</button>
+      </div>
+    <pre>PODCAST: {props[counter].show, props[counter].title}</pre>
     </>
   );
 };
