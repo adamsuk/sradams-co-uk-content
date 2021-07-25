@@ -5,7 +5,7 @@ import Player from '../../components/sandbox/MediaPlayer.js';
 import axios from 'axios';
 
 const Music = (props) => {
-  console.dir(props)
+  console.log(props)
   return (
     <Layout title="Music-Player">
       <Player props={props}></Player>
@@ -14,7 +14,8 @@ const Music = (props) => {
 }
 
 Music.getInitialProps = async () => {
-  const { data } = await axios.get('https://api.sradams.co.uk/random-podcast');
+  //const { data } = await axios.get('https://api.sradams.co.uk/random-podcast');
+  const { data } = await axios.get('https://api.sradams.co.uk/all-podcasts');
   return (data);
 }
 
