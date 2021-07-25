@@ -34,13 +34,16 @@ const useAudio = url => {
   return [playing, toggle];
 };
 
-const Player = ({ url }) => {
-  const [playing, toggle] = useAudio(url);
+const Player = ({ props }) => {
+  const [playing, toggle] = useAudio(props.url);
 
   return (
+    <>
     <div>
       <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
     </div>
+    <pre>PODCAST:{JSON.stringify({...props}, null, '\t')}</pre>
+    </>
   );
 };
 
