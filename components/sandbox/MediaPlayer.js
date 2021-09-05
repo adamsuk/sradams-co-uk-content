@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import Play from './icons/Play'
+import Pause from './icons/Pause'
+import Previous from './icons/Previous'
+import Next from './icons/Next'
+import Shuffle from './icons/Shuffle'
 
 const useAudio = props => {
   const [audio, setState] = useState();
@@ -76,24 +81,61 @@ const useAudio = props => {
 const Player = ({ props }) => {
   const { playing, toggle, random, randomise, previousSong, nextSong, counter } = useAudio(props);
 
+  var sectionStyle = {
+    display: "grid",
+    height: "100%",
+    width: "100%",
+    maxHeight: "500px",
+    maxWidth: "500px",
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridAutoRows: '1fr',
+    textAlign: 'center',
+    itemAlign: 'center',
+  }
+
+  const imageStyle= {
+    height: "100%",
+    width: "100%",
+    maxHeight: "400px",
+    maxWidth: "400px",
+    borderRadius: "15%",
+    backgroundColor: "white",
+    backgroundImage: `url(${props[counter].image})`,
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover'
+  }
+
+  const iconStyle = {
+    height: '100%',
+    width: '100%',
+    maxHeight: '50px',
+    maxWidth: '50px',
+    fill: 'white',
+    stroke: 'black',
+    strokeWidth: "4"
+  }
+
   return (
-    <>
-      <div style={{position: "relative", display: "inherit"}}>
+    <div style={{ ...sectionStyle, gridTemplateColumns: '1fr' }}>
+      <h3 style={{ margin: '0' }}>{props[counter]?.show}</h3>
+      <p style={{ marginTop: '0' }}>{props[counter]?.title}</p>
+      <div onClick={randomise} style={{ position: 'relative' }}>
         {props[counter]?.image !== undefined &&
-            <img src={props[counter].image} style={{height: "80%", width: "80%", maxHeight: "500px", maxWidth: "500px", borderRadius: "50%"}}/>
+            <img src={props[counter].image} style={{height: "100%", width: "100%", maxHeight: "400px", maxWidth: "400px", borderRadius: "15%"}}/>
         }
+        <div style={{ position: 'absolute', top: '0', bottom: '0', left: '0', right: '0', height: '100%', width: '100%' }}>
+          {random &&
+            <Shuffle style={{ ...iconStyle, maxHeight: '100%', maxWidth:'100%' }}/>
+          }
+        </div>
       </div>
-      <div>
-        <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
-        <br></br><hr></hr>
-        <button onClick={nextSong}>Next</button>
-        <br></br>
-        <button onClick={previousSong}>Previous</button>
-        <br></br><hr></hr>
-        <button onClick={randomise}>{random ? "Standardise" : "Randomise"}</button>
+      <div style={{ ...sectionStyle, paddingTop: '12px' }}>
+        <div><Previous style={ iconStyle } onClick={previousSong} /></div>
+        <div>{playing ? <Pause style={ iconStyle } onClick={toggle} /> : <Play style={ iconStyle } onClick={toggle} />}</div>
+        <div><Next style={ iconStyle } onClick={nextSong} /></div>
       </div>
-    <pre>PODCAST: {props[counter].show, props[counter].title}</pre>
-    </>
+    </div>
   );
 };
 
