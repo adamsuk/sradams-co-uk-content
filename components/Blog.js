@@ -1,5 +1,4 @@
 import style from "../styles/Blog.module.scss";
-import Link from 'next/link';
 
 var Blog = ({ props }) => {
 

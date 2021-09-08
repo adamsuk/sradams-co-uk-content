@@ -27,13 +27,28 @@ export async function getStaticProps() {
             const { data } = matter(content.default)
             
             posts_metadata.push({
-                'title': data.title,
-                'slug': path.parse(file).name,
-                'published_date': data.date,
-                ... data
+                slug: path.parse(file).name,
+                published_date: data.date,
+                ...data
             });
         };
     };
+
+    // github adamsuk readme post
+    const github_readme = await fetch('https://raw.githubusercontent.com/adamsuk/adamsuk/main/README.md')
+        .then((res) => {
+            const date = new Date(res.headers.get('date'));
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = date.getFullYear();
+            posts_metadata.push({
+                title: 'Hi There ... from Github',
+                slug: 'hi-there',
+                published_date: yyyy + '-' + mm + '-' + dd,
+                tags: ['Github'],
+                tldr: 'You may have seen this before, my Github profile welcome README :)'
+            })
+        })
 
     return {
         'props': {
