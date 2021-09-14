@@ -1,36 +1,37 @@
 ---
-date: "2021-03-27"
+date: "2021-09-14"
 title: "Scott Adams – Curriculum Vitae"
 tags: ["Career"]
 ---
-Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate
+### TL;DR
+Experience: Senior Software Engineer, Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate\
+Key Skills: Python, Javascript, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Github Actions, Helm
 
-Email: sra405@protonmail.com
-
-Phone: 07840579704
-___
-### Skills (TL;DR)
-Python, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Helm
+Contact me by [email](mailto:sra405@protonmail.com) or by [phone](tel:+44840579704)
 ___
 ## Personal Profile
-I'm currently a Platform Engineer at [Koodoo](https://koodoo.io/). This has allowed me to focus solely on tools and approaches used in a modern technology stack.
-My day-to-day involves a wide range of activities ranging from DevOps CI/CD pipelines, cloud-based infrastructure provisioning and general monitoring of staging and production deployments.
-I've held a variety of roles, predominantly software focused. My initial exposure to software development was as a Thermo-Fluid Engineer at Rolls-Royce.
-This role allowed me to learn analytical and simulation skills in a wide range of exciting and varied projects in the nuclear sector, both civil and marine. 
+I'm currently a Senior Software Engineer at [Koodoo](https://koodoo.io/). This has allowed me to focus solely on development tools and approaches used in a modern technology stack.
+My day-to-day involves a wide range of activities ranging from frontend developments (typically Next.js), backend developments (typically Express.js), DevOps CI/CD pipelines and taking part in scoping/planning activities.
+I've held a variety of roles, predominantly software focused. My initial exposure to software development was as a Thermo-Fluid Engineer at Rolls-Royce. This role allowed me to learn analytical and simulation skills in a wide range of exciting and varied projects in the nuclear sector, both civil and marine.
 I have led various python based developments, from design/develop through to integration and user acceptance testing, initially utilising waterfall then championing DevOps principles.
-My career to date has benefited significantly from the transferable skills I obtained from my academic, teaching and engineering experiences.
-This has allowed me present to various levels of senior management, apply coaching techniques to peers and efficiently inform and engage stakeholders.
+My career to date has benefited significantly from the transferable skills I obtained from my academic, teaching and engineering experiences. This has allowed me present to various levels of senior management, apply coaching techniques to peers and efficiently inform and engage stakeholders.
 ___
 ## Education and Work Experience
 ***
-### Platform Engineer, Koodoo - Mortgage Power Ltd (11/2020 - Present)
+### Senior Software Engineer, Koodoo - Mortgage Power Ltd (08/2021 - Present)
+#### Fully Remote
+- Responsible for developing and maintaining various parts frontend and backend applications.
+- Partaking in the agile sprint cycle with input into planning and estimation as well as peer code reviews.
+- Produced proof-of-concepts and developer tools such as useful CLI commands and migration to a shared component library.
+***
+### Platform Engineer, Koodoo - Mortgage Power Ltd (11/2020 - 08/2020)
 #### Fully Remote
 - Responsible for provisioning and maintaining the businesses cloud infrastructure (predominantly GCP but includes resources in AWS and Azure).
 - I provisioned the infrastructure from initial development to production for two major projects in the company (including terraform for GCP resources and 3rd party products such as Auth0 and Sentry).
 - Responsible for the CI/CD pipelines across the business.
 - I wrote the whole pipeline for the adoption of Next.js and Helm in CircleCI utilising the Orb structure and introduced significant improvements to existing pipelines (automation of terraform repositories, pipeline image generation/push to a private registry and tag based deployments for front and backend repositories).
 - Produced proof-of-concepts for new tools and services such as Pulumi, Helm, Lighthouse, Github Actions and Netlify.
-- Assisted GCP cluster migration (staging and production). This included transfer of deployments using Velero and updating pipelines to populate a new private container registry and update front and backend services.
+- Assisted GCP cluster migration (staging and production). This included transfer of deployments using Velero and updating pipelines to populate a new private container registry and update services.
 ***
 ### Performance Methods Lead, Rolls-Royce - UK SMR (02/2020 - 11/2020)
 #### Rolls-Royce, Jubilee House, Derby.
@@ -57,15 +58,11 @@ ___
 #### Long Field Academy, Melton Mowbray, Leicestershire.
 - Accountable for lesson delivery to meet learning and scheme of work objectives for pupils across key stages 3 and 4 (11-16) in Biology, Chemistry and Physics.
 ***
-### PGCE Secondary Science with Physics Enhancement (08/2012 - 07/2013)
-#### Outstanding - University of Chester
+#### PGCE Secondary Science with Physics Enhancement (08/2012 - 07/2013) - Outstanding - University of Chester
 ***
-### BSc Physics (09/2009 - 07/2012)
-#### 2:2 (Hons) - University of Leicester
+#### BSc Physics (09/2009 - 07/2012) - 2:2 (Hons) - University of Leicester
 ___
 ## Additional Skills
-Throughout my academic and professional experiences, I have developed transferable and specific skills, these include:
-
 __Computing__: DevOps champion by embracing modern tools and techniques. I scoped, implement and maintained server-side Docker, Gitlab, Puppet and MySQL instances.
 Extensive knowledge of programming languages such as Python and MATLAB, intermediate knowledge of C, C#, SQL and Fortran, working knowledge of C++, JavaScript and AWK.
 Modelling experience using codes such as RELAP5-3D, COBRA and MCNP as well as experience developing in-house codes.
@@ -87,7 +84,7 @@ Physical phenomena assessed from first principles for validation and analysis pu
 Extensive thermal hydraulic used to determine fluid properties, flow and heat transfer regimes.
 ___
 ## Further Details
-- Conferences – ICONE 26 presenter (robust design approaches) and co-author (two-staged validation), Microsoft Build 2020 (attendee), GitLab Commit 2020 (presenter), DevOps Live 2020 (panelist).
+- Conferences – ICONE 26 presenter (robust design approaches) and co-author (two-staged validation), Microsoft Build 2020 (attendee), GitLab Commit 2020 (presenter), DevOps Live 2020 & 2021 (panelist).
 - Interviewer – Enabling a start-up to ramp up by supporting various stages of the interview process. Organising, reviewing applications and leading interviews for four successful MSc placement students.
 - Home automation hobbyist – Ubuntu media server, Home Assistant smart device integration, NFS server for centralised storage, puppet server for cross-network software installation/updates.
 - Classic car enthusiast – owner of a 1978 MG BGT.
