@@ -76,6 +76,23 @@
       overflow: visible;
       margin: 0;
       padding: 0;
+      background-color: transparent !important;
+      color: black !important;
+      font-size: small;
+      text-shadow: none;
+
+      *,
+      *:before,
+      *:after {
+        color: black !important;
+        background-color: transparent !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+      a::after{
+        content: " (" attr(href) ") ";
+      }
     }
   
     .Post {

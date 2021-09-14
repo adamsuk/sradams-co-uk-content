@@ -11,16 +11,15 @@ const Homepage = pageProps => {
     }, 1000);
   }, [])
 
-  return (<Layout>
-  <div className={style.item}>
-    <a>
-    <img
-        src={pageProps.img}
-    />
-    <p id='welcome-txt'></p>
-    </a>
-  </div>
-  </Layout>
+  return (
+    <Layout>
+      <div className={style.item}>
+        <a>
+          <img src={pageProps.img}/>
+          <p id='welcome-txt'></p>
+        </a>
+      </div>
+    </Layout>
   );
 };
 
