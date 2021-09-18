@@ -4,7 +4,7 @@ title: "Scott Adams – Curriculum Vitae"
 tags: ["Career"]
 ---
 ### TL;DR
-Experience: Senior Software Engineer, Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Avocate\
+Experience: Senior Software Engineer, Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Advocate\
 Key Skills: Python, Javascript, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Github Actions, Helm
 
 Contact me by [email](mailto:sra405@protonmail.com) or by [phone](tel:+44840579704)
