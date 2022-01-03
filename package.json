@@ -1,56 +1,37 @@
 {
-  "name": "sradams-co-uk",
-  "version": "0.0.1",
+  "name": "sradams-co-uk-content",
   "private": true,
   "scripts": {
-    "commit": "cz",
     "dev": "next dev",
     "build": "next build",
-    "export": "next export",
     "start": "next start",
-    "ci": "next build && next start"
+    "lint": "next lint",
+    "ci": "next build && next start",
+    "export": "next export"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.2",
     "axios": "^0.24.0",
-    "commitizen": "^4.2.4",
-    "firebase": "^8.10.0",
     "gray-matter": "^4.0.3",
-    "js-cookie": "^3.0.1",
-    "lost": "8.2.0",
-    "mathjs": "^9.5.2",
-    "next": "^10.2.3",
-    "next-page-transitions": "1.0.0-beta.2",
-    "nprogress": "^0.2.0",
-    "postcss": "^8.4.5",
-    "postcss-import": "12.0.1",
-    "postcss-nested": "4.2.3",
+    "next": "12.0.7",
     "raw-loader": "^4.0.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-firebaseui": "^5.0.2",
-    "react-grid-system": "^7.3.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
-    "react-markdown": "^5.0.3",
-    "reactstrap": "^8.10.1",
-    "styled-components": "^5.3.3",
-    "styled-jsx-plugin-postcss": "1.0.0",
-    "webpack": "^4.0.0"
+    "react-markdown": "^7.1.1",
+    "react-responsive": "^9.0.0-beta.5",
+    "rehype-raw": "^6.1.0",
+    "rehype-sanitize": "^5.0.1",
+    "webpack": "^5.65.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.8.6",
+    "@tailwindcss/typography": "^0.5.0",
+    "autoprefixer": "^10.4.0",
     "cz-conventional-changelog": "^3.3.0",
-    "postcss-cli": "^8.3.1",
-    "postcss-preset-env": "^6.7.0",
-    "sass": "^1.32.5",
-    "tailwindcss": "^2.2.8",
-    "webpack": "^4.0.0",
-    "webpack-dev-server": "^3.11.2"
-  },
-  "postcss": {
-    "plugins": {
-      "lost": {},
-      "postcss-nested": {}
-    }
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.7"
   },
   "config": {
     "commitizen": {

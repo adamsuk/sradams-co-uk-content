@@ -1,16 +1,14 @@
-
 module.exports = {
-  webpack: function(config, { isServer }) {
-    // Fixes npm packages that depend on `fs` module
-    if (!isServer) {
-      config.node = {
-        fs: 'empty'
-      }
+  reactStrictMode: true,
+  future: {
+    webpack5: true, // by default, if you customize webpack config, they switch back to version 4. 
+  },
+  webpack(config) {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
     };
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader',
-    })
-    return config
-  }
+
+    return config;
+  },
 }
