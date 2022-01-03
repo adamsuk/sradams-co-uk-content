@@ -20,7 +20,7 @@ const CV = (props) => {
   }, []);
 
   return (
-    <div className='flex flex-col max-w-7xl m-auto items-center p-4 sm:pt-8 sm:pb-4 sm:px-4'>
+    <div className='flex flex-col max-w-7xl m-auto items-center pb-4 pt-8 px-4 print:pt-4'>
       <h1 className="font-sans"><center>{props.cv_metadata.title}</center></h1>
       <br></br>
       <Markdown
