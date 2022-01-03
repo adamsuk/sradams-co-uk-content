@@ -3,11 +3,7 @@ import Markdown from 'react-markdown'
 export default function Custom404() {
   return (
     <div className="flex justify-center items-center h-screen max-w-7xl w-full p-7">
-      <Markdown 
-        rehypePlugins={[rehypeRaw, rehypeSanitize]}
-        parserOptions={{ commonmark: true }}
-        className="prose dark:prose-invert whitespace-no-wrap"
-      >
+      <Markdown className="prose dark:prose-invert whitespace-no-wrap">
         :sob:
       </Markdown>
       <br></br>
