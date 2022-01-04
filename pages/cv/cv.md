@@ -5,9 +5,9 @@ tags: ["Career"]
 ---
 ### TL;DR
 Experience: Senior Software Engineer, Platform Engineer, Python Developer, Nuclear Engineer, Physicist, DevOps Advocate\
-Key Skills: Python, Javascript, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Github Actions, Helm
+Key Skills: Python, Javascript, Terraform, Bash, C/C#, Matlab, Docker, Puppet, Kubernetes, GCP, MySQL, Linux, Git, Github/Gitlab, CircleCI, Github Actions, Helm, GraphQL
 
-Contact me by [email](mailto:sra405@protonmail.com) or by [phone](tel:+44840579704)
+Contact at [email](mailto:sra405@protonmail.com) or by [phone](tel:+447840579704)
 ___
 ## Personal Profile
 I'm currently a Senior Software Engineer at [Koodoo](https://koodoo.io/). This has allowed me to focus solely on development tools and approaches used in a modern technology stack.
@@ -17,7 +17,6 @@ I have led various python based developments, from design/develop through to int
 My career to date has benefited significantly from the transferable skills I obtained from my academic, teaching and engineering experiences. This has allowed me present to various levels of senior management, apply coaching techniques to peers and efficiently inform and engage stakeholders.
 ___
 ## Education and Work Experience
-***
 ### Senior Software Engineer, Koodoo - Mortgage Power Ltd (08/2021 - Present)
 #### Fully Remote
 - Responsible for developing and maintaining various parts frontend and backend applications.
