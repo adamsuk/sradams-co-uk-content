@@ -82,12 +82,12 @@ const Blog = (props) => {
       <div className="pt-7">
         {(!sideActive) &&
           <>
-            <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200">
+            <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
               <button>
                 <VscChevronRight size={36} onClick={toggleSide}/>
               </button>
             </div>
-            <div className="visible lg:hidden z-30 items-center justify-center fixed rounded-r-lg bg-gray-200">
+            <div className="visible lg:hidden z-30 items-center justify-center fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
               <button>
                 <VscChevronDown size={36} onClick={toggleSide}/>
               </button>
@@ -97,7 +97,7 @@ const Blog = (props) => {
       </div>
       <div className={`relative container mb-auto flex flex-wrap flex-col md:flex-row md:px-0 max-w-screen w-full justify-between ${sideActive ? "lg:flex-row" : "md:max-w-7xl mx-auto"}`}>
         <div className={`${sideActive ? "visible" : "hidden"} relative md:w-2/5 w-full overflow-y-hidden`}>
-          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
+          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-700 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
             {(sideActive) && 
               <>
                 <div className="flex w-full items-end justify-end">
@@ -111,13 +111,10 @@ const Blog = (props) => {
                       <div key={`${post.slug}-div2`}>
                         <a key={`${post.slug}-a`} onClick={changePost(index, !isDesktopOrLaptop)}>
                           <button type="button">
-                            <h3>{post.title}</h3>
+                            <h4>{post.title}</h4>
                           </button>
                         </a>
                       </div>
-                      <a>
-                        <hr></hr>
-                      </a>
                     </div>
                   ))}
                 </div>
