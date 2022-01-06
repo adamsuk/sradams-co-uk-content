@@ -11,6 +11,9 @@ export default function Header(props) {
     { title: "Sandbox", url: "/sandbox" },
     { title: "CV", url: "/cv" }
   ];
+
+  const DarkModeIcon = theme === 'dark' ? WiDaySunny : WiMoonAltWaxingCrescent3
+
   return (
     <header
       className={`fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 z-20 trasition ease-in-out duration-500 print:hidden`}
@@ -86,12 +89,7 @@ export default function Header(props) {
                 className="align-middle pl-2 md:pl-3"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               >
-                {(theme === 'dark') && 
-                  <WiDaySunny size={24}/>
-                }
-                {(theme === 'light') &&
-                  <WiMoonAltWaxingCrescent3 size={24}/>
-                }
+                <DarkModeIcon size={24}/>
               </button>
             </li>
             </ul>
