@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Menu } from '@headlessui/react'
 import { useTheme } from 'next-themes'
-import { WiDaySunny } from "react-icons/wi";
+import { WiDaySunny, WiMoonAltWaxingCrescent3 } from "react-icons/wi";
 
 export default function Header(props) {
   const { theme, setTheme } = useTheme()
@@ -21,14 +21,14 @@ export default function Header(props) {
         >
           <Link href="/">
             <a
-              className="hidden md:block text-xl font-bold tracking-tighter pr-8"
+              className="hidden md:block text-xl font-bold tracking-tighter"
             >
               Scott Adams
             </a>
           </Link>
           <Link href="/">
             <a
-              className="visible md:hidden text-xl font-bold tracking-tighter pl-2"
+              className="visible md:hidden text-xl font-bold tracking-tighter pr-2"
             >
               SA
             </a>
@@ -86,7 +86,12 @@ export default function Header(props) {
                 className="align-middle pl-2 md:pl-3"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               >
-                <WiDaySunny size={24}/>
+                {(theme === 'dark') && 
+                  <WiDaySunny size={24}/>
+                }
+                {(theme === 'light') &&
+                  <WiMoonAltWaxingCrescent3 size={24}/>
+                }
               </button>
             </li>
             </ul>
