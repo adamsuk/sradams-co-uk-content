@@ -1,4 +1,5 @@
 import App from 'next/app';
+import { ThemeProvider } from 'next-themes'
 
 import '../styles/globals.css'
 
@@ -10,16 +11,18 @@ class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
   return (
-      <div key="generic" className='h-screen flex flex-col'>
-        <Head>
-          <title>Scott Adams</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta charSet="utf-8" />
-        </Head>
-        <Header />
-        <Component {...pageProps} />
-        <NavBar />
-      </div>
+      <ThemeProvider attribute='class'>
+        <div  key="generic" className='h-screen flex flex-col'>
+          <Head>
+            <title>Scott Adams</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta charSet="utf-8" />
+          </Head>
+          <Header />
+          <Component {...pageProps} />
+          <NavBar />
+        </div>
+      </ThemeProvider>
     );
   }
 };

@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { Menu } from '@headlessui/react'
+import { useTheme } from 'next-themes'
+import { WiDaySunny } from "react-icons/wi";
 
 export default function Header(props) {
+  const { theme, setTheme } = useTheme()
+
   const menuItems = [
     { title: "Blog", url: "/blog" },
     { title: "Sandbox", url: "/sandbox" },
@@ -9,7 +13,7 @@ export default function Header(props) {
   ];
   return (
     <header
-      className={`fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 z-20 trasition ease-in-out duration-500 print:hidden`}
+      className={`fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 z-20 trasition ease-in-out duration-500 print:hidden`}
     >
       <div className="max-w-7xl mx-auto ">
         <div
@@ -20,6 +24,13 @@ export default function Header(props) {
               className="hidden md:block text-xl font-bold tracking-tighter pr-8"
             >
               Scott Adams
+            </a>
+          </Link>
+          <Link href="/">
+            <a
+              className="visible md:hidden text-xl font-bold tracking-tighter pl-2"
+            >
+              SA
             </a>
           </Link>
           <nav>
@@ -68,15 +79,18 @@ export default function Header(props) {
                 </li>
               )}
             })}
+            <li key="dark-mode">
+              <button
+                aria-label="Toggle Dark Mode"
+                type="button"
+                className="align-middle pl-2 md:pl-3"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              >
+                <WiDaySunny size={24}/>
+              </button>
+            </li>
             </ul>
           </nav>
-          <Link href="/">
-            <a
-              className="visible md:hidden text-xl font-bold tracking-tighter pl-2"
-            >
-              SA
-            </a>
-          </Link>
         </div>
       </div>
     </header>

@@ -1,6 +1,7 @@
 const plugin = require('tailwindcss/plugin')
 
 module.exports = {
+  darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -30,6 +31,11 @@ module.exports = {
         DEFAULT: {
           css: {
             img: {
+              'margin-top': '0',
+              'margin-bottom': '0',
+              'display': 'inline',
+            },
+            Image: {
               'margin-top': '0',
               'margin-bottom': '0',
               'display': 'inline',

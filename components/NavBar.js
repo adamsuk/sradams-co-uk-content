@@ -6,11 +6,11 @@ const NavBar = () => {
   ];
 
   return (
-    <footer className="sticky bottom-0 w-full max-w-screen justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 print:hidden">
+    <footer className="sticky bottom-0 w-full max-w-screen justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 print:hidden">
       <div className="flex py-2 justify-evenly">
         {menuItems?.map((item) => (
           <a key={item?.title} href={item?.url}>
-            <img className="h-6" src={item?.img} alt={item?.title} />
+            <img className="visible dark:invert h-6" src={item?.img} alt={item?.title} />
           </a>
         ))}
       </div>
