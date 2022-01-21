@@ -43,7 +43,7 @@ const Homepage = (pageProps) => {
           </Markdown>
         </div>
 
-        <div className="hidden md:block relative md:h-screen md:w-2/5 w-full overflow-y-hidden">
+        <div className="hidden md:block relative md:w-2/5 w-full overflow-y-hidden">
           <div className="items-center justify-center max-h-[80%] md:w-3/10 md:pr-7 md:fixed">
             <img
               alt="ME!"
