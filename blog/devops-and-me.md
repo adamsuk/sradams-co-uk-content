@@ -1,11 +1,12 @@
 ---
-title: "DevOps and Me"
-date: "2021-06-04"
-tags: "Ramblings, Career, DevOps"
-description: "Some ramblings on how DevOps has shaped my career to date. From life in a multinational corporate to finding happiness in tech, all thanks to the culture DevOps instills."
+title: DevOps and Me
+date: '2021-06-04'
+tags: 'Ramblings, Career, DevOps'
+description: 'Some ramblings on how DevOps has shaped my career to date. From life in a multinational corporate to finding happiness in tech, all thanks to the culture DevOps instills.'
 cover_image: ''
 canonical_url: null
 published: false
+id: 965197
 ---
 
 I've been making random entries into this blog for a while now. That and conference season is coming back around I'm in full nostalgia mode. This post is personal and based on my professional experiences to date about how I am where I am.
