@@ -1,11 +1,12 @@
 ---
-title: "Gitlab Commit 2020 Proposal"
-date: "2021-03-26"
-tags: "DevOps, Career, Conferences"
-description: "The proposal I sent of to Gitlab to get a speaker slot at Gitlab Commit 2020. It's a little self deprecating but ultimately true regarding my early career."
+title: Gitlab Commit 2020 Proposal
+date: '2021-03-26'
+tags: 'DevOps, Career, Conferences'
+description: The proposal I sent of to Gitlab to get a speaker slot at Gitlab Commit 2020. It's a little self deprecating but ultimately true regarding my early career.
 cover_image: ''
 canonical_url: null
 published: false
+id: 965202
 ---
 ```
 scott@rolls-royce:~$ ./introduction.sh
