@@ -1,8 +1,11 @@
 ---
 title: "What I'm Loving About JavaScript"
 date: "2021-07-21"
-tags: ["Javascript", "Tech", "Learning", "Python"]
-tldr: "With a move over to web development I've been studying up on my JavaScript. Having mostly developed in Python I've been pondering on the differences and loving all things JS right about now."
+tags: "Javascript, Tech, Learning, Python"
+description: "With a move over to web development I've been studying up on my JavaScript. Having mostly developed in Python I've been pondering on the differences and loving all things JS right about now."
+cover_image: ''
+canonical_url: null
+published: false
 ---
 
 Having spent years developing various bits of software in python I'm surprised how similar I'm finding JavaScript. For sure, I'm still digging around the basic syntax but this base knowledge has me eagering awaiting all the use cases I can apply this too!!
