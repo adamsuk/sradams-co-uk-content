@@ -21,6 +21,8 @@ Just a little interesting syntax stuff:
 - [BLOCKS!](https://www.rubyguides.com/2016/02/ruby-procs-and-lambdas/) remind me of python lambdas
 - Shovel (`<<`) over plus-equals (`+=`) ... this'll be a hard one to get out of ye ol' brain. (shovel modifies original variable)
 
+There's always going to be little gotchas but what's really going to trip me up are the checks for empty variable types. I'm pretty much going to be reliant on trial/error and [cheatsheets](https://blog.arkency.com/2017/07/nil-empty-blank-ruby-rails-difference/) for a little while 😆
+
 ## Rails
 
 On first glance it looks like a nice mixture of Django with a templating structure not too dissimliar from Jinja2. There's definitely a LOT but I understand the whole "rails" concept for this MVC approach.
@@ -32,6 +34,7 @@ I'm loving the boilerplate generators!! Similar to the inbuilt methods I just ne
 ### Gotchas
 
 - To `require` or not to `require` that is the question. By default rails requires a ton of stuff so classes and methods are pretty much available everywhere and anywhere ... except when they're not. One that keeps getting me is `helpers`.
+- Rails-provided paths ... thanks rails for being ultra helpful but until I realise my paths have auto-generated variables I'm going to take a little longer setting up basic routing and redirects.
 
 ## Useful Links
 
