@@ -11,7 +11,7 @@ This is by no means a "how-to" guide on learning Ruby, instead it's more of a "h
 
 ## Noticable Syntax Differences
 Just a little interesting syntax stuff:
-- Objects have an `inspect` method. It seems pretty comparable to `to_s` expect for `nil` where the conversion to a string is `""` but on inspect it's `"nil"` ... interesting
+- Objects have an ~inspect~ method. It seems pretty comparable to `to_s` expect for `nil` where the conversion to a string is `""` but on inspect it's `"nil"` ... interesting
 - Double arrows on an `Array` pushes a value to the last element, NICE!
 - `:` 👀 ... ok this is different. We've got ourselves a new base type `Symbols` by the looks of things. Immutable strings for object keys, but a new base type so definitely not strings?!? I'm in!! Coming from a land of Javascript and Python the use of `:` keeps getting me!
 - Array slicing is `array[_start_index, _length]` not start to end index! To do that you use `array[_start_index.._end_index`] for inclusive and `array[_start_index..._end_index]` to exclude `_end_index`.
