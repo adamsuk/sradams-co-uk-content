@@ -1,6 +1,6 @@
-const NavBar = () => {
+const NavBar = (props) => {
   const menuItems = [
-    { title: "github", url: "https://github.com/adamsuk", img: "/Navbar/Github/GitHub-Mark-120px-plus.png" },
+    { title: "github", url: `https://github.com/${props.githubUsernames.personal}`, img: "/Navbar/Github/GitHub-Mark-120px-plus.png" },
     { title: "linkedin", url: "https://linkedin.com/in/scott-adams-a3b070192", img: "/Navbar/LinkedIn/linkedin.png" },
     { title: "email", url: "mailto:sra405@protonmail.com", img: "/Navbar/email.png" },
   ];

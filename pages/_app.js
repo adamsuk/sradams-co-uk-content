@@ -10,6 +10,10 @@ import Header from '../components/Header'
 class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
+    pageProps.githubUsernames = {
+      personal: "adamsuk",
+      professional: "sra405",
+    };
   return (
       <ThemeProvider attribute='class'>
         <div  key="generic" className='h-screen flex flex-col'>
@@ -20,7 +24,7 @@ class MyApp extends App {
           </Head>
           <Header />
           <Component {...pageProps} />
-          <NavBar />
+          <NavBar {...pageProps}/>
         </div>
       </ThemeProvider>
     );

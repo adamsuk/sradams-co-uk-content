@@ -4,17 +4,32 @@ import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 
-const Homepage = (pageProps) => {
+const Homepage = (props) => {
   const [markdownText, setMarkdownText] = useState("");
+  const [githubProfileType, setGithubProfileType] = useState(Object.keys(props.githubUsernames)[0]);
+  const [githubProfile, setGithubProfile] = useState(props.githubUsernames[githubProfileType]);
 
   useEffect(() => {
     async function fetchData() {
       const data = await axios(
-        `https://raw.githubusercontent.com/${pageProps.githubUsername}/${pageProps.githubUsername}/main/README.md`,
+        `https://raw.githubusercontent.com/${githubProfile}/${githubProfile}/main/README.md`,
       ).then((res) => setMarkdownText(res.data));
     }
     fetchData();
-  }, [pageProps.githubUsername]);
+  }, [githubProfile]);
+
+  const switchGithubProfile = () => {
+    const totalProfiles = Object.keys(props.githubUsernames).length;
+    const currentProfileIndex = Object.values(props.githubUsernames).indexOf(githubProfile);
+    if (currentProfileIndex === totalProfiles - 1) {
+      setGithubProfileType(Object.keys(props.githubUsernames)[0]);
+      setGithubProfile(Object.values(props.githubUsernames)[0]);
+    } else {
+      setGithubProfileType(Object.keys(props.githubUsernames)[currentProfileIndex + 1]);
+      setGithubProfile(Object.values(props.githubUsernames)[currentProfileIndex + 1]);
+    }
+    console.log(githubProfileType)
+  }
 
   return (
     <>
@@ -22,12 +37,18 @@ const Homepage = (pageProps) => {
         <div className="visible md:hidden relative w-full overflow-y-hidden pb-3">
           <hr></hr>
           <br></br>
-          <div className="items-center justify-center">
+          <div
+            className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]"
+            onClick={switchGithubProfile}
+          >
             <img
               alt="ME!"
-              className="mx-auto rounded-full items-center justify-center"
-              src={`https://github.com/${pageProps.githubUsername}.png`}
+              className="mx-auto rounded-full items-center justify-center w-full h-full"
+              src={`https://github.com/${githubProfile}.png`}
             />
+            <div className="flex-1 absolute">
+              <div className="w-full h-full z-10 rotate-[315deg] text-center text-2xl xs:text-4xl sm:text-6xl font-semibold">{githubProfileType}</div>
+            </div>
           </div>
           <br></br>
           <hr></hr>
@@ -48,7 +69,8 @@ const Homepage = (pageProps) => {
             <img
               alt="ME!"
               className="mx-auto rounded-full items-center justify-center"
-              src={`https://github.com/${pageProps.githubUsername}.png`}
+              src={`https://github.com/${githubProfile}.png`}
+              onClick={switchGithubProfile}
             />
           </div>
         </div>
@@ -57,6 +79,4 @@ const Homepage = (pageProps) => {
   );
 };
 
-const homepage = () => <Homepage githubUsername={"adamsuk"}></Homepage>;
-
-export default homepage
+export default Homepage;
