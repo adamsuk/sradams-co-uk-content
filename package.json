@@ -10,7 +10,7 @@
     "export": "next export"
   },
   "dependencies": {
-    "@headlessui/react": "^1.4.2",
+    "@headlessui/react": "^1.4.3",
     "axios": "^0.24.0",
     "gray-matter": "^4.0.3",
     "lodash": "^4.17.21",
@@ -21,12 +21,12 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
-    "react-markdown": "^7.1.1",
+    "react-markdown": "^7.1.2",
     "react-responsive": "^9.0.0-beta.5",
     "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",
-    "webpack": "^5.65.0"
+    "webpack": "^5.66.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.0",
