@@ -15,6 +15,7 @@ class MyApp extends App {
       <ThemeProvider attribute='class'>
         <div  key="generic" className='h-screen flex flex-col'>
           <Head>
+            <html lang='en' />
             <title>Scott Adams</title>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta charSet="utf-8" />
