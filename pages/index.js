@@ -14,10 +14,6 @@ const Homepage = (props) => {
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
 
-  if(router.isFallback) {
-    return <h1>Loading...</h1>
-  }
-
   useEffect(() => {
     if(!router.isReady) {
       setRenderReady(false);
