@@ -25,6 +25,7 @@
     "react-responsive": "^9.0.0-beta.5",
     "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
+    "remark-gfm": "^3.0.1",
     "webpack": "^5.65.0"
   },
   "devDependencies": {

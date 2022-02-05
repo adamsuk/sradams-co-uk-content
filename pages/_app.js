@@ -10,10 +10,7 @@ import Header from '../components/Header'
 class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
-    pageProps.githubUsernames = {
-      personal: "adamsuk",
-      professional: "sra405",
-    };
+    pageProps.githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'adamsuk';
   return (
       <ThemeProvider attribute='class'>
         <div  key="generic" className='h-screen flex flex-col'>

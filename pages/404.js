@@ -1,6 +1,6 @@
 export default function Custom404() {
   return (
-    <div className="flex flex-wrap flex-col mx-auto justify-center items-center h-screen max-w-7xl w-full p-3 md:p-7">
+    <div className="flex flex-wrap flex-col mx-auto justify-center items-center h-screen max-w-7xl w-full">
       <div className="flex flex-col m-auto text-center content-center md:max-w-[35%]">
         <a className="text-[10rem]">😭</a>
         <br></br>
