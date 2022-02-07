@@ -1,10 +1,9 @@
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import initFirebase from '../../../../auth/config';
-import { setUserCookie } from '../../../../auth/userCookie';
-import { mapUserData } from '../../../../auth/useUser';
-import Layout from '../../../components/Layout'
+import initFirebase from '../../auth/config';
+import { setUserCookie } from '../../auth/userCookie';
+import { mapUserData } from '../../auth/useUser';
 
 initFirebase();
 
@@ -28,15 +27,15 @@ const firebaseAuthConfig = ({ signInSuccessUrl }) => ({
 });
 
 const FirebaseAuth = () => {
-  const signInSuccessUrl = "/sandbox/login-portal"
+  const signInSuccessUrl = "/login-portal"
   return (
-    <Layout title="Signin">
+    <div className="flex-1 pt-7 pb-2">
       <StyledFirebaseAuth
         uiConfig={firebaseAuthConfig({ signInSuccessUrl })}
         firebaseAuth={firebase.auth()}
         signInSuccessUrl={signInSuccessUrl}
       />
-    </Layout>
+    </div>
   );
 };
 

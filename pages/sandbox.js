@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { VscClose, VscChevronRight, VscChevronDown } from "react-icons/vsc";
 import { useMediaQuery } from 'react-responsive'
-
-import Calculator from "../components/sandbox/Calculator";
-import MusicPlayer from "../components/sandbox/MediaPlayer"
+import sandboxes from "../components/sandbox";
 
 const Sandbox = (props) => {
   const [sideActive, setSideActive] = useState(true);
   const [index, setIndex] = useState(0);
-
-  const sandboxes = [
-    {
-      title: "Calculator",
-      component: Calculator
-    },
-    {
-      title: "Music Player",
-      component: MusicPlayer
-    }
-  ]
 
   // figure out if its a large screen
   // TODO: link to tailwind breakpoints

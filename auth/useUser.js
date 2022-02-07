@@ -32,7 +32,7 @@ const useUser = () => {
       .auth()
       .signOut()
       .then(() => {
-        router.push('/sandbox/login-portal');
+        router.push('/login-portal');
       })
       .catch(e => {
         console.error(e);

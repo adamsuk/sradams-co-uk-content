@@ -1,11 +1,11 @@
-import withAuth from '../../../auth/withAuth';
-import { useUser } from '../../../auth/useUser';
+import withAuth from '../../auth/withAuth';
+import { useUser } from '../../auth/useUser';
 
 const Private = () => {
   const { user, logout } = useUser();
 
   return (
-    <div>
+    <div className="flex-1 pt-7 pb-2">
       <div>Private</div>
       {
         user?.email &&
