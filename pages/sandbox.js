@@ -71,7 +71,7 @@ const Sandbox = (props) => {
             }
           </div>
         </div>
-        <div className={`${sideActive ? "hidden md:block" : ""}relative container px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between`}>
+        <div className={`${sideActive ? "hidden md:block" : ""} flex-1 flex-col max-w-screen w-full mx-auto items-center overflow-y-hidden pb-4 px-7`}>
           <Component props={props}/>
         </div>
       </div>
