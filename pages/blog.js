@@ -46,7 +46,7 @@ const Blog = (props) => {
 
   // figure out if its a large screen
   // TODO: link to tailwind breakpoints
-  const isDesktopOrLaptop = useMediaQuery(
+  const isLargeScreen = useMediaQuery(
     { minDeviceWidth: 768 },
   )
 
@@ -97,21 +97,25 @@ const Blog = (props) => {
       </div>
       <div className={`relative container mb-auto flex flex-wrap flex-col md:flex-row md:px-0 max-w-screen w-full justify-between ${sideActive ? "lg:flex-row" : "md:max-w-7xl mx-auto"}`}>
         <div className={`${sideActive ? "visible" : "hidden"} relative md:w-2/5 w-full overflow-y-hidden`}>
-          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-700 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
+          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-800 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
             {(sideActive) && 
               <>
-                <div className="flex w-full items-end justify-end">
+                <div className={`${isLargeScreen ? '' : 'hidden'} flex w-full items-end justify-end`}>
                   <button>
                     <VscClose size={36} onClick={toggleSide}/>
                   </button>
                 </div>
-                <div className="flex-1 h-full overflow-y-scroll no-scrollbar items-center text-center">
+                <div className="flex-1 h-full w-full overflow-y-scroll no-scrollbar items-center text-center">
                   {postMetadata.map((post, index) => (
-                    <div key={`${post.slug}-div1`} className='py-2'>
-                      <div key={`${post.slug}-div2`}>
-                        <a key={`${post.slug}-a`} onClick={changePost(index, !isDesktopOrLaptop)}>
-                          <button type="button">
-                            <h4>{post.title}</h4>
+                    <div key={`${post.slug}-div1`} className={`hover:bg-white hover:dark:bg-gray-600 p-2 ${index==(postMetadata.length - 1) ? "" : "border-b-4 border-gray-300"}`}>
+                      <div key={`${post.slug}-div2`} className="">
+                        <a key={`${post.slug}-a`} onClick={changePost(index, !isLargeScreen)}>
+                          <button type="button" className="w-full">
+                            <h3 className="border-b border-gray-300">{post.title}</h3>
+                            <br></br>
+                            <p className="text-sm text-left">{post.description}</p>
+                            <br></br>
+                            <p className="text-xs text-right">{post.date}</p>
                           </button>
                         </a>
                       </div>

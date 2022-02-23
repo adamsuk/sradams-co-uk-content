@@ -18,7 +18,7 @@ const Homepage = (pageProps) => {
 
   return (
     <>
-      <div className="relative container px-7 pt-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
+      <div className="relative container px-4 sm:px-7 pt-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
         <div className="visible md:hidden relative w-full overflow-y-hidden pb-3">
           <hr></hr>
           <br></br>
