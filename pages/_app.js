@@ -11,7 +11,7 @@ class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
     return (
-      <ThemeProvider attribute='class'>
+      <ThemeProvider attribute='class' className='absolute inset-0'>
         <div  key="generic" className='h-screen flex flex-col'>
           <Head>
             <title>Scott Adams</title>
