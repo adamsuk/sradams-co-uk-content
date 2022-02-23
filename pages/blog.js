@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useRouter } from 'next/router'
 
 import Markdown from 'react-markdown'
@@ -62,6 +62,15 @@ const Blog = (props) => {
     fetchData();
   }, [postIndex, postMetadata]);
 
+  useLayoutEffect(() => {
+    // We listen to the resize event
+    window.addEventListener('resize', () => {
+      // We execute the same script as before
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+  }, []);
+
   const toggleSide = () => {
     setSideActive(!sideActive);
   }
@@ -79,7 +88,7 @@ const Blog = (props) => {
 
   return (
     <>
-      <div className="pt-7">
+      <div className="inset-0 pt-7">
         {(!sideActive) &&
           <>
             <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
