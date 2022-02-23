@@ -57,7 +57,7 @@ const Blog = (props) => {
       // Parse .md data through `matter`
       const post = matter(content.default)
       setMarkdownText(`# ${postMetadata[postIndex].title}\r\n${post.content}`)
-      window.scrollTo(window.scrollX, 0)
+      window.scrollTo(window.scrollX, 1)
     }
     fetchData();
   }, [postIndex, postMetadata]);

@@ -10,10 +10,8 @@ import Header from '../components/Header'
 class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
-    const isMac = typeof window !== 'undefined' ? navigator.platform.toUpperCase().indexOf("MAC") >= 0 : false;
     return (
       <ThemeProvider attribute='class'>
-        <meta name={isMac ? 'apple-mobile-web-app-capable' : 'mobile-web-app-capable'} content="yes" />
         <div  key="generic" className='h-screen flex flex-col'>
           <Head>
             <title>Scott Adams</title>
