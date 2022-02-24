@@ -62,15 +62,6 @@ const Blog = (props) => {
     fetchData();
   }, [postIndex, postMetadata]);
 
-  useLayoutEffect(() => {
-    // We listen to the resize event
-    window.addEventListener('resize', () => {
-      // We execute the same script as before
-      let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    });
-  }, []);
-
   const toggleSide = () => {
     setSideActive(!sideActive);
   }
@@ -88,7 +79,7 @@ const Blog = (props) => {
 
   return (
     <>
-      <div className="inset-0 pt-7">
+      <div className="pt-7">
         {(!sideActive) &&
           <>
             <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
@@ -106,7 +97,7 @@ const Blog = (props) => {
       </div>
       <div className={`relative container mb-auto flex flex-wrap flex-col md:flex-row md:px-0 max-w-screen w-full justify-between ${sideActive ? "lg:flex-row" : "md:max-w-7xl mx-auto"}`}>
         <div className={`${sideActive ? "visible" : "hidden"} relative md:w-2/5 w-full overflow-y-hidden`}>
-          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-800 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
+          <div className={`${isLargeScreen ? 'fixed' : ''} flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-800 max-h-[80%] h-[80%] md:w-1/3 w-full p-3`}>
             {(sideActive) && 
               <>
                 <div className={`${isLargeScreen ? '' : 'hidden'} flex w-full items-end justify-end`}>
