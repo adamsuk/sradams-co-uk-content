@@ -12,7 +12,7 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <ThemeProvider attribute='class' className='absolute inset-0'>
-        <div  key="generic" className='flex flex-col'>
+        <div  key="generic" className='flex flex-col h-screen'>
           <Head>
             <title>Scott Adams</title>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
