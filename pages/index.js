@@ -4,20 +4,20 @@ import Markdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 
-const Homepage = (pageProps) => {
+const Homepage = (props) => {
   const [markdownText, setMarkdownText] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       const data = await axios(
-        `https://raw.githubusercontent.com/${pageProps.githubUsername}/${pageProps.githubUsername}/main/README.md`,
+        `https://raw.githubusercontent.com/${props.githubUsername}/${props.githubUsername}/main/README.md`,
       ).then((res) => setMarkdownText(res.data));
     }
     fetchData();
-  }, [pageProps.githubUsername]);
+  }, [props.githubUsername]);
 
   return (
-    <>
+    <div className={props.className}>
       <div className="relative container px-4 sm:px-7 pt-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
         <div className="visible md:hidden relative w-full overflow-y-hidden pb-3">
           <hr></hr>
@@ -26,7 +26,7 @@ const Homepage = (pageProps) => {
             <img
               alt="ME!"
               className="mx-auto rounded-full items-center justify-center"
-              src={`https://github.com/${pageProps.githubUsername}.png`}
+              src={`https://github.com/${props.githubUsername}.png`}
             />
           </div>
           <br></br>
@@ -48,12 +48,12 @@ const Homepage = (pageProps) => {
             <img
               alt="ME!"
               className="mx-auto rounded-full items-center justify-center"
-              src={`https://github.com/${pageProps.githubUsername}.png`}
+              src={`https://github.com/${props.githubUsername}.png`}
             />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

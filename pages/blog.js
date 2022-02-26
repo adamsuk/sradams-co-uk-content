@@ -78,7 +78,7 @@ const Blog = (props) => {
   }, [router])
 
   return (
-    <>
+    <div className={props.className}>
       <div className="pt-7">
         {(!sideActive) &&
           <>
@@ -137,7 +137,7 @@ const Blog = (props) => {
           </Markdown>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
