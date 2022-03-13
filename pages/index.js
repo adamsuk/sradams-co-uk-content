@@ -63,9 +63,9 @@ const Homepage = (props) => {
   if (!renderReady) return <div className="flex-1"></div>;
 
   return (
-    <div className="flex-1 pt-7 pb-2">
+    <div className={props.className}>
       {previewMode && (previewBanner)}
-      <div className="relative container flex flex-wrap flex-col md:flex-row w-full max-w-7xl mx-auto justify-between px-7 pt-2 pb-2 mb-auto md:px-0">
+      <div className="relative container px-4 sm:px-7 pt-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
         <div className="visible md:hidden relative w-full overflow-y-hidden">
           <hr></hr>
           <br></br>

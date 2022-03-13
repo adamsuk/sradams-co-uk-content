@@ -1,11 +1,12 @@
 ---
-title: "My Sandbox is HERE"
-date: "2021-02-02"
-tags: "Ramblings"
-description: "Part of my drive for making this site was to provide myself with a little safe space to try new things. My initial component being a calculator to trial things like grids, button mechanisms and user input/feedback."
+title: My Sandbox is HERE
+date: '2021-02-02'
+tags: Ramblings
+description: 'Part of my drive for making this site was to provide myself with a little safe space to try new things. My initial component being a calculator to trial things like grids, button mechanisms and user input/feedback.'
 cover_image: ''
 canonical_url: null
 published: false
+id: 999974
 ---
 
 I wanted to give myself a little space to deploy some small, potentially bug filled nuggets... welcome MY SANDBOX!

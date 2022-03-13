@@ -11,9 +11,8 @@ class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
     pageProps.githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'adamsuk';
-  return (
-      <ThemeProvider attribute='class'>
-        <div  key="generic" className='h-screen flex flex-col'>
+      <ThemeProvider attribute='class' className='absolute inset-0'>
+        <div  key="generic" className='flex flex-col h-screen'>
           <Head>
             <html lang='en' />
             <title>Scott Adams</title>
@@ -21,8 +20,8 @@ class MyApp extends App {
             <meta charSet="utf-8" />
           </Head>
           <Header />
-          <Component {...pageProps} />
-          <NavBar {...pageProps}/>
+          <Component {...pageProps} className="mb-auto" />
+          <NavBar {...pageProps} className="sticky bottom-0" />
         </div>
       </ThemeProvider>
     );
