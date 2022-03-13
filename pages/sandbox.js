@@ -29,6 +29,7 @@ const Sandbox = (props) => {
   return (
     <>
       <div className="pt-7">
+      <h1 className="text-center">🚧 Under Construction 🚧</h1>
       {(!sideActive) &&
           <>
             <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
