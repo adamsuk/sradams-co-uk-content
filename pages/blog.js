@@ -127,7 +127,7 @@ const Blog = (props) => {
           </div>
         </div>
 
-        <div className={`${sideActive ? "hidden md:block" : ""} flex-1 flex-col max-w-screen w-full mx-auto items-center overflow-y-hidden pb-4 px-7`}>
+        <div className={`${sideActive ? "hidden md:block" : ""} flex-1 flex-col max-w-screen w-full mx-auto items-center overflow-y-hidden pb-4 px-4`}>
           <Markdown 
             rehypePlugins={[rehypeRaw, rehypeSanitize]}
             parserOptions={{ commonmark: true }}
