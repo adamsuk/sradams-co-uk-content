@@ -10,17 +10,19 @@ import Header from '../components/Header'
 class MyApp extends App {
   render () {
     const { Component, pageProps } = this.props;
+    pageProps.githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'adamsuk';
     return (
       <ThemeProvider attribute='class' className='absolute inset-0'>
-        <div  key="generic" className='flex flex-col h-screen'>
+        <div  key="generic" className='flex flex-col h-screen justify-between'>
           <Head>
+            <html lang='en' />
             <title>Scott Adams</title>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <meta charSet="utf-8" />
           </Head>
           <Header />
-          <Component {...pageProps} className="mb-auto" />
-          <NavBar className="sticky bottom-0" />
+          <Component {...pageProps} className="container max-w-full"/>
+          <NavBar {...pageProps} />
         </div>
       </ThemeProvider>
     );
