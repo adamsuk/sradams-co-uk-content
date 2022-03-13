@@ -1,8 +1,8 @@
 const cn = require('classnames');
 
-const NavBar = ({ className }) => {
+const NavBar = ({ className, githubUsername }) => {
   const menuItems = [
-    { title: "github", url: `https://github.com/${props.githubUsername}`, img: "/Navbar/Github/GitHub-Mark-120px-plus.png" },
+    { title: "github", url: `https://github.com/${githubUsername}`, img: "/Navbar/Github/GitHub-Mark-120px-plus.png" },
     { title: "linkedin", url: "https://linkedin.com/in/scott-adams-a3b070192", img: "/Navbar/LinkedIn/linkedin.png" },
     { title: "email", url: "mailto:sra405@protonmail.com", img: "/Navbar/email.png" },
   ];

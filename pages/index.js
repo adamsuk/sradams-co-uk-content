@@ -6,6 +6,7 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
+import cn from 'classnames'
 
 const Homepage = (props) => {
   const router = useRouter();
@@ -64,50 +65,52 @@ const Homepage = (props) => {
 
   return (
     <div className={props.className}>
-      {previewMode && (previewBanner)}
-      <div className="relative container px-4 sm:px-7 pt-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
-        <div className="visible md:hidden relative w-full overflow-y-hidden">
-          <hr></hr>
-          <br></br>
-          <div
-            className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]"
-          >
-            {githubProfile && (
-              <img
-                alt="ME!"
-                className="mx-auto rounded-full items-center justify-center w-full h-full"
-                src={`https://github.com/${githubProfile}.png`}
-              />
-            )}
+      <div className="flex flex-col pt-7 pb-2 h-full justify-between">
+        {previewMode && (previewBanner)}
+        <div className="relative container px-4 sm:px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
+          <div className="visible md:hidden relative w-full overflow-y-hidden">
+            <hr></hr>
+            <br></br>
+            <div
+              className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]"
+            >
+              {githubProfile && (
+                <img
+                  alt="ME!"
+                  className="mx-auto rounded-full items-center justify-center w-full h-full"
+                  src={`https://github.com/${githubProfile}.png`}
+                />
+              )}
+            </div>
+            <br></br>
+            <hr></hr>
           </div>
-          <br></br>
-          <hr></hr>
-        </div>
-        
-        <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
-          <Markdown 
-            rehypePlugins={[rehypeRaw, rehypeSanitize]}
-            remarkPlugins={[remarkGfm]}
-            parserOptions={{ commonmark: true }}
-            className="prose dark:prose-invert whitespace-no-wrap max-w-full"
-          >
-            {markdownText}
-          </Markdown>
-        </div>
+          
+          <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
+            <Markdown 
+              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+              remarkPlugins={[remarkGfm]}
+              parserOptions={{ commonmark: true }}
+              className="prose dark:prose-invert whitespace-no-wrap max-w-full"
+            >
+              {markdownText}
+            </Markdown>
+          </div>
 
-        <div className="hidden md:block relative md:w-2/5 w-full overflow-y-hidden">
-          <div className="items-center justify-center max-h-[80%] md:w-3/10 md:pr-7 md:fixed">
-            {githubProfile && (
-              <img
-                alt="ME!"
-                className="mx-auto rounded-full items-center justify-center"
-                src={`https://github.com/${githubProfile}.png`}
-              />
-            )}
+          <div className="hidden md:block relative md:w-2/5 w-full overflow-y-hidden">
+            <div className="items-center justify-center max-h-[80%] md:w-3/10 md:pr-7 md:fixed">
+              {githubProfile && (
+                <img
+                  alt="ME!"
+                  className="mx-auto rounded-full items-center justify-center"
+                  src={`https://github.com/${githubProfile}.png`}
+                />
+              )}
+            </div>
           </div>
         </div>
+        {previewMode && (previewBanner)}
       </div>
-      {previewMode && (previewBanner)}
     </div>
   );
 };
