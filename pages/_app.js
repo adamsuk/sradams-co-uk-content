@@ -1,4 +1,6 @@
-import App from 'next/app';
+import React from "react";
+import { useRouter } from 'next/router'
+
 import { ThemeProvider } from 'next-themes'
 
 import '../styles/globals.css'
@@ -7,10 +9,17 @@ import Head from "next/head";
 import NavBar from '../components/NavBar'
 import Header from '../components/Header'
 
-class MyApp extends App {
-  render () {
-    const { Component, pageProps } = this.props;
-    pageProps.githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'adamsuk';
+const MyApp = ({ Component, pageProps }) => {
+    const [loading, setLoading] = React.useState(false);
+    const router = useRouter();
+    React.useEffect(() => {
+      const handleStart = () => { setLoading(true); };
+      const handleComplete = () => { setLoading(false); };
+  
+      router.events.on('routeChangeStart', handleStart);
+      router.events.on('routeChangeComplete', handleComplete);
+      router.events.on('routeChangeError', handleComplete);
+    }, [router]);
     return (
       <ThemeProvider attribute='class' className='absolute inset-0'>
         <div  key="generic" className='flex flex-col h-screen justify-between'>
@@ -21,12 +30,23 @@ class MyApp extends App {
             <meta charSet="utf-8" />
           </Head>
           <Header />
-          <Component {...pageProps} className="container max-w-full"/>
+          <>
+            {loading ? (
+              <div className="relative top-1/2 translate-y-[-50%]">
+                <div className="justify-center items-center w-full p-3 md:p-7">
+                  <div className="flex flex-col m-auto text-center content-center md:max-w-[35%]">
+                    <h1>Loading ...</h1>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Component {...pageProps} className="container max-w-full"/>
+            )}
+          </>
           <NavBar {...pageProps} />
         </div>
       </ThemeProvider>
     );
   }
-};
-  
+
 export default MyApp;

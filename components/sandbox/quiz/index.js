@@ -1,26 +1,24 @@
 import React from 'react'
-import * as R from 'ramda'
-
-import style from "./../../../styles/Quiz.module.scss";
-
-const { first_question, question_set } = require("./questions.json")
+import { has } from 'ramda'
 
 const Quiz = props => {
-  var [output, setOutput] = React.useState({});
-  var [next_question, setNextQuestion] = React.useState(first_question);
-  const QuestionComponent = require("./../../../components/sandbox/" + props.component).default
+  const { first_question, question_set } = require("./questions.json")
+  var output = props?.sandbox;
+  var setOutput = props?.setSandbox;
+  var next_question = props?.next_question || first_question;
+  const QuestionComponent = require("./" + question_set[next_question].component).default
   
-  const renderNextQuestion = (event) => {
+  const renderNextQuestion = (output) => (event) => {
     props = question_set[next_question]
     // define some logic here to get the next question
-    if (R.has("exact_answer", props.nextQuestion)) {
+    if (has("exact_answer", props.nextQuestion)) {
       const user_answer = output[props.inputName].toLowerCase()
       const filter_answers = props.nextQuestion.exact_answer
-      if (R.has(user_answer, filter_answers)) {
-        setNextQuestion(filter_answers[user_answer])
+      if (has(user_answer, filter_answers)) {
+        next_question = filter_answers[user_answer]
       }
-    } else if (R.has("default", props.nextQuestion)) {
-      setNextQuestion(props.nextQuestion.default)
+    } else if (has("default", props.nextQuestion)) {
+      next_question = props.nextQuestion.default
     }
   }
 
@@ -28,7 +26,7 @@ const Quiz = props => {
     <>
       <QuestionComponent
         props={question_set[next_question]}
-        renderNextQuestion={renderNextQuestion}
+        renderNextQuestion={renderNextQuestion(output)}
         output={output}
         setOutput={setOutput} >
       </QuestionComponent>
@@ -42,6 +40,6 @@ Quiz.getInitialProps = () => {
   return question_set[first_question];
 };
 
-Quiz.Layout = style.Container;
+// Quiz.Layout = style.Container;
 
 export default Quiz
