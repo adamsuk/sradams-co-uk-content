@@ -37,7 +37,6 @@ const Sandbox = ({ className }) => {
     <div className="pt-7">
       <h1 className="text-center">🚧 Under Construction 🚧</h1>
       <SideBar
-        children={Component}
         childrenProps={ComponentProps}
         sidebarItems={sandboxes}
         SidebarItem={SandboxItem}
@@ -45,7 +44,9 @@ const Sandbox = ({ className }) => {
         className={className}
         index={itemIndex}
         changeRouting={changeRouting}
-      />
+      >
+        {Component}
+      </SideBar>
   </div>
   );
 };

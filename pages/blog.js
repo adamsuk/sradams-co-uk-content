@@ -78,14 +78,15 @@ const Blog = ({ children, className, error }) => {
   return (
     <div className="pt-7">
       <SideBar
-        children={MarkdownPage}
         sidebarItems={children}
         SidebarItem={BlogItem}
         error={error}
         className={className}
         slug={router.query}
         index={itemIndex}
-      />
+      >
+        {MarkdownPage}
+      </SideBar>
     </div>
   );
 };

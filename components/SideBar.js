@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 
 import { VscClose, VscChevronRight, VscChevronDown } from "react-icons/vsc";
 
-export default ({children, childrenProps={}, sidebarItems, SidebarItem, error, className, index = 0, changeRouting}) => {
+const SideBar = ({children, childrenProps={}, sidebarItems, SidebarItem, error, className, index = 0, changeRouting}) => {
   const [sideActive, setSideActive] = useState(true);
   const [itemIndex, setItemIndex] = useState(index);
   const [windowSize, setWindowSize] = useState({
@@ -110,3 +110,5 @@ export default ({children, childrenProps={}, sidebarItems, SidebarItem, error, c
     </div>
   );
 };
+
+export default SideBar;
