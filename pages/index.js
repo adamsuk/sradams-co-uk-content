@@ -6,7 +6,8 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
-import cn from 'classnames'
+
+import env from '../default-env.js'
 
 const Homepage = (props) => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const Homepage = (props) => {
     if(!router.isReady) {
       setRenderReady(false);
     } else {
-      setGithubProfile(router.query.githubProfile || props.githubUsername);
+      setGithubProfile(router.query.githubProfile || env.NEXT_PUBLIC_GITHUB_PROFILE);
       router.query.githubProfile ? setPreviewMode(true) : setPreviewMode(false);
     }
   }, [router]);
@@ -66,7 +67,9 @@ const Homepage = (props) => {
   return (
     <div className={props.className}>
       <div className="flex flex-col pt-7 pb-2 h-full justify-between">
-        {previewMode && (previewBanner)}
+        {previewMode && (
+          <div className="pb-4">{previewBanner}</div>
+        )}
         <div className="relative container px-4 sm:px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
           <div className="visible md:hidden relative w-full overflow-y-hidden">
             <hr></hr>
@@ -109,7 +112,9 @@ const Homepage = (props) => {
             </div>
           </div>
         </div>
-        {previewMode && (previewBanner)}
+        {previewMode && (
+          <div className="pt-4">{previewBanner}</div>
+        )}
       </div>
     </div>
   );

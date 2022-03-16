@@ -1,82 +1,53 @@
-import React, { useState, useEffect } from "react";
-import { VscClose, VscChevronRight, VscChevronDown } from "react-icons/vsc";
-import { useMediaQuery } from 'react-responsive'
+import React, { Component, useEffect, useState } from "react";
+import { useRouter } from 'next/router'
+
 import sandboxes from "../components/sandbox";
+import SideBar from '../components/SideBar'
 
-const Sandbox = (props) => {
-  const [sideActive, setSideActive] = useState(true);
-  const [index, setIndex] = useState(0);
+const Sandbox = ({ className }) => {
+  const [itemIndex, setItemIndex] = useState(0);
+  const [sandbox, setSandbox] = useState({});
+  const router = useRouter();
 
-  // figure out if its a large screen
-  // TODO: link to tailwind breakpoints
-  const isDesktopOrLaptop = useMediaQuery(
-    { minDeviceWidth: 768 },
+  useEffect(() => {
+    if (router.query?.component) {
+      const index = sandboxes.findIndex(item => item.slug === router.query.component)
+      if (index !== -1) {
+        setItemIndex(index)
+      }
+    }
+  }, [router.query])
+
+  const SandboxItem = ({ item, index }) => (
+    <button type="button">
+      <h4>{item.title}</h4>
+    </button>
   )
 
-  const toggleSide = () => {
-    setSideActive(!sideActive);
-  }
-
-  const changeSandbox = (i, isSmallScreen=false) => () => {
-    setIndex(i);
-    if (isSmallScreen) {
-      toggleSide()
+  const changeRouting = ({ index, items }) => {
+    if (items[index]?.slug) {
+      router.push(`/sandbox/?component=${items[index].slug}`, undefined, { shallow: true })
     }
   }
 
-  const Component = sandboxes[index].component;
+  const Component = ({ index, items }) => items[index].component;
+  const ComponentProps = { sandbox, setSandbox };
 
   return (
-    <>
-      <div className="pt-7">
+    <div className="pt-7">
       <h1 className="text-center">🚧 Under Construction 🚧</h1>
-      {(!sideActive) &&
-          <>
-            <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
-              <button>
-                <VscChevronRight size={36} onClick={toggleSide}/>
-              </button>
-            </div>
-            <div className="visible lg:hidden z-30 items-center justify-center fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
-              <button>
-                <VscChevronDown size={36} onClick={toggleSide}/>
-              </button>
-            </div>
-          </>
-        }
-      </div>
-      <div className={`relative container mb-auto flex flex-wrap flex-col md:flex-row md:px-0 max-w-screen w-full justify-between ${sideActive ? "lg:flex-row" : "md:max-w-7xl mx-auto"}`}>
-        <div className={`${sideActive ? "visible" : "hidden"} relative md:w-2/5 w-full overflow-y-hidden`}>
-          <div className="fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-700 max-h-[80%] h-[80%] md:w-1/3 w-full p-3">
-            {(sideActive) && 
-              <>
-                <div className="flex w-full items-end justify-end">
-                  <button>
-                    <VscClose size={36} onClick={toggleSide}/>
-                  </button>
-                </div>
-                <div className="flex-1 h-full overflow-y-scroll no-scrollbar items-center text-center">
-                  {sandboxes.map((post, index) => (
-                    <div key={`${post.title}-div1`} className='py-2'>
-                      <div key={`${post.title}-div2`}>
-                        <a key={`${post.title}-a`} onClick={changeSandbox(index, !isDesktopOrLaptop)}>
-                          <button type="button">
-                            <h4>{post.title}</h4>
-                          </button>
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            }
-          </div>
-        </div>
-        <div className={`${sideActive ? "hidden md:block" : ""} flex-1 flex-col max-w-screen w-full mx-auto items-center overflow-y-hidden pb-4 px-7`}>
-          <Component props={props}/>
-        </div>
-      </div>
-    </>
+      <SideBar
+        childrenProps={ComponentProps}
+        sidebarItems={sandboxes}
+        SidebarItem={SandboxItem}
+        error={false}
+        className={className}
+        index={itemIndex}
+        changeRouting={changeRouting}
+      >
+        {Component}
+      </SideBar>
+  </div>
   );
 };
 
