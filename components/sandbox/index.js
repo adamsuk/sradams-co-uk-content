@@ -1,13 +1,12 @@
-
-import Calculator from "./Calculator";
-import MusicPlayer from "./MediaPlayer"
-import Quiz from "./quiz";
+import Calculator from './Calculator';
+// import MusicPlayer from './MediaPlayer';
+import Quiz from './quiz';
 
 const sandboxes = [
   {
-    title: "Calculator",
+    title: 'Calculator',
     slug: 'calculator',
-    component: Calculator
+    component: Calculator,
   },
   // {
   //   title: "Podcast Player",
@@ -15,10 +14,10 @@ const sandboxes = [
   //   component: MusicPlayer
   // },
   {
-    title: "Dynamic Quiz",
+    title: 'Dynamic Quiz',
     slug: 'quiz',
-    component: Quiz
-  }
-]
+    component: Quiz,
+  },
+];
 
 export default sandboxes;

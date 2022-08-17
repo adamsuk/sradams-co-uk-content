@@ -1,53 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/router'
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 
 import axios from 'axios';
-import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 
-import env from '../default-env.js'
+import env from '../default-env';
 
-const Homepage = (props) => {
+function Homepage({ className }) {
   const router = useRouter();
-  const [markdownText, setMarkdownText] = useState("");
-  const [githubProfile, setGithubProfile] = useState("");
+  const [markdownText, setMarkdownText] = useState('');
+  const [githubProfile, setGithubProfile] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
 
+  const isPreview = () => (
+    router.query.githubProfile ? setPreviewMode(true) : setPreviewMode(false)
+  );
+
   useEffect(() => {
-    if(!router.isReady) {
+    if (!router.isReady) {
       setRenderReady(false);
     } else {
-      setGithubProfile(router.query.githubProfile || env.NEXT_PUBLIC_GITHUB_PROFILE);
-      router.query.githubProfile ? setPreviewMode(true) : setPreviewMode(false);
+      setGithubProfile(
+        router.query.githubProfile || env.NEXT_PUBLIC_GITHUB_PROFILE,
+      );
+      isPreview();
     }
-  }, [router]);
+  }, [router, isPreview]);
 
-  const fetchGithubProfile = (branch='main') => {
-    return axios(
-      `https://raw.githubusercontent.com/${githubProfile}/${githubProfile}/${branch}/README.md`,
-    )
-  }
+  const fetchGithubProfile = (branch = 'main') => axios(
+    `https://raw.githubusercontent.com/${githubProfile}/${githubProfile}/${branch}/README.md`,
+  );
 
   useEffect(() => {
     setRenderReady(false);
     async function fetchData() {
       try {
-        const data = await fetchGithubProfile().then((res) => {
-          setMarkdownText(res.data)
-          setRenderReady(true)
+        await fetchGithubProfile().then((res) => {
+          setMarkdownText(res.data);
+          setRenderReady(true);
         });
       } catch (error) {
         try {
           // try master
-          const data = await fetchGithubProfile('master').then((res) => {
-            setMarkdownText(res.data)
-            setRenderReady(true)
+          await fetchGithubProfile('master').then((res) => {
+            setMarkdownText(res.data);
+            setRenderReady(true);
           });
-        } catch (error) {
-          router.push('/404')
+        } catch (e) {
+          router.push('/404');
         }
       }
     }
@@ -58,25 +63,23 @@ const Homepage = (props) => {
 
   const previewBanner = (
     <div className="w-full bg-slate-500 dark:bg-white text-white dark:text-black text-center text-base sm:text-xl md:text-2xl py-1 md:py-3">
-      PREVIEW MODE - GitHub Profile: {githubProfile}
+      PREVIEW MODE - GitHub Profile:
+      {' '}
+      {githubProfile}
     </div>
   );
 
-  if (!renderReady) return <div className="flex-1"></div>;
+  if (!renderReady) return <div className="flex-1" />;
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div className="flex flex-col pt-7 pb-2 h-full justify-between">
-        {previewMode && (
-          <div className="pb-4">{previewBanner}</div>
-        )}
+        {previewMode && <div className="pb-4">{previewBanner}</div>}
         <div className="relative container px-4 sm:px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
           <div className="visible md:hidden relative w-full overflow-y-hidden">
-            <hr></hr>
-            <br></br>
-            <div
-              className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]"
-            >
+            <hr />
+            <br />
+            <div className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]">
               {githubProfile && (
                 <img
                   alt="ME!"
@@ -85,12 +88,12 @@ const Homepage = (props) => {
                 />
               )}
             </div>
-            <br></br>
-            <hr></hr>
+            <br />
+            <hr />
           </div>
-          
+
           <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
-            <Markdown 
+            <Markdown
               rehypePlugins={[rehypeRaw, rehypeSanitize]}
               remarkPlugins={[remarkGfm]}
               parserOptions={{ commonmark: true }}
@@ -112,12 +115,18 @@ const Homepage = (props) => {
             </div>
           </div>
         </div>
-        {previewMode && (
-          <div className="pt-4">{previewBanner}</div>
-        )}
+        {previewMode && <div className="pt-4">{previewBanner}</div>}
       </div>
     </div>
   );
+}
+
+Homepage.defaultProps = {
+  className: '',
+};
+
+Homepage.propTypes = {
+  className: PropTypes.string,
 };
 
 export default Homepage;
