@@ -1,6 +1,6 @@
 {
-  "first_question": "name",
-  "question_set": {
+  "firstQuestion": "name",
+  "questionSet": {
     "name": {
       "title": "First Name",
       "inputName": "name",
@@ -41,5 +41,5 @@
         "default": "monthly_spend"
       }
     }
-  }    
+  }
 }

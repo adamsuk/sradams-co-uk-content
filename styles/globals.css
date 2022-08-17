@@ -40,7 +40,7 @@ a {
     text-decoration: none !important;
     font-weight: inherit !important;
   }
-  a::after{
+  a::after {
     content: " (" attr(href) ") ";
   }
 }
