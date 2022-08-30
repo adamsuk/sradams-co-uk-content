@@ -25,7 +25,7 @@ function CV({ className, cvMetadata }) {
 
   return (
     <div className={className}>
-      <div className="flex flex-col max-w-7xl m-auto items-center pb-4 pt-8 px-4 print:pt-4 print:text-black">
+      <div className="flex flex-col max-w-7xl m-auto items-center pb-4 pt-8 px-4 print:pt-1 print:text-black">
         <h1 className="font-sans">
           <center>{cvMetadata.title}</center>
         </h1>
@@ -37,7 +37,7 @@ function CV({ className, cvMetadata }) {
         >
           {markdownText}
         </Markdown>
-        <Markdown className="hidden prose whitespace-no-wrap max-w-full print:text-xs print:block">
+        <Markdown className="hidden prose whitespace-no-wrap max-w-full print:text-2xs print:block">
           {markdownText}
         </Markdown>
       </div>
