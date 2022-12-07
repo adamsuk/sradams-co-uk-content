@@ -47,7 +47,7 @@ function Sandbox({ className }) {
   const ComponentProps = { sandbox, setSandbox };
 
   return (
-    <div className="pt-7">
+    <div className="h-full pt-7">
       <h1 className="text-center">🚧 Under Construction 🚧</h1>
       <SideBar
         childrenProps={ComponentProps}

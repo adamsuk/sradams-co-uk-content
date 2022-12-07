@@ -12,6 +12,7 @@ import SideBar from '../components/SideBar';
 import env from '../default-env';
 
 function MarkdownPage({ index, items }) {
+  const [title, setTitle] = useState('');
   const [markdownText, setMarkdownText] = useState('');
 
   const phpStreams = {
@@ -26,17 +27,23 @@ function MarkdownPage({ index, items }) {
       post = post.replace(regex, url);
     }
     window.scrollTo(window.scrollX, 1);
-    setMarkdownText(`# ${items[index].header.title}\r\n${post}`);
+    setTitle(items[index].header.title);
+    setMarkdownText(post);
   }, [index, items]);
 
   return (
-    <Markdown
-      rehypePlugins={[rehypeRaw, rehypeSanitize]}
-      parserOptions={{ commonmark: true }}
-      className="prose dark:prose-invert whitespace-no-wrap max-w-full"
-    >
-      {markdownText}
-    </Markdown>
+    <div>
+      <div className="text-4xl font-extrabold text-center pb-4">
+        {title}
+      </div>
+      <Markdown
+        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        parserOptions={{ commonmark: true }}
+        className="prose dark:prose-invert whitespace-no-wrap max-w-full"
+      >
+        {markdownText}
+      </Markdown>
+    </div>
   );
 }
 
@@ -124,7 +131,7 @@ function Blog({ children, className, error }) {
 
 export async function getStaticProps() {
   const grav = await axios
-    .get('https://grav.sradams.co.uk/?return-as=json')
+    .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`)
     .then((response) => response.data)
     .catch((error) => {
       console.log(error);

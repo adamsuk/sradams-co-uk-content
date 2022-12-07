@@ -89,7 +89,7 @@ function SideBar({
       <div
         className={`${
           windowSize.width > maxSize ? '' : 'flex flex-wrap flex-col'
-        } mb-auto md:flex-row md:px-0 max-w-screen w-full justify-between ${
+        } h-full mb-auto md:flex-row md:px-0 max-w-screen w-full justify-between ${
           sideActive ? 'lg:flex-row' : 'mx-auto'
         }`}
       >
