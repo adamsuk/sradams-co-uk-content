@@ -44,7 +44,7 @@ function MyApp({ Component, pageProps }) {
             </div>
           ) : (
             // eslint-disable-next-line react/jsx-props-no-spreading
-            <Component {...pageProps} className="container max-w-full" />
+            <Component {...pageProps} className="container max-w-full overflow-y-auto h-full print:overflow-visible" />
           )}
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <NavBar {...pageProps} />

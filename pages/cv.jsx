@@ -85,7 +85,7 @@ const Cv = ({ grav, className }) => {
   };
   return (
     <div className={className}>
-      <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:py-1 print:text-black">
+      <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-5 print:text-black">
         <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
           {grav?.header?.title}
         </h1>
