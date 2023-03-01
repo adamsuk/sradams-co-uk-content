@@ -79,46 +79,43 @@ CvSection.propTypes = {
   level: PropTypes.number,
 };
 
-const Cv = ({ grav, className }) => {
+const Cv = ({ className }) => {
+  const [grav, setGrav] = useState();
   const print = () => {
     window.print();
   };
+
+  useEffect(() => {
+    axios
+      .get(`${env.NEXT_PUBLIC_CMS_URL}/cv?return-as=json`)
+      .then((response) => setGrav(response.data));
+  }, []);
+
   return (
     <div className={className}>
       <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-5 print:text-black">
-        <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-          {grav?.header?.title}
-        </h1>
-        <div className="flex justify-end pt-1 print:hidden">
-          <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
-        </div>
-        {grav?.children.map((el) => (
-          <CvSection
-            content={el.content}
-            collapsable={el.header?.collapsable}
-            level={el.header?.level}
-            title={el.header.title}
-          />
-        ))}
+        {grav && (
+          <>
+            <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
+              {grav?.header?.title}
+            </h1>
+            <div className="flex justify-end pt-1 print:hidden">
+              <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
+            </div>
+            {grav?.children.map((el) => (
+              <CvSection
+                content={el.content}
+                collapsable={el.header?.collapsable}
+                level={el.header?.level}
+                title={el.header.title}
+              />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
 };
-
-export async function getStaticProps() {
-  const grav = await axios
-    .get(`${env.NEXT_PUBLIC_CMS_URL}/cv?return-as=json`)
-    .then((response) => response.data)
-    .catch((error) => {
-      console.log(error);
-    });
-
-  return {
-    props: {
-      grav,
-    },
-  };
-}
 
 Cv.defaultProps = {
   className: '',
@@ -126,13 +123,6 @@ Cv.defaultProps = {
 
 Cv.propTypes = {
   className: PropTypes.string,
-  grav: PropTypes.shape({
-    // eslint-disable-next-line react/forbid-prop-types
-    children: PropTypes.array,
-    header: PropTypes.shape({
-      title: PropTypes.string,
-    }),
-  }).isRequired,
 };
 
 export default Cv;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+
 import PropTypes from 'prop-types';
 
 import axios from 'axios';
@@ -18,6 +19,13 @@ function MarkdownPage({ index, items }) {
   const phpStreams = {
     'page://': `${env.NEXT_PUBLIC_CMS_URL}/user/pages/`,
   };
+
+  // TODO: url param change on blog change
+  // if (items[index]?.header?.slug) {
+  //   router.push(`/blog?post=${items[index].header.slug}`, undefined, {
+  //     shallow: true,
+  //   });
+  // }
 
   useEffect(() => {
     let post = items[index].content;
@@ -83,28 +91,27 @@ BlogItem.propTypes = {
   }).isRequired,
 };
 
-function Blog({ children, className, error }) {
+function Blog({ className }) {
   const [itemIndex, setItemIndex] = useState(0);
+  const [grav, setGrav] = useState();
+
   const router = useRouter();
 
   useEffect(() => {
-    if (error) {
+    axios
+      .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`)
+      .then((response) => setGrav(response.data));
+  }, []);
+
+  useEffect(() => {
+    if (grav?.error) {
       router.push('/404');
     }
-  }, [error]);
-
-  // TODO: allow for params to set blog post
-  // const changeRouting = ({ index, items }) => {
-  //   if (items[index]?.header?.slug) {
-  //     router.push(`/blog/?post=${items[index].header.slug}`, undefined, {
-  //       shallow: true,
-  //     });
-  //   }
-  // };
+  }, [grav?.error]);
 
   useEffect(() => {
     if (router.query?.post) {
-      const index = children.findIndex(
+      const index = grav?.children.findIndex(
         (item) => item.header.slug === router.query.post,
       );
       if (index !== -1) {
@@ -115,46 +122,30 @@ function Blog({ children, className, error }) {
 
   return (
     <div className="pt-7">
-      <SideBar
-        sidebarItems={children}
-        SidebarItem={BlogItem}
-        error={error}
-        className={className}
-        slug={router.query}
-        index={itemIndex}
-      >
-        {MarkdownPage}
-      </SideBar>
+      {grav && (
+        <SideBar
+          sidebarItems={grav.children}
+          SidebarItem={BlogItem}
+          error={grav.error}
+          className={className}
+          slug={router.query}
+          index={itemIndex}
+        >
+          {MarkdownPage}
+        </SideBar>
+      )}
     </div>
   );
 }
 
-export async function getStaticProps() {
-  const grav = await axios
-    .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`)
-    .then((response) => response.data)
-    .catch((error) => {
-      console.log(error);
-    });
-
-  return {
-    props: {
-      ...grav,
-    },
-  };
-}
-
 Blog.defaultProps = {
   className: '',
-  error: null,
 };
 
 Blog.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  children: PropTypes.array.isRequired,
   className: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
-  error: PropTypes.object,
 };
 
 export default Blog;
