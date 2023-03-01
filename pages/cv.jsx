@@ -89,7 +89,7 @@ const Cv = ({ className }) => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv?return-as=json`, {
         headers: {
-          ...(process.env.NODE_ENV === 'production' && { 'Access-Control-Allow-Origin': '*' }),
+          ...(process.env.NEXT_RUNTIME === 'production' && { 'Access-Control-Allow-Origin': '*' }),
         },
       })
       .then((response) => setGrav(response.data));
