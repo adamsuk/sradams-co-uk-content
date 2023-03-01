@@ -16,6 +16,6 @@ module.exports = {
     domains: ['github.com'],
   },
   env: {
-    NEXT_RUNTIME: process.env.NODE_ENV,
+    NEXT_PUBLIC_ENV: process.env.NODE_ENV,
   },
 };
