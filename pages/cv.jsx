@@ -88,9 +88,7 @@ const Cv = ({ className }) => {
   useEffect(() => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv?return-as=json`, {
-        headers: {
-          ...(process.env.NEXT_PUBLIC_ENV === 'production' && { 'Access-Control-Allow-Origin': '*' }),
-        },
+        headers: { 'Access-Control-Allow-Origin': '*' },
       })
       .then((response) => setGrav(response.data));
   }, []);

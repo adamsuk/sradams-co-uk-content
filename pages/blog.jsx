@@ -100,9 +100,7 @@ function Blog({ className }) {
   useEffect(() => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`, {
-        headers: {
-          ...(process.env.NEXT_PUBLIC_ENV === 'production' && { 'Access-Control-Allow-Origin': '*' }),
-        },
+        headers: { 'Access-Control-Allow-Origin': '*' },
       })
       .then((response) => setGrav(response.data));
   }, []);

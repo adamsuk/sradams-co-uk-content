@@ -15,7 +15,4 @@ module.exports = {
   images: {
     domains: ['github.com'],
   },
-  env: {
-    NEXT_PUBLIC_ENV: process.env.NODE_ENV,
-  },
 };
