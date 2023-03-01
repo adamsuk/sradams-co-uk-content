@@ -99,7 +99,11 @@ function Blog({ className }) {
 
   useEffect(() => {
     axios
-      .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`)
+      .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`, {
+        headers: {
+          ...(process.env.NODE_ENV === 'production' && { 'Access-Control-Allow-Origin': '*' }),
+        },
+      })
       .then((response) => setGrav(response.data));
   }, []);
 
