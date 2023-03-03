@@ -1,6 +1,6 @@
 ## Static content for sradams.co.uk
 
-Build found [here](https://www.sradams.co.uk)
+Build found [here](https://sradams.co.uk)
 
 ### Front-end
 
@@ -11,7 +11,7 @@ These are all aspects I want to reincorporate into my site but for now I'm keepi
 
 ### Hosting
 
-I've moved from a GCP based setup to a Vercel deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). So this is all currently hosted on Vercel.
+I've moved from a GCP based setup to a CloudFlare Pages deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). So this is all currently hosted on Vercel.
 
 ### CI/CD
 
