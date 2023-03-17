@@ -12,7 +12,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.11",
+    "@headlessui/react": "^1.7.12",
     "@tailwindcss/typography": "^0.5.9",
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
