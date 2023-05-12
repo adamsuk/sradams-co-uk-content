@@ -19,7 +19,7 @@
     "dotenv": "^16.0.3",
     "firebase": "^8.10.0",
     "gray-matter": "^4.0.3",
-    "js-cookie": "^3.0.1",
+    "js-cookie": "^3.0.4",
     "lodash": "^4.17.21",
     "mathjs": "^10.6.4",
     "next": "^12.3.4",
