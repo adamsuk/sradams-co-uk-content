@@ -80,34 +80,34 @@ CvSection.propTypes = {
 };
 
 const Cv = ({ className }) => {
-  const [grav, setGrav] = useState();
+  const [blog, setBlog] = useState();
   const print = () => {
     window.print();
   };
 
   useEffect(() => {
     axios
-      .get(`${env.NEXT_PUBLIC_CMS_URL}/cv?return-as=json`)
-      .then((response) => setGrav(response.data));
+      .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
+      .then((response) => setBlog(response.data.filter((section) => section.meta)));
   }, []);
 
   return (
     <div className={className}>
       <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-5 print:text-black">
-        {grav && (
+        {blog && (
           <>
             <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-              {grav?.header?.title}
+              {blog?.meta?.title}
             </h1>
             <div className="flex justify-end pt-1 print:hidden">
               <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
             </div>
-            {grav?.children.map((el) => (
+            {blog?.children.map((el) => (
               <CvSection
                 content={el.content}
-                collapsable={el.header?.collapsable}
-                level={el.header?.level}
-                title={el.header.title}
+                collapsable={el.meta?.collapsable}
+                level={el.meta?.level}
+                title={el.meta.title}
               />
             ))}
           </>

@@ -21,8 +21,8 @@ function MarkdownPage({ index, items }) {
   };
 
   // TODO: url param change on blog change
-  // if (items[index]?.header?.slug) {
-  //   router.push(`/blog?post=${items[index].header.slug}`, undefined, {
+  // if (items[index]?.meta?.slug) {
+  //   router.push(`/blog?post=${items[index].meta.slug}`, undefined, {
   //     shallow: true,
   //   });
   // }
@@ -35,7 +35,7 @@ function MarkdownPage({ index, items }) {
       post = post.replace(regex, url);
     }
     window.scrollTo(window.scrollX, 1);
-    setTitle(items[index].header.title);
+    setTitle(items[index].meta.title);
     setMarkdownText(post);
   }, [index, items]);
 
@@ -58,7 +58,7 @@ function MarkdownPage({ index, items }) {
 MarkdownPage.propTypes = {
   index: PropTypes.number.isRequired,
   items: PropTypes.shape({
-    header: PropTypes.shape({
+    meta: PropTypes.shape({
       slug: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
@@ -72,18 +72,18 @@ MarkdownPage.propTypes = {
 function BlogItem({ item }) {
   return (
     <button type="button" className="w-full">
-      <h3 className="border-b border-gray-300">{item.header.title}</h3>
+      <h3 className="border-b border-gray-300">{String(item.meta.title)}</h3>
       <br />
-      <p className="text-sm text-left">{item.header.description}</p>
+      <p className="text-sm text-left">{String(item.meta.description)}</p>
       <br />
-      <p className="text-xs text-right">{item.header.date}</p>
+      <p className="text-xs text-right">{item.meta.date}</p>
     </button>
   );
 }
 
 BlogItem.propTypes = {
   item: PropTypes.shape({
-    header: PropTypes.shape({
+    meta: PropTypes.shape({
       title: PropTypes.string,
       description: PropTypes.string,
       date: PropTypes.string,
@@ -93,26 +93,26 @@ BlogItem.propTypes = {
 
 function Blog({ className }) {
   const [itemIndex, setItemIndex] = useState(0);
-  const [grav, setGrav] = useState();
+  const [blog, setBlog] = useState();
 
   const router = useRouter();
 
   useEffect(() => {
     axios
-      .get(`${env.NEXT_PUBLIC_CMS_URL}/?return-as=json`)
-      .then((response) => setGrav(response.data));
+      .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
+      .then((response) => setBlog(response.data.filter((post) => post.meta)));
   }, []);
 
   useEffect(() => {
-    if (grav?.error) {
+    if (blog?.error) {
       router.push('/404');
     }
-  }, [grav?.error]);
+  }, [blog?.error]);
 
   useEffect(() => {
     if (router.query?.post) {
-      const index = grav?.children.findIndex(
-        (item) => item.header.slug === router.query.post,
+      const index = blog?.findIndex(
+        (item) => item.slug === router.query.post,
       );
       if (index !== -1) {
         setItemIndex(index);
@@ -122,11 +122,11 @@ function Blog({ className }) {
 
   return (
     <div className="pt-7">
-      {grav && (
+      {blog && (
         <SideBar
-          sidebarItems={grav.children}
+          sidebarItems={blog}
           SidebarItem={BlogItem}
-          error={grav.error}
+          error={blog.error}
           className={className}
           slug={router.query}
           index={itemIndex}
