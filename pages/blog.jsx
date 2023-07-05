@@ -48,6 +48,7 @@ function MarkdownPage({ index, items }) {
         rehypePlugins={[rehypeRaw, rehypeSanitize]}
         parserOptions={{ commonmark: true }}
         className="prose dark:prose-invert whitespace-no-wrap max-w-full"
+        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
       >
         {markdownText}
       </Markdown>

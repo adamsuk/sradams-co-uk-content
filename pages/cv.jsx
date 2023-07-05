@@ -54,11 +54,15 @@ const CvSection = ({
         rehypePlugins={[rehypeRaw]}
         parserOptions={{ commonmark: true }}
         className={`${collapsed ? 'hidden' : 'shown'} prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
+        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
       >
         {content}
       </Markdown>
       <hr className="mt-1 print:hidden" />
-      <Markdown className="hidden prose whitespace-no-wrap max-w-full print:text-2xs print:block">
+      <Markdown
+        className="hidden prose whitespace-no-wrap max-w-full print:text-2xs print:block"
+        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
+      >
         {level === 1 ? `---\n\n${content}` : content}
       </Markdown>
     </div>
@@ -94,6 +98,7 @@ const Cv = ({ className }) => {
   return (
     <div className={className}>
       <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-5 print:text-black">
+        <h1 className="text-center">🚧 Under Construction 🚧</h1>
         {blog && (
           <>
             <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
@@ -102,7 +107,7 @@ const Cv = ({ className }) => {
             <div className="flex justify-end pt-1 print:hidden">
               <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
             </div>
-            {blog?.children.map((el) => (
+            {blog?.map((el) => (
               <CvSection
                 content={el.content}
                 collapsable={el.meta?.collapsable}
