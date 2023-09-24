@@ -101,7 +101,10 @@ function Blog({ className }) {
   useEffect(() => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
-      .then((response) => setBlog(response.data.filter((post) => post.meta)));
+      .then((response) => {
+        const rawRes = response.data.filter((post) => post.meta);
+        setBlog(rawRes.filter((post) => post.name !== 'blog.md'));
+      });
   }, []);
 
   useEffect(() => {

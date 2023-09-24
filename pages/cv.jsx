@@ -58,10 +58,10 @@ const CvSection = ({
       >
         {content}
       </Markdown>
-      <hr className="mt-1 print:hidden" />
+      <hr />
       <Markdown
         className="hidden prose whitespace-no-wrap max-w-full print:text-2xs print:block"
-        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
+        disallowedElements={['h2', 'hr']} // TODO: short term fix to remove meta from content
       >
         {level === 1 ? `---\n\n${content}` : content}
       </Markdown>
@@ -84,7 +84,8 @@ CvSection.propTypes = {
 };
 
 const Cv = ({ className }) => {
-  const [blog, setBlog] = useState();
+  const [blog, setBlog] = useState([]);
+  const [meta, setMeta] = useState({});
   const print = () => {
     window.print();
   };
@@ -92,17 +93,23 @@ const Cv = ({ className }) => {
   useEffect(() => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
-      .then((response) => setBlog(response.data.filter((section) => section.meta)));
+      .then((response) => {
+        const raw = response.data.filter((section) => section.meta);
+        const rawMeta = raw.filter((section) => section.name === 'blog.md');
+        if (rawMeta) {
+          setMeta(rawMeta[0]);
+        }
+        setBlog(raw.filter((section) => section.name !== 'blog.md'));
+      });
   }, []);
 
   return (
     <div className={className}>
-      <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-5 print:text-black">
-        <h1 className="text-center">🚧 Under Construction 🚧</h1>
+      <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black">
         {blog && (
           <>
             <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-              {blog?.meta?.title}
+              {meta.meta?.title}
             </h1>
             <div className="flex justify-end pt-1 print:hidden">
               <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
