@@ -33,6 +33,7 @@
     "react-icons": "^4.8.0",
     "react-markdown": "^7.1.2",
     "react-responsive": "^9.0.2",
+    "react-spinners": "^0.13.8",
     "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",

@@ -1,7 +1,7 @@
 /* eslint-disable react/function-component-definition */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
+import cn from 'classnames';
 import Markdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { BsPrinterFill, BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import env from '../default-env';
 import { theme } from '../tailwind.config';
+import Loader from '../components/Loader';
 
 const fonts = Object.keys(theme.fontSize);
 
@@ -83,7 +84,7 @@ CvSection.propTypes = {
   level: PropTypes.number,
 };
 
-const Cv = ({ className }) => {
+const Cv = () => {
   const [blog, setBlog] = useState([]);
   const [meta, setMeta] = useState({});
   const print = () => {
@@ -104,37 +105,27 @@ const Cv = ({ className }) => {
   }, []);
 
   return (
-    <div className={className}>
-      <div className="flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black">
-        {blog && (
-          <>
-            <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-              {meta.meta?.title}
-            </h1>
-            <div className="flex justify-end pt-1 print:hidden">
-              <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
-            </div>
-            {blog?.map((el) => (
-              <CvSection
-                content={el.content}
-                collapsable={el.meta?.collapsable}
-                level={el.meta?.level}
-                title={el.meta.title}
-              />
-            ))}
-          </>
-        )}
-      </div>
+    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black', { 'h-full': !blog })}>
+      {blog.length ? (
+        <>
+          <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
+            {meta.meta?.title}
+          </h1>
+          <div className="flex justify-end pt-1 print:hidden">
+            <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
+          </div>
+          {blog?.map((el) => (
+            <CvSection
+              content={el.content}
+              collapsable={el.meta?.collapsable}
+              level={el.meta?.level}
+              title={el.meta.title}
+            />
+          ))}
+        </>
+      ) : <Loader />}
     </div>
   );
-};
-
-Cv.defaultProps = {
-  className: '',
-};
-
-Cv.propTypes = {
-  className: PropTypes.string,
 };
 
 export default Cv;

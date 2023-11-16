@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
+import Loader from '../components/Loader';
 
 function Homepage({ className }) {
   const router = useRouter();
@@ -69,7 +70,7 @@ function Homepage({ className }) {
     </div>
   );
 
-  if (!renderReady) return <div className="flex-1" />;
+  if (!renderReady) return <Loader />;
 
   return (
     <div className={className}>
