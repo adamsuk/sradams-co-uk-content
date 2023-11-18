@@ -123,8 +123,8 @@ function Blog({ className }) {
   }, [router.query]);
 
   return (
-    <div className="h-full w-full pt-7">
-      {blog ? (
+    blog ? (
+      <div className="w-full pt-7">
         <SideBar
           sidebarItems={blog}
           SidebarItem={BlogItem}
@@ -135,8 +135,8 @@ function Blog({ className }) {
         >
           {MarkdownPage}
         </SideBar>
-      ) : <Loader />}
-    </div>
+      </div>
+    ) : <Loader className="h-full" />
   );
 }
 
