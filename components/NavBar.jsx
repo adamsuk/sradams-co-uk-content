@@ -40,7 +40,6 @@ function NavBar({ className }) {
                   alt={item?.title}
                 />
               </a>
-              <hr />
               <p className="hidden print:visible print:text-2xs print:block">
                 {item?.title}
                 :

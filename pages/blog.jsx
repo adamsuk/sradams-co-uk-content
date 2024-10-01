@@ -136,7 +136,7 @@ function Blog({ className }) {
           {MarkdownPage}
         </SideBar>
       </div>
-    ) : <Loader className="h-full" />
+    ) : <Loader className="h-dvh" />
   );
 }
 

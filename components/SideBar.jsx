@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import { VscClose, VscChevronRight, VscChevronDown } from 'react-icons/vsc';
 
@@ -71,7 +72,7 @@ function SideBar({
   const Component = children({ index: itemIndex, items: sidebarItems });
 
   return (
-    <div className={className}>
+    <div className={cn(className, 'h-dvh')}>
       {!sideActive && (
         <>
           <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
@@ -95,11 +96,11 @@ function SideBar({
       >
         <div
           className={`${
-            sideActive ? 'visible' : 'hidden'
+            sideActive ? 'visible h-dvh' : 'hidden'
           } md:max-w-[500px] md:w-2/5 w-full overflow-y-hidden`}
         >
           <div
-            className="md:fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 dark:bg-gray-800 max-h-[80%] h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3"
+            className="md:fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 h-full dark:bg-gray-800 md:h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3"
           >
             {sideActive && (
               <>

@@ -33,13 +33,13 @@ const CvSection = ({
   };
 
   return (
-    <div className="select-none pb-2 pt-1 print:py-0">
+    <div className="select-none pb-2 pt-1">
       <div
         tabIndex="0"
         onClick={toggleCollapsable}
         onKeyPress={toggleCollapsable}
         role="button"
-        className={`${collapsable ? 'cursor-pointer' : ''} flex w-full text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold print:pb-0`}
+        className={`${collapsable ? 'cursor-pointer' : ''} flex w-full text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
       >
         <div className="w-full">
           {title}
@@ -109,7 +109,7 @@ const Cv = () => {
   }, []);
 
   return (
-    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black', { 'h-full': !cv })}>
+    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black', { 'h-full': !cv })}>
       {cv.length ? (
         <>
           <div className="flex justify-end pt-1 print:hidden">
