@@ -85,11 +85,13 @@ CvSection.propTypes = {
 };
 
 const Cv = () => {
-  const [blog, setBlog] = useState([]);
+  const [cv, setCv] = useState([]);
+  const [tldr, setTldr] = useState([]);
   const [meta, setMeta] = useState({});
   const print = () => {
     window.print();
   };
+  const githubProfile = env.NEXT_PUBLIC_GITHUB_PROFILE;
 
   useEffect(() => {
     axios
@@ -100,21 +102,42 @@ const Cv = () => {
         if (rawMeta) {
           setMeta(rawMeta[0]);
         }
-        setBlog(raw.filter((section) => section.name !== 'blog.md'));
+        const newCv = raw.filter((section) => section.name !== 'blog.md');
+        setCv(newCv.filter((item) => item.meta.title !== 'TL;DR'));
+        setTldr(newCv.find((item) => item.meta.title === 'TL;DR'));
       });
   }, []);
 
   return (
-    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black', { 'h-full': !blog })}>
-      {blog.length ? (
+    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-1 print:text-black', { 'h-full': !cv })}>
+      {cv.length ? (
         <>
-          <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-            {meta.meta?.title}
-          </h1>
           <div className="flex justify-end pt-1 print:hidden">
             <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
           </div>
-          {blog?.map((el) => (
+          <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
+            {meta.meta?.title}
+          </h1>
+          <div className="flex flex-col items-center justify-center gap-4 my-4 sm:flex-row sm:my-1">
+            <div className="flex-1 basis-1/2">
+              <CvSection
+                content={tldr.content}
+                collapsable={tldr.meta?.collapsable}
+                level={tldr.meta?.level}
+                title={tldr.meta?.title}
+              />
+            </div>
+            {githubProfile && (
+              <div className="flex-1">
+                <img
+                  alt="ME!"
+                  className="mx-auto rounded-full items-center justify-center"
+                  src={`https://github.com/${githubProfile}.png`}
+                />
+              </div>
+            )}
+          </div>
+          {cv?.map((el) => (
             <CvSection
               content={el.content}
               collapsable={el.meta?.collapsable}

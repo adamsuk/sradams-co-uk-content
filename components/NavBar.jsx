@@ -6,17 +6,17 @@ import env from '../default-env';
 function NavBar({ className }) {
   const menuItems = [
     {
-      title: 'github',
+      title: 'Github',
       url: `https://github.com/${env.NEXT_PUBLIC_GITHUB_PROFILE}`,
       img: '/Navbar/Github/GitHub-Mark-120px-plus.png',
     },
     {
-      title: 'linkedin',
+      title: 'LinkedIn',
       url: 'https://linkedin.com/in/scott-adams-a3b070192',
       img: '/Navbar/LinkedIn/linkedin.png',
     },
     {
-      title: 'email',
+      title: 'Email',
       url: 'mailto:sra405@protonmail.com',
       img: '/Navbar/email.png',
     },
@@ -27,18 +27,26 @@ function NavBar({ className }) {
       <footer
         className={cn(
           className,
-          'mx-auto w-full justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 print:hidden',
+          'mx-auto w-full justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5',
         )}
       >
-        <div className="flex max-w-7xl mx-auto py-2 justify-evenly">
+        <div className="flex max-w-7xl mx-auto py-2 justify-evenly print:py-0">
           {menuItems?.map((item) => (
-            <a key={item?.title} href={item?.url}>
-              <img
-                className="visible dark:invert h-6"
-                src={item?.img}
-                alt={item?.title}
-              />
-            </a>
+            <>
+              <a key={item?.title} href={item?.url} className="print:hidden">
+                <img
+                  className="visible dark:invert h-6"
+                  src={item?.img}
+                  alt={item?.title}
+                />
+              </a>
+              <hr />
+              <p className="hidden print:visible print:text-2xs print:block">
+                {item?.title}
+                :
+                {item?.url}
+              </p>
+            </>
           ))}
         </div>
       </footer>

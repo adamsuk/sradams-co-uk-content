@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu } from '@headlessui/react';
 import { useTheme } from 'next-themes';
 import { WiDaySunny, WiMoonAltWaxingCrescent3 } from 'react-icons/wi';
@@ -12,7 +12,14 @@ function Header() {
     { title: 'CV', url: '/cv' },
   ];
 
-  const DarkModeIcon = theme === 'dark' ? WiDaySunny : WiMoonAltWaxingCrescent3;
+  useEffect(() => {
+    const userTheme = localStorage.getItem('theme');
+    if (userTheme) {
+      setTheme(userTheme);
+    } else {
+      setTheme('light');
+    }
+  }, []);
 
   return (
     <header
@@ -58,7 +65,8 @@ function Header() {
                   className="align-middle pl-2 md:pl-3"
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
-                  <DarkModeIcon size={24} />
+                  {theme === 'light' && <WiMoonAltWaxingCrescent3 size={24} />}
+                  {theme === 'dark' && <WiDaySunny size={24} />}
                 </button>
               </li>
             </ul>
