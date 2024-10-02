@@ -20,6 +20,11 @@ function NavBar({ className }) {
       url: 'mailto:sra405@protonmail.com',
       img: '/Navbar/email.png',
     },
+    {
+      title: 'Phone',
+      url: 'tel:+447840579704',
+      img: '/Navbar/phone.webp',
+    },
   ];
 
   return (
@@ -30,7 +35,7 @@ function NavBar({ className }) {
           'mx-auto w-full justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5',
         )}
       >
-        <div className="flex max-w-7xl mx-auto py-2 justify-evenly print:py-0">
+        <div className="flex max-w-7xl mx-auto py-2 justify-evenly print:py-1">
           {menuItems?.map((item) => (
             <>
               <a key={item?.title} href={item?.url} className="print:hidden">
@@ -40,11 +45,9 @@ function NavBar({ className }) {
                   alt={item?.title}
                 />
               </a>
-              <p className="hidden print:visible print:text-2xs print:block">
-                {item?.title}
-                :
-                {item?.url}
-              </p>
+              <div className="hidden flex print:visible print:text-2xs print:block">
+                <p>{item?.url}</p>
+              </div>
             </>
           ))}
         </div>

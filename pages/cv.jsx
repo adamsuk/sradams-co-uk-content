@@ -10,6 +10,7 @@ import { BsPrinterFill, BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import env from '../default-env';
 import { theme } from '../tailwind.config';
 import Loader from '../components/Loader';
+import NavBar from '../components/NavBar';
 
 const fonts = Object.keys(theme.fontSize);
 
@@ -34,23 +35,25 @@ const CvSection = ({
 
   return (
     <div className="select-none pb-2 pt-1">
-      <div
-        tabIndex="0"
-        onClick={toggleCollapsable}
-        onKeyPress={toggleCollapsable}
-        role="button"
-        className={`${collapsable ? 'cursor-pointer' : ''} flex w-full text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
-      >
-        <div className="w-full">
-          {title}
+      {title && (
+        <div
+          tabIndex="0"
+          onClick={toggleCollapsable}
+          onKeyPress={toggleCollapsable}
+          role="button"
+          className={`${collapsable ? 'cursor-pointer' : ''} flex w-full text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
+        >
+          <div className="w-full">
+            {title}
+          </div>
+          <div className="m-auto print:hidden">
+            {(collapsable && collapsed)
+              && <BsChevronDown size={24} />}
+            {(collapsable && !collapsed)
+              && <BsChevronUp size={24} />}
+          </div>
         </div>
-        <div className="m-auto print:hidden">
-          {(collapsable && collapsed)
-            && <BsChevronDown size={24} />}
-          {(collapsable && !collapsed)
-            && <BsChevronUp size={24} />}
-        </div>
-      </div>
+      )}
       <Markdown
         rehypePlugins={[rehypeRaw]}
         parserOptions={{ commonmark: true }}
@@ -61,7 +64,7 @@ const CvSection = ({
       </Markdown>
       <hr />
       <Markdown
-        className="hidden prose whitespace-no-wrap max-w-full print:text-2xs print:block"
+        className="hidden prose whitespace-no-wrap print:[&_img]:hidden max-w-full print:text-2xs print:block"
         disallowedElements={['h2', 'hr']} // TODO: short term fix to remove meta from content
       >
         {level === 1 ? `---\n\n${content}` : content}
@@ -87,6 +90,7 @@ CvSection.propTypes = {
 const Cv = () => {
   const [cv, setCv] = useState([]);
   const [tldr, setTldr] = useState([]);
+  const [pp, setPp] = useState([]);
   const [meta, setMeta] = useState({});
   const print = () => {
     window.print();
@@ -103,8 +107,9 @@ const Cv = () => {
           setMeta(rawMeta[0]);
         }
         const newCv = raw.filter((section) => section.name !== 'blog.md');
-        setCv(newCv.filter((item) => item.meta.title !== 'TL;DR'));
+        setCv(newCv.filter((item) => !['TL;DR', 'Personal Profile'].includes(item.meta.title)));
         setTldr(newCv.find((item) => item.meta.title === 'TL;DR'));
+        setPp(newCv.find((item) => item.meta.title === 'Personal Profile'));
       });
   }, []);
 
@@ -118,14 +123,11 @@ const Cv = () => {
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta.meta?.title}
           </h1>
-          <div className="flex flex-col items-center justify-center gap-4 my-4 sm:flex-row sm:my-1">
+          <NavBar className="hidden print:block" />
+          <CvSection content={tldr.content} />
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <div className="flex-1 basis-1/2">
-              <CvSection
-                content={tldr.content}
-                collapsable={tldr.meta?.collapsable}
-                level={tldr.meta?.level}
-                title={tldr.meta?.title}
-              />
+              <CvSection content={pp.content} />
             </div>
             {githubProfile && (
               <div className="flex-1">
