@@ -11,11 +11,11 @@ These are all aspects I want to reincorporate into my site but for now I'm keepi
 
 ### Hosting
 
-I've moved from a GCP based setup to a CloudFlare Pages deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). So this is all currently hosted on Vercel.
+I've moved from a GCP based setup to a CloudFlare Pages deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). I did have a year or so hosted on Vercel and had no issues at all but wanted to play with Pages so that's where it currently lives.
 
 ### CI/CD
 
-Originally solely integrated and deployed using CircleCI pipelines. This still remains but the prod deployment is completed with Github integrations. My drive to keep CircleCI is due to control and ease of future CLI integrations in the future.
+Originally solely integrated and deployed using CircleCI pipelines. But now the prod deployment is completed with really simple Github integrations with CloudFlare.
 
 ## TODOs
 
