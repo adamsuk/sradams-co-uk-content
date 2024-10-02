@@ -5,6 +5,7 @@ import axios from 'axios';
 import Markdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
+import cn from 'classnames';
 
 import SideBar from '../components/SideBar';
 import Loader from '../components/Loader';
@@ -123,20 +124,22 @@ function Blog({ className }) {
   }, [router.query]);
 
   return (
-    blog ? (
-      <div className="w-full pt-7">
-        <SideBar
-          sidebarItems={blog}
-          SidebarItem={BlogItem}
-          error={blog.error}
-          className={className}
-          slug={router.query}
-          index={itemIndex}
-        >
-          {MarkdownPage}
-        </SideBar>
-      </div>
-    ) : <Loader className="h-dvh" />
+    <div className={cn('flex flex-1 flex-col max-w-7xl m-auto', { 'h-full': !blog })}>
+      {blog ? (
+        <div className="w-full pt-7">
+          <SideBar
+            sidebarItems={blog}
+            SidebarItem={BlogItem}
+            error={blog.error}
+            className={className}
+            slug={router.query}
+            index={itemIndex}
+          >
+            {MarkdownPage}
+          </SideBar>
+        </div>
+      ) : <Loader />}
+    </div>
   );
 }
 

@@ -62,17 +62,13 @@ function SideBar({
   };
 
   useEffect(() => {
-    setSideActive(true);
-  }, [router]);
-
-  useEffect(() => {
     setItemIndex(index);
   }, [index]);
 
   const Component = children({ index: itemIndex, items: sidebarItems });
 
   return (
-    <div className={cn(className, 'h-dvh')}>
+    <div className={cn(className, 'h-full')}>
       {!sideActive && (
         <>
           <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">

@@ -15,7 +15,7 @@ function Loader() {
   }, [theme]);
 
   return (
-    <div className="flex max-w-screen w-full h-full justify-center items-center">
+    <div className="flex flex-1 max-w-screen w-full h-full justify-center items-center">
       <PacmanLoader {...loaderProps} />
     </div>
   );
