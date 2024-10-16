@@ -124,7 +124,7 @@ function Blog({ className }) {
   }, [router.query]);
 
   return (
-    <div className={cn('flex flex-1 flex-col max-w-7xl m-auto', { 'h-full': !blog })}>
+    <div className={cn('flex flex-1 flex-col w-full', { 'h-full': !blog })}>
       {blog ? (
         <div className="w-full pt-7">
           <SideBar
