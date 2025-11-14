@@ -1,5 +1,6 @@
 module.exports = {
   reactStrictMode: true,
+  output: 'export',
   webpack(config) {
     // eslint-disable-next-line no-param-reassign
     config.resolve.fallback = {
@@ -10,6 +11,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ['github.com'],
+    unoptimized: true,
   },
 };
