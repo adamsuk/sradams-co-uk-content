@@ -1,6 +1,9 @@
 {
   "name": "sradams-co-uk-content",
   "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -43,7 +46,7 @@
     "cz-conventional-changelog": "^3.0.1",
     "eslint": "^8.15.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-next": "12.0.7",
+    "eslint-config-next": "^14.2.33",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
