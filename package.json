@@ -11,6 +11,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "ci": "next build && next start",
+    "export": "next build",
     "prepare": "husky install"
   },
   "dependencies": {
