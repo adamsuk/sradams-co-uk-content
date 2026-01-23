@@ -1,4 +1,14 @@
 {
   "extends": "next/core-web-vitals",
-  "rules": { "react/no-unescaped-entities": 0 }
+  "rules": { 
+    "react/no-unescaped-entities": 0
+  },
+  "overrides": [
+    {
+      "files": ["*.stories.jsx", "*.stories.js"],
+      "rules": {
+        "react/jsx-props-no-spreading": "off"
+      }
+    }
+  ]
 }

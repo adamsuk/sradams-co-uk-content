@@ -13,4 +13,12 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {},
+  overrides: [
+    {
+      files: ['*.stories.jsx', '*.stories.js'],
+      rules: {
+        'react/jsx-props-no-spreading': 'off',
+      },
+    },
+  ],
 };
