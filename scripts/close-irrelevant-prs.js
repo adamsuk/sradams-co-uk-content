@@ -27,6 +27,18 @@ const isDryRun = args.includes('--dry-run');
 const packageJsonPath = path.join(__dirname, '..', 'package.json');
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
+// Important packages to display in summary
+const IMPORTANT_PACKAGES = ['next', 'axios', 'webpack', 'tailwindcss', 'firebase', 'ramda'];
+
+// Generate comment for closing PR
+function generateCloseComment(reason) {
+  return `Closing this PR as it is now irrelevant.
+
+Reason: ${reason}
+
+The package has been upgraded to a newer version in the main branch, making this PR obsolete.`;
+}
+
 // Extract version from dependency string (e.g., "^14.2.33" -> "14.2.33")
 function extractVersion(versionString) {
   if (!versionString) return null;
@@ -142,18 +154,20 @@ function getOpenPRs() {
 
 // Close a PR with a comment
 function closePR(prNumber, reason) {
-  const comment = `Closing this PR as it is now irrelevant.
-
-Reason: ${reason}
-
-The package has been upgraded to a newer version in the main branch, making this PR obsolete.`;
+  const comment = generateCloseComment(reason);
   
   try {
-    // Add comment
-    execSync(`gh pr comment ${prNumber} --body "${comment}"`, {
+    // Add comment - using JSON to properly escape the comment
+    const commentFile = path.join('/tmp', `pr-comment-${prNumber}.txt`);
+    fs.writeFileSync(commentFile, comment);
+    
+    execSync(`gh pr comment ${prNumber} --body-file "${commentFile}"`, {
       encoding: 'utf8',
       cwd: path.join(__dirname, '..')
     });
+    
+    // Clean up temp file
+    fs.unlinkSync(commentFile);
     
     // Close PR
     execSync(`gh pr close ${prNumber}`, {
@@ -175,7 +189,7 @@ function main() {
   const currentVersions = getCurrentVersions();
   console.log('📦 Current package versions:');
   Object.entries(currentVersions)
-    .filter(([pkg]) => ['next', 'axios', 'webpack', 'tailwindcss', 'firebase'].includes(pkg))
+    .filter(([pkg]) => IMPORTANT_PACKAGES.includes(pkg))
     .forEach(([pkg, version]) => {
       console.log(`  - ${pkg}: ${version}`);
     });

@@ -22,6 +22,14 @@ const prListFile = args[0] || path.join(__dirname, 'pr-list.json');
 const packageJsonPath = path.join(__dirname, '..', 'package.json');
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
+// Important packages to display in summary
+const IMPORTANT_PACKAGES = ['next', 'axios', 'webpack', 'tailwindcss', 'firebase', 'ramda'];
+
+// Generate comment for closing PR
+function generateCloseComment(reason) {
+  return `Closing this PR as it is now irrelevant. ${reason}. The package has been upgraded to a newer version in the main branch, making this PR obsolete.`;
+}
+
 // Extract version from dependency string (e.g., "^14.2.33" -> "14.2.33")
 function extractVersion(versionString) {
   if (!versionString) return null;
@@ -123,9 +131,8 @@ function main() {
   
   const currentVersions = getCurrentVersions();
   console.log('\n📦 Current package versions:');
-  const importantPackages = ['next', 'axios', 'webpack', 'tailwindcss', 'firebase', 'ramda'];
   Object.entries(currentVersions)
-    .filter(([pkg]) => importantPackages.includes(pkg))
+    .filter(([pkg]) => IMPORTANT_PACKAGES.includes(pkg))
     .forEach(([pkg, version]) => {
       console.log(`  - ${pkg}: ${version}`);
     });
@@ -166,14 +173,16 @@ function main() {
     
     irrelevantPRs.forEach(pr => {
       console.log(`# Close PR #${pr.number}: ${pr.title.substring(0, 60)}${pr.title.length > 60 ? '...' : ''}`);
-      console.log(`gh pr close ${pr.number} --comment "Closing this PR as it is now irrelevant. ${pr.reason}. The package has been upgraded to a newer version in the main branch, making this PR obsolete."`);
+      const comment = generateCloseComment(pr.reason);
+      console.log(`gh pr close ${pr.number} --comment "${comment}"`);
       console.log('');
     });
     
     // Generate a batch script file
-    const scriptContent = irrelevantPRs.map(pr => 
-      `gh pr close ${pr.number} --comment "Closing this PR as it is now irrelevant. ${pr.reason}. The package has been upgraded to a newer version in the main branch, making this PR obsolete."`
-    ).join('\n');
+    const scriptContent = irrelevantPRs.map(pr => {
+      const comment = generateCloseComment(pr.reason);
+      return `gh pr close ${pr.number} --comment "${comment}"`;
+    }).join('\n');
     
     const scriptPath = path.join(__dirname, 'close-prs.sh');
     fs.writeFileSync(scriptPath, '#!/bin/bash\n\n' + scriptContent + '\n');
