@@ -32,3 +32,7 @@ yarn-error.log*
 
 # linting
 .eslintcache
+
+# scripts - generated files
+scripts/pr-list.json
+scripts/close-prs.sh
