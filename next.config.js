@@ -1,8 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  future: {
-    webpack5: true, // by default, if you customize webpack config, they switch back to version 4.
-  },
+  output: 'export',
   webpack(config) {
     // eslint-disable-next-line no-param-reassign
     config.resolve.fallback = {
@@ -13,6 +11,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ['github.com'],
+    unoptimized: true,
   },
 };
