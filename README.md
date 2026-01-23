@@ -9,6 +9,22 @@ I've recently been through a whole site rewrite including aspects such as pullin
 The sandbox page is as it says on the tin, quick, messy, web-based applets.
 These are all aspects I want to reincorporate into my site but for now I'm keeping it simple.
 
+### Storybook
+
+This project includes Storybook for component development and documentation. All components in the `components` directory have corresponding stories.
+
+**Running Storybook locally:**
+```bash
+npm run storybook
+```
+
+**Building Storybook for deployment:**
+```bash
+npm run build-storybook
+```
+
+The built Storybook will be in the `storybook-static` directory, which can be deployed to preview environments.
+
 ### Hosting
 
 I've moved from a GCP based setup to a CloudFlare Pages deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). I did have a year or so hosted on Vercel and had no issues at all but wanted to play with Pages so that's where it currently lives.
