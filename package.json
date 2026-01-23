@@ -6,12 +6,13 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/build-with-storybook.js",
+    "build:next-only": "./node_modules/.bin/next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "ci": "next build && next start",
-    "export": "next build",
+    "export": "node scripts/build-with-storybook.js",
     "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

@@ -25,6 +25,18 @@ npm run build-storybook
 
 The built Storybook will be in the `storybook-static` directory, which can be deployed to preview environments.
 
+**Deployment:**
+The build process automatically includes Storybook in non-production deployments:
+- **Production branch** (main/master/production): Only Next.js app is built
+- **All other branches**: Both Next.js app and Storybook are built
+
+When Storybook is included, it's available at `/storybook/` on your deployed site.
+
+For CloudFlare Pages, the build command remains: `npm run build && npm run export`
+- The script detects the `CF_PAGES_BRANCH` environment variable
+- Production branches exclude Storybook automatically
+- Preview/branch deployments include Storybook automatically
+
 ### Hosting
 
 I've moved from a GCP based setup to a CloudFlare Pages deployment. I had fun setting up the pipelines and resources on GCP but quickly realised how overkill it was (especially when my free credits expired!). I did have a year or so hosted on Vercel and had no issues at all but wanted to play with Pages so that's where it currently lives.
