@@ -1,3 +1,12 @@
+# Deploy to Cloudflare Pages
+#
+# Required GitHub Secrets:
+# - CLOUDFLARE_API_TOKEN: API Token with "Cloudflare Pages — Edit" permission (NOT Global API Key)
+# - CLOUDFLARE_ACCOUNT_ID: Your Cloudflare account ID
+# - CLOUDFLARE_PROJECT_NAME: Your Cloudflare Pages project name
+#
+# For setup instructions, see: .github/CLOUDFLARE_SETUP.md
+#
 name: Deploy to Cloudflare Pages
 
 on:
@@ -52,6 +61,10 @@ jobs:
             });
             return deployment.data.id;
 
+      # Deploy to Cloudflare Pages using Wrangler
+      # IMPORTANT: CLOUDFLARE_API_TOKEN must be an API Token (not Global API Key)
+      # with "Cloudflare Pages — Edit" permission
+      # See .github/CLOUDFLARE_SETUP.md for setup instructions
       - name: Publish to Cloudflare Pages
         id: cloudflare
         uses: cloudflare/wrangler-action@v3
