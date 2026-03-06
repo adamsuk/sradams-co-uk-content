@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 
 import sandboxes from '../components/sandbox';
 import SideBar from '../components/SideBar';
 
-function SandboxItem({ item }) {
+interface SandboxItemProps {
+  item: { title?: string };
+}
+
+function SandboxItem({ item }: SandboxItemProps) {
   return (
     <button type="button">
       <h4>{item.title}</h4>
@@ -13,13 +16,11 @@ function SandboxItem({ item }) {
   );
 }
 
-SandboxItem.propTypes = {
-  item: PropTypes.shape({
-    title: PropTypes.string,
-  }).isRequired,
-};
+interface SandboxProps {
+  className?: string;
+}
 
-function Sandbox({ className }) {
+function Sandbox({ className = '' }: SandboxProps) {
   const [itemIndex, setItemIndex] = useState(0);
   const [sandbox, setSandbox] = useState({});
   const router = useRouter();
@@ -35,7 +36,7 @@ function Sandbox({ className }) {
     }
   }, [router.query]);
 
-  const changeRouting = ({ index, items }) => {
+  const changeRouting = ({ index, items }: { index: number; items: typeof sandboxes }) => {
     if (items[index]?.slug) {
       router.push(`/sandbox/?component=${items[index].slug}`, undefined, {
         shallow: true,
@@ -43,7 +44,9 @@ function Sandbox({ className }) {
     }
   };
 
-  const Component = ({ index, items }) => items[index].component;
+  const Component = (
+    { index, items }: { index: number; items: typeof sandboxes },
+  ) => items[index].component;
   const ComponentProps = { sandbox, setSandbox };
 
   return (
@@ -63,13 +66,5 @@ function Sandbox({ className }) {
     </div>
   );
 }
-
-Sandbox.defaultProps = {
-  className: '',
-};
-
-Sandbox.propTypes = {
-  className: PropTypes.string,
-};
 
 export default Sandbox;

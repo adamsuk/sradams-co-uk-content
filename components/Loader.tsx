@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 
 function Loader() {
   const { theme } = useTheme();
-  const [loaderProps, setLoaderProps] = useState({});
+  const [loaderProps, setLoaderProps] = useState<{ color?: string }>({});
 
   useEffect(() => {
     if (theme) {

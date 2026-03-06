@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
+import type { AppProps } from 'next/app';
 
 import { ThemeProvider } from 'next-themes';
 
@@ -10,7 +10,7 @@ import Head from 'next/head';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
         <title>Scott Adams</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <ThemeProvider attribute="class" className="absolute inset-0">
+      <ThemeProvider attribute="class">
         <div key="generic" className="flex flex-col min-h-dvh h-dvh justify-between">
           <Header />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -45,15 +45,5 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-MyApp.defaultProps = {
-  pageProps: {},
-};
-
-MyApp.propTypes = {
-  Component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  pageProps: PropTypes.object,
-};
 
 export default MyApp;

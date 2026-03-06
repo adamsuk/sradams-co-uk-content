@@ -1,6 +1,4 @@
-/* eslint-disable react/function-component-definition */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Markdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -14,9 +12,17 @@ import NavBar from '../components/NavBar';
 
 const fonts = Object.keys(theme.fontSize);
 
+interface CvSectionProps {
+  title?: string;
+  content: string;
+  collapsable?: boolean;
+  baseFontSize?: number;
+  level?: number;
+}
+
 const CvSection = ({
   title, content, collapsable = false, baseFontSize = 6, level = 1,
-}) => {
+}: CvSectionProps) => {
   const [collapsed, setCollapsed] = useState(collapsable);
   const [headerFont, setHeaderFont] = useState('2xl');
 
@@ -37,7 +43,7 @@ const CvSection = ({
     <div className="select-none pb-2 pt-1">
       {title && (
         <div
-          tabIndex="0"
+          tabIndex={0}
           onClick={toggleCollapsable}
           onKeyPress={toggleCollapsable}
           role="button"
@@ -55,17 +61,17 @@ const CvSection = ({
         </div>
       )}
       <Markdown
-        rehypePlugins={[rehypeRaw]}
-        parserOptions={{ commonmark: true }}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rehypePlugins={[rehypeRaw] as any}
         className={`${collapsed ? 'hidden' : 'shown'} prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
-        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
+        disallowedElements={['h2']}
       >
         {content}
       </Markdown>
       <hr />
       <Markdown
         className="hidden prose whitespace-no-wrap print:[&_img]:hidden max-w-full print:text-2xs print:block"
-        disallowedElements={['h2', 'hr']} // TODO: short term fix to remove meta from content
+        disallowedElements={['h2', 'hr']}
       >
         {level === 1 ? `---\n\n${content}` : content}
       </Markdown>
@@ -73,25 +79,23 @@ const CvSection = ({
   );
 };
 
-CvSection.defaultProps = {
-  collapsable: false,
-  baseFontSize: 6,
-  level: 1,
-};
+interface CvMeta {
+  title?: string;
+  collapsable?: boolean;
+  level?: number;
+}
 
-CvSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  collapsable: PropTypes.bool,
-  baseFontSize: PropTypes.number,
-  level: PropTypes.number,
-};
+interface CvItem {
+  name: string;
+  meta: CvMeta;
+  content: string;
+}
 
 const Cv = () => {
-  const [cv, setCv] = useState([]);
-  const [tldr, setTldr] = useState([]);
-  const [pp, setPp] = useState([]);
-  const [meta, setMeta] = useState({});
+  const [cv, setCv] = useState<CvItem[]>([]);
+  const [tldr, setTldr] = useState<CvItem | undefined>();
+  const [pp, setPp] = useState<CvItem | undefined>();
+  const [meta, setMeta] = useState<CvItem | undefined>();
   const print = () => {
     window.print();
   };
@@ -101,13 +105,13 @@ const Cv = () => {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
       .then((response) => {
-        const raw = response.data.filter((section) => section.meta);
+        const raw: CvItem[] = response.data.filter((section: CvItem) => section.meta);
         const rawMeta = raw.filter((section) => section.name === 'blog.md');
         if (rawMeta) {
           setMeta(rawMeta[0]);
         }
         const newCv = raw.filter((section) => section.name !== 'blog.md');
-        setCv(newCv.filter((item) => !['TL;DR', 'Personal Profile'].includes(item.meta.title)));
+        setCv(newCv.filter((item) => !['TL;DR', 'Personal Profile'].includes(item.meta.title || '')));
         setTldr(newCv.find((item) => item.meta.title === 'TL;DR'));
         setPp(newCv.find((item) => item.meta.title === 'Personal Profile'));
       });
@@ -121,13 +125,13 @@ const Cv = () => {
             <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
           </div>
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
-            {meta.meta?.title}
+            {meta?.meta?.title}
           </h1>
           <NavBar className="hidden print:block" />
-          <CvSection content={tldr.content} />
+          {tldr && <CvSection content={tldr.content} />}
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <div className="flex-1 basis-1/2">
-              <CvSection content={pp.content} />
+              {pp && <CvSection content={pp.content} />}
             </div>
             {githubProfile && (
               <div className="flex-1">
@@ -141,6 +145,7 @@ const Cv = () => {
           </div>
           {cv?.map((el) => (
             <CvSection
+              key={el.meta.title}
               content={el.content}
               collapsable={el.meta?.collapsable}
               level={el.meta?.level}

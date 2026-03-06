@@ -1,8 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
-import PropTypes from 'prop-types';
 
-function Custom404({ className = '' }) {
+interface Custom404Props {
+  className?: string;
+}
+
+function Custom404({ className = '' }: Custom404Props) {
   return (
     <div className={cn(className, 'relative top-1/2 translate-y-[-50%]')}>
       <div className="justify-center items-center w-full p-3 md:p-7">
@@ -21,13 +24,5 @@ function Custom404({ className = '' }) {
     </div>
   );
 }
-
-Custom404.defaultProps = {
-  className: '',
-};
-
-Custom404.propTypes = {
-  className: PropTypes.string,
-};
 
 export default Custom404;
