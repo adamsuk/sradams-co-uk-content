@@ -9,8 +9,19 @@ import Previous from './icons/Previous';
 import Next from './icons/Next';
 import Shuffle from './icons/Shuffle';
 
-const useAudio = ({ podcasts }) => {
-  const [audio, setState] = useState();
+interface Podcast {
+  url: string;
+  show?: string;
+  title?: string;
+  image?: string;
+}
+
+interface UseAudioArgs {
+  podcasts: Podcast[];
+}
+
+const useAudio = ({ podcasts }: UseAudioArgs) => {
+  const [audio, setState] = useState<HTMLAudioElement | undefined>();
   const [playing, setPlaying] = useState(false);
   const [random, setRandom] = useState(false);
   const [next, setNext] = useState(false);
@@ -72,7 +83,7 @@ const useAudio = ({ podcasts }) => {
         audio.removeEventListener('ended', () => setNext(false));
       };
     }
-    return {};
+    return undefined;
   }, [audio]);
 
   return {
@@ -87,9 +98,9 @@ const useAudio = ({ podcasts }) => {
 };
 
 function Player() {
-  const [podcasts, setPodcasts] = useState([]);
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
 
-  const sectionStyle = {
+  const sectionStyle: React.CSSProperties = {
     display: 'grid',
     height: '100%',
     width: '100%',
@@ -98,23 +109,9 @@ function Player() {
     gridTemplateColumns: 'repeat(3, 1fr)',
     gridAutoRows: '1fr',
     textAlign: 'center',
-    itemAlign: 'center',
   };
 
-  // const imageStyle= {
-  //   height: "100%",
-  //   width: "100%",
-  //   maxHeight: "400px",
-  //   maxWidth: "400px",
-  //   borderRadius: "15%",
-  //   backgroundColor: "white",
-  //   backgroundImage: podcasts ? `url(${podcasts[counter].image})` : "",
-  //   backgroundPosition: 'center',
-  //   backgroundRepeat: 'no-repeat',
-  //   backgroundSize: 'cover'
-  // }
-
-  const iconStyle = {
+  const iconStyle: React.CSSProperties = {
     height: '100%',
     width: '100%',
     maxHeight: '50px',

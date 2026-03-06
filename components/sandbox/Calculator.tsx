@@ -2,36 +2,40 @@ import React from 'react';
 import { evaluate } from 'mathjs';
 
 let displayVal = '';
-let savedVal = 0;
+let savedVal: string | number = 0;
 let op = '';
 
-const mathEval = (val1, val2, operation) => {
+const mathEval = (val1: string | number, val2: string | number, operation: string): number => {
   const ans = evaluate(+val1 + operation + +val2);
   return +ans;
 };
 
-const setScreenVal = (val) => {
-  document.getElementById('calculator-screen').value = +val;
+const setScreenVal = (val: string | number) => {
+  const screen = document.getElementById('calculator-screen') as HTMLInputElement | null;
+  if (screen) {
+    screen.value = String(+val);
+  }
 };
 
-const handleClick = (event) => {
-  const isButton = event.target.nodeName === 'BUTTON';
+const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const target = event.target as HTMLButtonElement;
+  const isButton = target.nodeName === 'BUTTON';
   if (!isButton) {
     return;
   }
 
-  const { className } = event.target;
+  const { className } = target;
 
   if (className.split(' ').includes('digit')) {
-    displayVal += event.target.value;
+    displayVal += target.value;
     setScreenVal(displayVal);
   } else if (className.split(' ').includes('operator')) {
     savedVal = displayVal;
     displayVal = '';
-    op = event.target.value;
+    op = target.value;
   } else if (className.split(' ').includes('equal-sign')) {
     if (displayVal && savedVal && op) {
-      displayVal = mathEval(savedVal, displayVal, op);
+      displayVal = String(mathEval(savedVal, displayVal, op));
       savedVal = '';
       setScreenVal(+displayVal);
     }
@@ -59,7 +63,7 @@ function Calculator() {
         type="text"
         className="w-full rounded-lg text-6xl h-20 bg-gray-900 text-white text-right pr-5 pl-2 max-h-[150px]"
         id="calculator-screen"
-        value="0"
+        defaultValue="0"
         disabled
       />
 

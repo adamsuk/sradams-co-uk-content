@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
+import type { AppProps } from 'next/app';
 
 import { ThemeProvider } from 'next-themes';
 
@@ -10,7 +10,7 @@ import Head from 'next/head';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -45,15 +45,5 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-MyApp.defaultProps = {
-  pageProps: {},
-};
-
-MyApp.propTypes = {
-  Component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  pageProps: PropTypes.object,
-};
 
 export default MyApp;

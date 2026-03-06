@@ -1,28 +1,31 @@
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { has } from 'ramda';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { firstQuestion, questionSet } = require('./questions.json');
 
-function Quiz(props) {
+interface QuizProps {
+  sandbox?: Record<string, string>;
+  setSandbox?: ((output: Record<string, string>) => void) | null;
+  nextQuestion?: string;
+}
+
+function Quiz(props: QuizProps) {
   const output = props?.sandbox;
   const setOutput = props?.setSandbox;
   let question = props?.nextQuestion || firstQuestion;
 
-  // eslint-disable-next-line import/no-dynamic-require, global-require
-  const QuestionComponent = require(`./${
-    questionSet[question].component}`).default;
+  // eslint-disable-next-line import/no-dynamic-require, global-require, @typescript-eslint/no-var-requires
+  const QuestionComponent = require(`./${questionSet[question].component}`).default;
 
-  const renderNextQuestion = (out) => () => {
+  const renderNextQuestion = (out: Record<string, string> | undefined) => () => {
     const nextProps = questionSet[question];
-    // define some logic here to get the next question
     if (has('exact_answer', nextProps.question)) {
-      const userAnswer = out[nextProps.inputName].toLowerCase();
+      const userAnswer = out?.[nextProps.inputName]?.toLowerCase();
       const filterAnswers = nextProps.question.exact_answer;
-      if (has(userAnswer, filterAnswers)) {
+      if (userAnswer && has(userAnswer, filterAnswers)) {
         question = filterAnswers[userAnswer];
       }
     } else if (has('default', nextProps.question)) {
@@ -51,17 +54,5 @@ function Quiz(props) {
 }
 
 Quiz.getInitialProps = () => questionSet[firstQuestion];
-
-Quiz.defaultProps = {
-  sandbox: {},
-  setSandbox: null,
-  nextQuestion: '',
-};
-
-Quiz.propTypes = {
-  sandbox: PropTypes.object,
-  setSandbox: PropTypes.func,
-  nextQuestion: PropTypes.string,
-};
 
 export default Quiz;

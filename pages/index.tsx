@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 
 import axios from 'axios';
 import Markdown from 'react-markdown';
@@ -11,23 +10,31 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 
-function Homepage({ className }) {
+interface HomepageProps {
+  className?: string;
+}
+
+function Homepage({ className = '' }: HomepageProps) {
   const router = useRouter();
   const [markdownText, setMarkdownText] = useState('');
   const [githubProfile, setGithubProfile] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
 
-  const isPreview = () => (
-    router.query.githubProfile ? setPreviewMode(true) : setPreviewMode(false)
-  );
+  const isPreview = useCallback(() => {
+    if (router.query.githubProfile) {
+      setPreviewMode(true);
+    } else {
+      setPreviewMode(false);
+    }
+  }, [router.query.githubProfile]);
 
   useEffect(() => {
     if (!router.isReady) {
       setRenderReady(false);
     } else {
       setGithubProfile(
-        router.query.githubProfile || env.NEXT_PUBLIC_GITHUB_PROFILE,
+        (router.query.githubProfile as string) || env.NEXT_PUBLIC_GITHUB_PROFILE,
       );
       isPreview();
     }
@@ -97,7 +104,6 @@ function Homepage({ className }) {
             <Markdown
               rehypePlugins={[rehypeRaw, rehypeSanitize]}
               remarkPlugins={[remarkGfm]}
-              parserOptions={{ commonmark: true }}
               className="prose dark:prose-invert whitespace-no-wrap max-w-full"
             >
               {markdownText}
@@ -121,13 +127,5 @@ function Homepage({ className }) {
     </div>
   );
 }
-
-Homepage.defaultProps = {
-  className: '',
-};
-
-Homepage.propTypes = {
-  className: PropTypes.string,
-};
 
 export default Homepage;

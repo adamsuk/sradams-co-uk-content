@@ -1,8 +1,8 @@
 import React from 'react';
 
-function Shuffle(props) {
+function Shuffle(props: React.SVGProps<SVGSVGElement>) {
+  // eslint-disable-next-line react/jsx-props-no-spreading
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <svg fill="none" viewBox="0 0 280 280" stroke="white" {...props}>
       <path
         transform="scale(-1, 1) translate(-280, 0)"

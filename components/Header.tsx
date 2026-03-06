@@ -3,10 +3,16 @@ import { Menu } from '@headlessui/react';
 import { useTheme } from 'next-themes';
 import { WiDaySunny, WiMoonAltWaxingCrescent3 } from 'react-icons/wi';
 
+interface MenuItem {
+  title: string;
+  url?: string;
+  options?: unknown[];
+}
+
 function Header() {
   const { theme, setTheme } = useTheme();
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { title: 'Blog', url: '/blog' },
     { title: 'Sandbox', url: '/sandbox' },
     { title: 'CV', url: '/cv' },

@@ -1,9 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
 import env from '../default-env';
 
-function NavBar({ className }) {
+interface NavBarProps {
+  className?: string;
+}
+
+function NavBar({ className = '' }: NavBarProps) {
   const menuItems = [
     {
       title: 'Github',
@@ -55,13 +58,5 @@ function NavBar({ className }) {
     </div>
   );
 }
-
-NavBar.defaultProps = {
-  className: '',
-};
-
-NavBar.propTypes = {
-  className: PropTypes.string,
-};
 
 export default NavBar;

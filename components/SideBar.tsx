@@ -3,10 +3,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import { VscClose, VscChevronRight, VscChevronDown } from 'react-icons/vsc';
+
+interface ChangeRoutingArgs {
+  index: number;
+  items: unknown[];
+}
+
+interface SideBarProps {
+  children: (args: { index: number; items: unknown[] }) => React.ReactNode;
+  childrenProps?: Record<string, unknown>;
+  sidebarItems: unknown[];
+  SidebarItem: React.ComponentType<{ item: unknown; index: number }>;
+  error?: boolean | null;
+  className?: string;
+  index?: number;
+  changeRouting?: ((args: ChangeRoutingArgs) => void) | null;
+}
 
 function SideBar({
   children,
@@ -14,13 +29,13 @@ function SideBar({
   sidebarItems,
   SidebarItem,
   error,
-  className,
+  className = '',
   index = 0,
   changeRouting,
-}) {
+}: SideBarProps) {
   const [sideActive, setSideActive] = useState(true);
   const [itemIndex, setItemIndex] = useState(index);
-  const [windowSize, setWindowSize] = useState({
+  const [windowSize, setWindowSize] = useState<{ width: number | undefined; height: number | undefined }>({
     width: undefined,
     height: undefined,
   });
@@ -51,7 +66,7 @@ function SideBar({
     setSideActive(!sideActive);
   };
 
-  const changeItem = (i, isSmallScreen = false) => () => {
+  const changeItem = (i: number, isSmallScreen = false) => () => {
     setItemIndex(i);
     if (changeRouting) {
       changeRouting({ index: i, items: sidebarItems });
@@ -85,7 +100,7 @@ function SideBar({
       )}
       <div
         className={`${
-          windowSize.width > maxSize ? '' : 'flex flex-wrap flex-col'
+          windowSize.width && windowSize.width > maxSize ? '' : 'flex flex-wrap flex-col'
         } h-full mb-auto md:flex-row md:px-0 max-w-screen w-full justify-between ${
           sideActive ? 'lg:flex-row' : 'mx-auto'
         }`}
@@ -106,7 +121,7 @@ function SideBar({
                   </button>
                 </div>
                 <div className="flex-1 h-full w-full overflow-y-scroll no-scrollbar items-center text-center">
-                  {sidebarItems.map((item, i) => (
+                  {(sidebarItems as unknown[]).map((item, i) => (
                     <div
                       // eslint-disable-next-line react/no-array-index-key
                       key={`blog-${i}-div1`}
@@ -122,7 +137,7 @@ function SideBar({
                         className=""
                         onClick={changeItem(
                           i,
-                          windowSize.width <= mobileSize,
+                          windowSize.width !== undefined && windowSize.width <= mobileSize,
                         )}
                       >
                         <SidebarItem item={item} index={i} />
@@ -141,11 +156,11 @@ function SideBar({
         >
           {/* eslint-disable-next-line no-nested-ternary */}
           {typeof Component === 'function' ? (
-            React.isValidElement(Component()) ? (
+            React.isValidElement((Component as () => React.ReactNode)()) ? (
               // eslint-disable-next-line react/jsx-props-no-spreading
-              <Component {...childrenProps} />
+              <(Component as React.ComponentType<Record<string, unknown>>)  {...childrenProps} />
             ) : (
-              Component()
+              (Component as () => React.ReactNode)()
             )
           ) : (
             Component
@@ -155,27 +170,5 @@ function SideBar({
     </div>
   );
 }
-
-SideBar.defaultProps = {
-  childrenProps: {},
-  error: null,
-  className: '',
-  index: 0,
-  changeRouting: null,
-};
-
-SideBar.propTypes = {
-  children: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  childrenProps: PropTypes.object,
-  // eslint-disable-next-line react/forbid-prop-types
-  sidebarItems: PropTypes.array.isRequired,
-  SidebarItem: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  error: PropTypes.bool,
-  className: PropTypes.string,
-  index: PropTypes.number,
-  changeRouting: PropTypes.func,
-};
 
 export default SideBar;

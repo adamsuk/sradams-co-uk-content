@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import Markdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -11,20 +10,33 @@ import SideBar from '../components/SideBar';
 import Loader from '../components/Loader';
 import env from '../default-env';
 
-function MarkdownPage({ index, items }) {
+interface BlogMeta {
+  slug?: string;
+  title?: string;
+  description?: string;
+  date?: string;
+}
+
+interface BlogPost {
+  name: string;
+  slug?: string;
+  meta: BlogMeta;
+  content: string;
+  error?: boolean;
+}
+
+interface MarkdownPageProps {
+  index: number;
+  items: BlogPost[];
+}
+
+function MarkdownPage({ index, items }: MarkdownPageProps) {
   const [title, setTitle] = useState('');
   const [markdownText, setMarkdownText] = useState('');
 
-  const phpStreams = {
+  const phpStreams: Record<string, string> = {
     'page://': `${env.NEXT_PUBLIC_CMS_URL}/user/pages/`,
   };
-
-  // TODO: url param change on blog change
-  // if (items[index]?.meta?.slug) {
-  //   router.push(`/blog?post=${items[index].meta.slug}`, undefined, {
-  //     shallow: true,
-  //   });
-  // }
 
   useEffect(() => {
     let post = items[index].content;
@@ -34,7 +46,7 @@ function MarkdownPage({ index, items }) {
       post = post.replace(regex, url);
     }
     window.scrollTo(window.scrollX, 1);
-    setTitle(items[index].meta.title);
+    setTitle(items[index].meta.title || '');
     setMarkdownText(post);
   }, [index, items]);
 
@@ -45,9 +57,8 @@ function MarkdownPage({ index, items }) {
       </div>
       <Markdown
         rehypePlugins={[rehypeRaw, rehypeSanitize]}
-        parserOptions={{ commonmark: true }}
         className="prose dark:prose-invert whitespace-no-wrap max-w-full"
-        disallowedElements={['h2']} // TODO: short term fix to remove meta from content
+        disallowedElements={['h2']}
       >
         {markdownText}
       </Markdown>
@@ -55,21 +66,11 @@ function MarkdownPage({ index, items }) {
   );
 }
 
-MarkdownPage.propTypes = {
-  index: PropTypes.number.isRequired,
-  items: PropTypes.shape({
-    meta: PropTypes.shape({
-      slug: PropTypes.string,
-      title: PropTypes.string,
-      description: PropTypes.string,
-      date: PropTypes.string,
-    }),
-    // eslint-disable-next-line react/forbid-prop-types
-    content: PropTypes.object,
-  }).isRequired,
-};
+interface BlogItemProps {
+  item: BlogPost;
+}
 
-function BlogItem({ item }) {
+function BlogItem({ item }: BlogItemProps) {
   return (
     <button type="button" className="w-full">
       <h3 className="border-b border-gray-300">{String(item.meta.title)}</h3>
@@ -81,19 +82,13 @@ function BlogItem({ item }) {
   );
 }
 
-BlogItem.propTypes = {
-  item: PropTypes.shape({
-    meta: PropTypes.shape({
-      title: PropTypes.string,
-      description: PropTypes.string,
-      date: PropTypes.string,
-    }),
-  }).isRequired,
-};
+interface BlogProps {
+  className?: string;
+}
 
-function Blog({ className }) {
+function Blog({ className = '' }: BlogProps) {
   const [itemIndex, setItemIndex] = useState(0);
-  const [blog, setBlog] = useState();
+  const [blog, setBlog] = useState<BlogPost[] | undefined>();
 
   const router = useRouter();
 
@@ -101,23 +96,23 @@ function Blog({ className }) {
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
       .then((response) => {
-        const rawRes = response.data.filter((post) => post.meta);
-        setBlog(rawRes.filter((post) => post.name !== 'blog.md'));
+        const rawRes = response.data.filter((post: BlogPost) => post.meta);
+        setBlog(rawRes.filter((post: BlogPost) => post.name !== 'blog.md'));
       });
   }, []);
 
   useEffect(() => {
-    if (blog?.error) {
+    if ((blog as unknown as { error?: boolean })?.error) {
       router.push('/404');
     }
-  }, [blog?.error]);
+  }, [(blog as unknown as { error?: boolean })?.error]);
 
   useEffect(() => {
     if (router.query?.post) {
       const index = blog?.findIndex(
         (item) => item.slug === router.query.post,
       );
-      if (index !== -1) {
+      if (index !== undefined && index !== -1) {
         setItemIndex(index);
       }
     }
@@ -130,9 +125,8 @@ function Blog({ className }) {
           <SideBar
             sidebarItems={blog}
             SidebarItem={BlogItem}
-            error={blog.error}
+            error={false}
             className={className}
-            slug={router.query}
             index={itemIndex}
           >
             {MarkdownPage}
@@ -142,15 +136,5 @@ function Blog({ className }) {
     </div>
   );
 }
-
-Blog.defaultProps = {
-  className: '',
-};
-
-Blog.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  className: PropTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-};
 
 export default Blog;
