@@ -56,7 +56,8 @@ function MarkdownPage({ index, items }: MarkdownPageProps) {
         {title}
       </div>
       <Markdown
-        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
         className="prose dark:prose-invert whitespace-no-wrap max-w-full"
         disallowedElements={['h2']}
       >

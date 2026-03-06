@@ -61,7 +61,8 @@ const CvSection = ({
         </div>
       )}
       <Markdown
-        rehypePlugins={[rehypeRaw]}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rehypePlugins={[rehypeRaw] as any}
         className={`${collapsed ? 'hidden' : 'shown'} prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
         disallowedElements={['h2']}
       >

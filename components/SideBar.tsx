@@ -13,10 +13,12 @@ interface ChangeRoutingArgs {
 }
 
 interface SideBarProps {
-  children: (args: { index: number; items: unknown[] }) => React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children: (args: { index: number; items: unknown[] }) => any;
   childrenProps?: Record<string, unknown>;
   sidebarItems: unknown[];
-  SidebarItem: React.ComponentType<{ item: unknown; index: number }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  SidebarItem: React.ComponentType<any>;
   error?: boolean | null;
   className?: string;
   index?: number;
@@ -157,8 +159,11 @@ function SideBar({
           {/* eslint-disable-next-line no-nested-ternary */}
           {typeof Component === 'function' ? (
             React.isValidElement((Component as () => React.ReactNode)()) ? (
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              <(Component as React.ComponentType<Record<string, unknown>>)  {...childrenProps} />
+              (() => {
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                const TypedComponent = Component as React.ComponentType<Record<string, unknown>>;
+                return <TypedComponent {...childrenProps} />;
+              })()
             ) : (
               (Component as () => React.ReactNode)()
             )

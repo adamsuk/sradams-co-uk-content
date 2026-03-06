@@ -102,7 +102,8 @@ function Homepage({ className = '' }: HomepageProps) {
 
           <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
             <Markdown
-              rehypePlugins={[rehypeRaw, rehypeSanitize]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
               remarkPlugins={[remarkGfm]}
               className="prose dark:prose-invert whitespace-no-wrap max-w-full"
             >

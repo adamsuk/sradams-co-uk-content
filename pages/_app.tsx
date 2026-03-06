@@ -33,8 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Scott Adams</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <ThemeProvider attribute="class" className="absolute inset-0">
-        <div key="generic" className="flex flex-col min-h-dvh h-dvh justify-between">
+      <ThemeProvider attribute="class">
+        <div key="generic" className="absolute inset-0 flex flex-col min-h-dvh h-dvh justify-between">
           <Header />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Component {...{ ...pageProps, setLoading, loading }} />
