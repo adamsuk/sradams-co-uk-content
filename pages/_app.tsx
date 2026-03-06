@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <ThemeProvider attribute="class">
-        <div key="generic" className="absolute inset-0 flex flex-col min-h-dvh h-dvh justify-between">
+        <div key="generic" className="flex flex-col min-h-dvh h-dvh justify-between">
           <Header />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <Component {...{ ...pageProps, setLoading, loading }} />
