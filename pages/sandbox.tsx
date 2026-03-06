@@ -44,7 +44,9 @@ function Sandbox({ className = '' }: SandboxProps) {
     }
   };
 
-  const Component = ({ index, items }: { index: number; items: typeof sandboxes }) => items[index].component;
+  const Component = (
+    { index, items }: { index: number; items: typeof sandboxes },
+  ) => items[index].component;
   const ComponentProps = { sandbox, setSandbox };
 
   return (

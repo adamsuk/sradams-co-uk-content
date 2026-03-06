@@ -26,7 +26,8 @@ module.exports = {
     ],
     // Allow prop spreading where explicitly disabled inline
     'react/jsx-props-no-spreading': 'off',
-    // Increase max line length to accommodate TypeScript generics
-    'max-len': ['error', { code: 160 }],
+    'max-len': ['error', {
+      code: 100, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreComments: true,
+    }],
   },
 };
