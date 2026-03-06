@@ -29,7 +29,7 @@ function Header() {
 
   return (
     <header
-      className='fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 z-20 trasition ease-in-out duration-500 print:hidden'
+      className="fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 z-20 trasition ease-in-out duration-500 print:hidden"
     >
       <div className="max-w-7xl mx-auto ">
         <div
