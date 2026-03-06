@@ -32,6 +32,7 @@ const customJestConfig = {
       statements: 80,
     },
   },
+  coverageReporters: ['text', 'json-summary'],
 };
 
 module.exports = createJestConfig(customJestConfig);

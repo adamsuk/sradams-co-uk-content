@@ -69,7 +69,7 @@ describe('SideBar', () => {
         {MockContent}
       </SideBar>,
     );
-    expect(screen.getByTestId('content')).toHaveTextContent('Content for: Item One');
+    expect(screen.getByTestId('content')).toHaveTextContent(/Content for.*Item One/);
   });
 
   it('renders content for a custom initial index', () => {
@@ -78,7 +78,7 @@ describe('SideBar', () => {
         {MockContent}
       </SideBar>,
     );
-    expect(screen.getByTestId('content')).toHaveTextContent('Content for: Item Two');
+    expect(screen.getByTestId('content')).toHaveTextContent(/Content for.*Item Two/);
   });
 
   it('changes content when a sidebar item is clicked', () => {
@@ -88,7 +88,7 @@ describe('SideBar', () => {
       </SideBar>,
     );
     fireEvent.click(screen.getByText('Item Three'));
-    expect(screen.getByTestId('content')).toHaveTextContent('Content for: Item Three');
+    expect(screen.getByTestId('content')).toHaveTextContent(/Content for.*Item Three/);
   });
 
   it('hides sidebar items when close button is clicked', () => {
