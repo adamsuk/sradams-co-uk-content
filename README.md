@@ -30,19 +30,6 @@ npm run lint:fix  # auto-fix lint issues
 
 Hosted on **Cloudflare Pages** with a direct GitHub integration — pushes to `main` trigger a deploy automatically. The build command is `next build` and the output directory is `out`.
 
-A `vercel.json` is still present for cache-control headers if you ever want to run it on Vercel, but it's not the active deployment target.
-
-### Docker
-
-A multi-stage Dockerfile is included if you want to run it in a container:
-
-```bash
-docker build -t sradams-co-uk .
-docker run -p 3000:3000 sradams-co-uk
-```
-
-> Note: the Dockerfile targets an older Node version — worth updating if you use it seriously.
-
 ## Notes
 
 - Static export (`output: 'export'` in `next.config.js`) — no server-side runtime, no API routes.
