@@ -13,8 +13,10 @@ import env from '../default-env';
 interface BlogMeta {
   slug?: string;
   title?: string;
-  description?: string;
+  desc?: string;
   date?: string;
+  public?: boolean;
+  tags?: string[];
 }
 
 interface BlogPost {
@@ -76,7 +78,7 @@ function BlogItem({ item }: BlogItemProps) {
     <button type="button" className="w-full">
       <h3 className="border-b border-gray-300">{String(item.meta.title)}</h3>
       <br />
-      <p className="text-sm text-left">{String(item.meta.description)}</p>
+      <p className="text-sm text-left">{String(item.meta.desc)}</p>
       <br />
       <p className="text-xs text-right">{item.meta.date}</p>
     </button>
@@ -98,7 +100,7 @@ function Blog({ className = '' }: BlogProps) {
       .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
       .then((response) => {
         const rawRes = response.data.filter((post: BlogPost) => post.meta);
-        setBlog(rawRes.filter((post: BlogPost) => post.name !== 'blog.md'));
+        setBlog(rawRes.filter((post: BlogPost) => post.meta.public !== false));
       });
   }, []);
 

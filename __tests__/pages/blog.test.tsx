@@ -34,20 +34,29 @@ const axiosMock = new AxiosMockAdapter(axios);
 
 const mockBlogPosts = [
   {
-    name: 'first-post.md',
-    slug: 'first-post',
-    meta: { title: 'First Post', description: 'About the first post', date: '2024-01-01' },
+    name: 'blog.2024.01.01.first-post.md',
+    slug: 'blog.2024.01.01.first-post',
+    meta: {
+      title: 'First Post', desc: 'About the first post', date: '2024-01-01', public: true,
+    },
     content: 'First post content',
   },
   {
-    name: 'second-post.md',
-    slug: 'second-post',
-    meta: { title: 'Second Post', description: 'About the second post', date: '2024-02-01' },
+    name: 'blog.2024.02.01.second-post.md',
+    slug: 'blog.2024.02.01.second-post',
+    meta: {
+      title: 'Second Post', desc: 'About the second post', date: '2024-02-01', public: true,
+    },
     content: 'Second post content',
   },
-  // Filtered out — name === 'blog.md'
+  // Filtered out — public: false
   {
-    name: 'blog.md', slug: 'blog', meta: { title: 'Blog Meta' }, content: '',
+    name: 'blog.2024.03.01.draft-post.md',
+    slug: 'blog.2024.03.01.draft-post',
+    meta: {
+      title: 'Draft Post', desc: 'Not published', date: '2024-03-01', public: false,
+    },
+    content: '',
   },
   // Filtered out — no meta
   { name: 'no-meta.md', slug: 'no-meta', content: '' },
@@ -74,11 +83,11 @@ describe('Blog', () => {
     expect(screen.getAllByText('Second Post').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('filters out blog.md from the post list', async () => {
+  it('filters out posts with public: false', async () => {
     axiosMock.onGet(/\/blog/).reply(200, mockBlogPosts);
     render(<Blog />);
     await waitFor(() => expect(screen.getAllByText('First Post').length).toBeGreaterThanOrEqual(1));
-    expect(screen.queryByText('Blog Meta')).not.toBeInTheDocument();
+    expect(screen.queryByText('Draft Post')).not.toBeInTheDocument();
   });
 
   it('filters out posts with no meta', async () => {
