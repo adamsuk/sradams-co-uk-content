@@ -106,11 +106,11 @@ const Cv = () => {
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
       .then((response) => {
         const raw: CvItem[] = response.data.filter((section: CvItem) => section.meta);
-        const rawMeta = raw.filter((section) => section.name === 'blog.md');
+        const rawMeta = raw.filter((section) => section.name === 'cv.md');
         if (rawMeta) {
           setMeta(rawMeta[0]);
         }
-        const newCv = raw.filter((section) => section.name !== 'blog.md');
+        const newCv = raw.filter((section) => section.name !== 'cv.md');
         setCv(newCv.filter((item) => !['TL;DR', 'Personal Profile'].includes(item.meta.title || '')));
         setTldr(newCv.find((item) => item.meta.title === 'TL;DR'));
         setPp(newCv.find((item) => item.meta.title === 'Personal Profile'));
