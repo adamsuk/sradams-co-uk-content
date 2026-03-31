@@ -32,7 +32,7 @@ const axiosMock = new AxiosMockAdapter(axios);
 
 const mockCvData = [
   {
-    name: 'blog.md',
+    name: 'cv.md',
     meta: { title: 'Scott Adams – CV' },
     content: '',
   },

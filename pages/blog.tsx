@@ -47,6 +47,12 @@ function MarkdownPage({ index, items }: MarkdownPageProps) {
       const regex = new RegExp(stream, 'g');
       post = post.replace(regex, url);
     }
+    if (post.startsWith('---')) {
+      const endIndex = post.indexOf('---', 3);
+      if (endIndex !== -1) {
+        post = post.slice(endIndex + 3).trim();
+      }
+    }
     window.scrollTo(window.scrollX, 1);
     setTitle(items[index].meta.title || '');
     setMarkdownText(post);
