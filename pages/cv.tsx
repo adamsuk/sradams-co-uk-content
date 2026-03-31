@@ -113,20 +113,20 @@ const Cv = () => {
     <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black', { 'h-full': !cv })}>
       {cv.length ? (
         <>
-          <div className="flex items-center justify-between pt-1 print:hidden">
+          <div className="flex justify-end pt-1 print:hidden">
             <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
-            {githubProfile && (
-              <img
-                alt="ME!"
-                className="w-16 h-16 rounded-full"
-                src={`https://github.com/${githubProfile}.png`}
-              />
-            )}
           </div>
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta?.meta?.title}
           </h1>
           <NavBar className="hidden print:block" />
+          {githubProfile && (
+            <img
+              alt="ME!"
+              className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] rounded-full print:hidden"
+              src={`https://github.com/${githubProfile}.png`}
+            />
+          )}
           {cv?.map((el) => (
             <CvSection
               key={el.meta.title}
