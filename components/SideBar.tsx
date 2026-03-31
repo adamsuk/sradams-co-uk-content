@@ -111,10 +111,10 @@ function SideBar({
         <div
           className={`${
             sideActive ? 'visible h-dvh' : 'hidden'
-          } md:max-w-[500px] md:w-2/5 w-full overflow-y-hidden`}
+          } md:max-w-[500px] md:w-2/5 w-full`}
         >
           <div
-            className="md:fixed flex flex-col overflow-y rounded-r-lg bg-gray-200 h-full dark:bg-gray-800 md:h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3"
+            className="md:fixed flex flex-col overflow-y-auto rounded-r-lg bg-gray-200 h-full dark:bg-gray-800 md:h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3"
           >
             {sideActive && (
               <>
@@ -155,7 +155,7 @@ function SideBar({
         <div
           className={`${
             sideActive ? 'hidden md:block' : ''
-          } flex-1 flex-col max-w-screen w-full mx-auto items-center overflow-y-hidden pb-4 px-4 max-w-7xl`}
+          } flex-1 flex-col max-w-screen w-full mx-auto items-center pb-4 px-4 max-w-7xl`}
         >
           {/* eslint-disable-next-line no-nested-ternary */}
           {typeof Component === 'function' ? (

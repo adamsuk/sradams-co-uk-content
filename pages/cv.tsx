@@ -93,8 +93,6 @@ interface CvItem {
 
 const Cv = () => {
   const [cv, setCv] = useState<CvItem[]>([]);
-  const [tldr, setTldr] = useState<CvItem | undefined>();
-  const [pp, setPp] = useState<CvItem | undefined>();
   const [meta, setMeta] = useState<CvItem | undefined>();
   const print = () => {
     window.print();
@@ -106,14 +104,8 @@ const Cv = () => {
       .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
       .then((response) => {
         const raw: CvItem[] = response.data.filter((section: CvItem) => section.meta);
-        const rawMeta = raw.filter((section) => section.name === 'cv.md');
-        if (rawMeta) {
-          setMeta(rawMeta[0]);
-        }
-        const newCv = raw.filter((section) => section.name !== 'cv.md');
-        setCv(newCv.filter((item) => !['TL;DR', 'Personal Profile'].includes(item.meta.title || '')));
-        setTldr(newCv.find((item) => item.meta.title === 'TL;DR'));
-        setPp(newCv.find((item) => item.meta.title === 'Personal Profile'));
+        setMeta(raw.find((section: CvItem) => section.name === 'cv.md'));
+        setCv(raw.filter((section: CvItem) => section.name !== 'cv.md'));
       });
   }, []);
 
@@ -121,28 +113,20 @@ const Cv = () => {
     <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black', { 'h-full': !cv })}>
       {cv.length ? (
         <>
-          <div className="flex justify-end pt-1 print:hidden">
+          <div className="flex items-center justify-between pt-1 print:hidden">
             <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
+            {githubProfile && (
+              <img
+                alt="ME!"
+                className="w-16 h-16 rounded-full"
+                src={`https://github.com/${githubProfile}.png`}
+              />
+            )}
           </div>
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta?.meta?.title}
           </h1>
           <NavBar className="hidden print:block" />
-          {tldr && <CvSection content={tldr.content} />}
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <div className="flex-1 basis-1/2">
-              {pp && <CvSection content={pp.content} />}
-            </div>
-            {githubProfile && (
-              <div className="flex-1">
-                <img
-                  alt="ME!"
-                  className="mx-auto rounded-full items-center justify-center"
-                  src={`https://github.com/${githubProfile}.png`}
-                />
-              </div>
-            )}
-          </div>
           {cv?.map((el) => (
             <CvSection
               key={el.meta.title}
