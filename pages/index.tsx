@@ -106,6 +106,14 @@ function Homepage({ className = '' }: HomepageProps) {
               rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
               remarkPlugins={[remarkGfm]}
               className="prose dark:prose-invert whitespace-no-wrap max-w-full"
+              components={{
+                // Strip trailing %22 (URL-encoded double quote) that can appear when a
+                // markdown image URL has a stray trailing '"' character before the closing ')'.
+                // eslint-disable-next-line react/no-unstable-nested-components
+                img: ({ src, alt, ...props }) => (
+                  <img src={src?.replace(/%22$/i, '')} alt={alt ?? ''} {...props} />
+                ),
+              }}
             >
               {markdownText}
             </Markdown>
