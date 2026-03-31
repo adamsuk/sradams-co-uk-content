@@ -120,22 +120,24 @@ const Cv = () => {
             {meta?.meta?.title}
           </h1>
           <NavBar className="hidden print:block" />
-          {githubProfile && (
-            <img
-              alt="ME!"
-              className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] rounded-full print:hidden"
-              src={`https://github.com/${githubProfile}.png`}
-            />
-          )}
-          {cv?.map((el) => (
-            <CvSection
-              key={el.meta.title}
-              content={el.content}
-              collapsable={el.meta?.collapsable}
-              level={el.meta?.level}
-              title={el.meta.title}
-            />
-          ))}
+          <div className="overflow-hidden">
+            {githubProfile && (
+              <img
+                alt="ME!"
+                className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] rounded-full print:hidden"
+                src={`https://github.com/${githubProfile}.png`}
+              />
+            )}
+            {cv?.map((el) => (
+              <CvSection
+                key={el.meta.title}
+                content={el.content}
+                collapsable={el.meta?.collapsable}
+                level={el.meta?.level}
+                title={el.meta.title}
+              />
+            ))}
+          </div>
         </>
       ) : <Loader />}
     </div>
