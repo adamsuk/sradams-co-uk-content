@@ -15,9 +15,19 @@ jest.mock('react-spinners', () => ({
   PacmanLoader: () => <div data-testid="pacman-loader" />,
 }));
 
+interface MarkdownProps {
+  children: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  components?: Record<string, React.ComponentType<any>>;
+}
+
+let capturedComponents: Record<string, React.ComponentType<any>> | undefined;
 jest.mock('react-markdown', () => ({
   __esModule: true,
-  default: ({ children }: { children: string }) => <div data-testid="markdown">{children}</div>,
+  default: ({ children, components }: MarkdownProps) => {
+    capturedComponents = components;
+    return <div data-testid="markdown">{children}</div>;
+  },
 }));
 
 jest.mock('react-icons/bs', () => ({
@@ -61,6 +71,7 @@ const mockCvData = [
 describe('Cv', () => {
   beforeEach(() => {
     axiosMock.reset();
+    capturedComponents = undefined;
   });
 
   it('shows a loader while data is being fetched', () => {
@@ -114,5 +125,43 @@ describe('Cv', () => {
     const experienceTitle = screen.getByText('Experience');
     fireEvent.click(experienceTitle);
     expect(screen.getByTestId('chevron-up')).toBeInTheDocument();
+  });
+
+  describe('img component', () => {
+    let ImgComponent: React.FC<{ src?: string; alt?: string }>;
+
+    beforeEach(async () => {
+      axiosMock.onGet(/\/cv/).reply(200, mockCvData);
+      render(<Cv />);
+      await waitFor(() => expect(screen.getAllByTestId('markdown').length).toBeGreaterThanOrEqual(1));
+      ImgComponent = capturedComponents!.img as React.FC<{ src?: string; alt?: string }>;
+    });
+
+    it('passes the custom img component to Markdown', () => {
+      expect(capturedComponents?.img).toBeDefined();
+    });
+
+    it('decodes literal &amp; entities in image src URLs', () => {
+      const urlWithAmpEntities = 'https://img.shields.io/badge/foo?&amp;style=flat&amp;logo=bar';
+      const expectedUrl = 'https://img.shields.io/badge/foo?&style=flat&logo=bar';
+
+      const { container } = render(<ImgComponent src={urlWithAmpEntities} alt="foo" />);
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedUrl);
+    });
+
+    it('strips a trailing %22 from image src URLs', () => {
+      const urlWithTrailingQuote = 'https://img.shields.io/badge/foo?&style=flat%22';
+      const expectedUrl = 'https://img.shields.io/badge/foo?&style=flat';
+
+      const { container } = render(<ImgComponent src={urlWithTrailingQuote} alt="foo" />);
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedUrl);
+    });
+
+    it('does not modify clean image src URLs', () => {
+      const cleanUrl = 'https://img.shields.io/badge/foo?&style=flat';
+
+      const { container } = render(<ImgComponent src={cleanUrl} alt="foo" />);
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(cleanUrl);
+    });
   });
 });

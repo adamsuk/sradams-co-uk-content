@@ -9,6 +9,7 @@ import env from '../default-env';
 import { theme } from '../tailwind.config';
 import Loader from '../components/Loader';
 import NavBar from '../components/NavBar';
+import MarkdownImg from '../components/MarkdownImg';
 
 const fonts = Object.keys(theme.fontSize);
 
@@ -65,6 +66,9 @@ const CvSection = ({
         rehypePlugins={[rehypeRaw] as any}
         className={`${collapsed ? 'hidden' : 'shown'} prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
         disallowedElements={['h2']}
+        components={{
+          img: MarkdownImg,
+        }}
       >
         {content}
       </Markdown>
@@ -72,6 +76,9 @@ const CvSection = ({
       <Markdown
         className="hidden prose whitespace-no-wrap print:[&_img]:hidden max-w-full print:text-2xs print:block"
         disallowedElements={['h2', 'hr']}
+        components={{
+          img: MarkdownImg,
+        }}
       >
         {level === 1 ? `---\n\n${content}` : content}
       </Markdown>
