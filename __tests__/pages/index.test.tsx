@@ -115,6 +115,14 @@ describe('Homepage', () => {
       expect(capturedComponents?.img).toBeDefined();
     });
 
+    it('decodes literal &amp; entities in badge image src URLs', () => {
+      const urlWithAmpEntities = 'https://img.shields.io/badge/python%20-%2314354C.svg?&amp;style=for-the-badge&amp;logo=python&amp;logoColor=white';
+      const expectedUrl = 'https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white';
+
+      const { container } = render(<ImgComponent src={urlWithAmpEntities} alt="python" />);
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedUrl);
+    });
+
     it('strips a trailing %22 (URL-encoded double quote) from badge image src URLs', () => {
       const urlWithTrailingQuote = 'https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white%22';
       const expectedUrl = 'https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white';
@@ -123,7 +131,15 @@ describe('Homepage', () => {
       expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedUrl);
     });
 
-    it('does not modify image src URLs that do not end with %22', () => {
+    it('handles a URL with both &amp; entities and a trailing %22', () => {
+      const combined = 'https://img.shields.io/badge/python%20-%2314354C.svg?&amp;style=for-the-badge&amp;logo=python&amp;logoColor=white%22';
+      const expectedUrl = 'https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white';
+
+      const { container } = render(<ImgComponent src={combined} alt="python" />);
+      expect(container.querySelector('img')?.getAttribute('src')).toBe(expectedUrl);
+    });
+
+    it('does not modify clean image src URLs', () => {
       const cleanUrl = 'https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white';
 
       const { container } = render(<ImgComponent src={cleanUrl} alt="python" />);
