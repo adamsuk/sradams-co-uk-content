@@ -47,7 +47,7 @@ const CvSection = ({
           onClick={toggleCollapsable}
           onKeyPress={toggleCollapsable}
           role="button"
-          className={`${collapsable ? 'cursor-pointer' : ''} flex w-full text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
+          className={`${collapsable ? 'cursor-pointer' : ''} flex text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
         >
           <div className="w-full">
             {title}
