@@ -8,6 +8,7 @@ import cn from 'classnames';
 
 import SideBar from '../components/SideBar';
 import Loader from '../components/Loader';
+import MarkdownImg from '../components/MarkdownImg';
 import env from '../default-env';
 
 interface BlogMeta {
@@ -68,6 +69,9 @@ function MarkdownPage({ index, items }: MarkdownPageProps) {
         rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
         className="prose dark:prose-invert whitespace-no-wrap max-w-full"
         disallowedElements={['h2']}
+        components={{
+          img: MarkdownImg,
+        }}
       >
         {markdownText}
       </Markdown>
