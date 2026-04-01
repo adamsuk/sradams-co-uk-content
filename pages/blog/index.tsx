@@ -33,6 +33,10 @@ function calculateReadingTime(content: string): string {
 
 function BlogIndex() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [pageMeta, setPageMeta] = useState<{
+    title: string;
+    desc: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -48,7 +52,25 @@ function BlogIndex() {
         const filteredPosts = rawRes.filter(
           (post: BlogPost) => post.meta.public !== false,
         );
-        setPosts(filteredPosts);
+
+        const blogMd = filteredPosts.find(
+          (post: BlogPost) => post.name === 'blog.md',
+        );
+        if (blogMd) {
+          setPageMeta({
+            title: blogMd.meta.title || 'Blog',
+            desc: blogMd.meta.desc || '',
+          });
+          setPosts(
+            filteredPosts.filter((post: BlogPost) => post.name !== 'blog.md'),
+          );
+        } else {
+          setPageMeta({
+            title: 'Blog',
+            desc: 'Thoughts on development, technology, and more',
+          });
+          setPosts(filteredPosts);
+        }
       })
       .catch(() => {
         router.push('/404');
@@ -98,9 +120,11 @@ function BlogIndex() {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-extrabold text-center mb-2">Blog</h1>
+        <h1 className="text-4xl font-extrabold text-center mb-2">
+          {pageMeta?.title || 'Blog'}
+        </h1>
         <p className="text-center text-gray-600 dark:text-gray-400">
-          Thoughts on development, technology, and more
+          {pageMeta?.desc || 'Thoughts on development, technology, and more'}
         </p>
       </div>
 
