@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import env from '../../default-env';
 import Loader from '../../components/Loader';
@@ -36,6 +38,7 @@ function BlogIndex() {
   const [pageMeta, setPageMeta] = useState<{
     title: string;
     desc: string;
+    content: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,16 +63,11 @@ function BlogIndex() {
           setPageMeta({
             title: blogMd.meta.title || 'Blog',
             desc: blogMd.meta.desc || '',
+            content: blogMd.content || '',
           });
           setPosts(
             filteredPosts.filter((post: BlogPost) => post.name !== 'blog.md'),
           );
-        } else {
-          setPageMeta({
-            title: 'Blog',
-            desc: 'Thoughts on development, technology, and more',
-          });
-          setPosts(filteredPosts);
         }
       })
       .catch(() => {
@@ -123,9 +121,17 @@ function BlogIndex() {
         <h1 className="text-4xl font-extrabold text-center mb-2">
           {pageMeta?.title || 'Blog'}
         </h1>
-        <p className="text-center text-gray-600 dark:text-gray-400">
-          {pageMeta?.desc || 'Thoughts on development, technology, and more'}
-        </p>
+        {pageMeta?.content ? (
+          <div className="prose prose-lg dark:prose-invert mx-auto text-center max-w-3xl">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {pageMeta.content}
+            </ReactMarkdown>
+          </div>
+        ) : (
+          <p className="text-center text-gray-600 dark:text-gray-400">
+            {pageMeta?.desc || 'Thoughts on development, technology, and more'}
+          </p>
+        )}
       </div>
 
       <BlogFilters
