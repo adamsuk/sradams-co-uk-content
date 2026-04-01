@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -110,6 +113,7 @@ jobs:
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           directory: out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
 
       - name: Update Deployment Status (Success)
         if: success()
@@ -161,12 +165,20 @@ jobs:
           CLOUDFLARE_ALIAS: ${{ steps.cloudflare.outputs.alias }}
         with:
           script: |
-            const cloudflareUrl = process.env.CLOUDFLARE_URL || process.env.CLOUDFLARE_ALIAS;
-            if (cloudflareUrl) {
+            const deployUrl = process.env.CLOUDFLARE_ALIAS || process.env.CLOUDFLARE_URL;
+            const uniqueUrl = process.env.CLOUDFLARE_URL;
+            if (deployUrl) {
               github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.payload.pull_request.number,
-                body: `## 🚀 Cloudflare Pages Deployment\n\n**Preview URL:** ${cloudflareUrl}\n\nDeployed successfully!`
+                body: [
+                  '## 🚀 Cloudflare Pages Preview Deployment',
+                  '',
+                  `**Preview URL:** ${deployUrl}`,
+                  uniqueUrl && uniqueUrl !== deployUrl ? `**Unique deployment URL:** ${uniqueUrl}` : '',
+                  '',
+                  'Deployed successfully!',
+                ].filter(line => line !== undefined && !(line === '' && false)).join('\n'),
               });
             }
