@@ -1,5 +1,5 @@
 import React from 'react';
-import { VscArrowSwap, VscClose } from 'react-icons/vsc';
+import { VscArrowDown, VscClose } from 'react-icons/vsc';
 
 interface BlogFiltersProps {
   searchQuery: string;
@@ -39,16 +39,14 @@ const BlogFilters = ({
 
   return (
     <div className="mb-8 space-y-4">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <input
-            type="text"
-            placeholder="Search posts..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="h-full w-full pl-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors text-base"
-          />
-        </div>
+      <div className="flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder="Search posts..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="h-6 w-full pl-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors text-base"
+        />
 
         <div className="flex items-center gap-2">
           <button
@@ -56,9 +54,9 @@ const BlogFilters = ({
             onClick={() => onSortChange(isNewest ? 'oldest' : 'newest')}
             className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
-            <VscArrowSwap className={!isNewest ? 'rotate-180' : ''} />
-            <span className="hidden sm:inline">
-              {isNewest ? 'Newest' : 'Oldest'}
+            <VscArrowDown className={!isNewest ? 'rotate-180' : ''} />
+            <span>
+              {isNewest ? 'Descending' : 'Ascending'}
             </span>
           </button>
         </div>
