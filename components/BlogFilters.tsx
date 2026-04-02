@@ -1,5 +1,5 @@
 import React from 'react';
-import { VscSearch, VscArrowSwap, VscClose } from 'react-icons/vsc';
+import { VscArrowSwap, VscClose } from 'react-icons/vsc';
 
 interface BlogFiltersProps {
   searchQuery: string;
@@ -12,7 +12,7 @@ interface BlogFiltersProps {
   postCount: number;
 }
 
-function BlogFilters({
+const BlogFilters = ({
   searchQuery,
   onSearchChange,
   allTags,
@@ -21,7 +21,7 @@ function BlogFilters({
   sortOrder,
   onSortChange,
   postCount,
-}: BlogFiltersProps) {
+}: BlogFiltersProps) => {
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
       onTagsChange(selectedTags.filter((t) => t !== tag));
@@ -41,13 +41,12 @@ function BlogFilters({
     <div className="mb-8 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <VscSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
             placeholder="Search posts..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-12 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors text-base"
+            className="h-full w-full pl-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors text-base"
           />
         </div>
 
@@ -105,6 +104,6 @@ function BlogFilters({
       )}
     </div>
   );
-}
+};
 
 export default BlogFilters;
