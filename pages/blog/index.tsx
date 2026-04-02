@@ -97,12 +97,12 @@ const BlogIndex = () => {
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
       <div className="mb-2">
         {pageMeta?.meta?.title && (
-          <h1 className="text-4xl font-extrabold text-center mb-2">
+          <h1 className="text-4xl font-extrabold mb-2">
             {pageMeta?.meta?.title}
           </h1>
         )}
         {pageMeta?.content && (
-          <div className="prose prose-lg max-w-none dark:prose-invert mx-auto text-center">
+          <div className="prose prose-lg max-w-none dark:prose-invert mx-auto">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {pageMeta.content}
             </ReactMarkdown>
