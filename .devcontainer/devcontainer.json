@@ -9,7 +9,6 @@
   // Logs available at /tmp/next-dev.log
   "postStartCommand": "nohup npm run dev > /tmp/next-dev.log 2>&1 &",
 
-  "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
       "label": "Dev Server",
