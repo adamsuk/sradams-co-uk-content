@@ -5,11 +5,15 @@
   // Installs dependencies and triggers husky install via the prepare script
   "postCreateCommand": "npm install",
 
+  // Starts the dev server in the background on every Codespace open/resume.
+  // Logs available at /tmp/next-dev.log
+  "postStartCommand": "npm run dev > /tmp/next-dev.log 2>&1 &",
+
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
       "label": "Dev Server",
-      "onAutoForward": "notify"
+      "onAutoForward": "openBrowser"
     }
   },
 
