@@ -11,22 +11,8 @@ import env from '../../default-env';
 import MarkdownImg from '../../components/MarkdownImg';
 import Loader from '../../components/Loader';
 
-interface BlogMeta {
-  slug?: string;
-  title?: string;
-  desc?: string;
-  date?: string;
-  public?: boolean;
-  tags?: string[];
-}
-
-interface BlogPost {
-  name: string;
-  slug?: string;
-  meta: BlogMeta;
-  content: string;
-  error?: boolean;
-}
+import { BlogPost } from './models';
+import { parsePost } from './helper';
 
 function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;
@@ -56,28 +42,7 @@ function BlogPostPage() {
           return;
         }
 
-        let processedContent = foundPost.content;
-
-        const phpStreams: Record<string, string> = {
-          'page://': `${env.NEXT_PUBLIC_CMS_URL}/user/pages/`,
-        };
-
-        Object.entries(phpStreams).forEach(([stream, url]) => {
-          const regex = new RegExp(stream, 'g');
-          processedContent = processedContent.replace(regex, url);
-        });
-
-        if (processedContent.startsWith('---')) {
-          const endIndex = processedContent.indexOf('---', 3);
-          if (endIndex !== -1) {
-            processedContent = processedContent.slice(endIndex + 3).trim();
-          }
-        }
-
-        setPost({
-          ...foundPost,
-          content: processedContent,
-        });
+        setPost(parsePost(foundPost));
       })
       .catch(() => {
         setError(true);

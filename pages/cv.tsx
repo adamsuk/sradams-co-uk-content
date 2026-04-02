@@ -11,6 +11,8 @@ import Loader from '../components/Loader';
 import NavBar from '../components/NavBar';
 import MarkdownImg from '../components/MarkdownImg';
 
+import { BlogMeta, BlogPost } from './blog/models';
+
 const fonts = Object.keys(theme.fontSize);
 
 interface CvSectionProps {
@@ -19,6 +21,15 @@ interface CvSectionProps {
   collapsable?: boolean;
   baseFontSize?: number;
   level?: number;
+}
+
+interface CvMeta extends BlogMeta {
+  collapsable?: boolean;
+  level?: number;
+}
+
+interface CvItem extends BlogPost {
+  meta: CvMeta;
 }
 
 const CvSection = ({
@@ -85,18 +96,6 @@ const CvSection = ({
     </div>
   );
 };
-
-interface CvMeta {
-  title?: string;
-  collapsable?: boolean;
-  level?: number;
-}
-
-interface CvItem {
-  name: string;
-  meta: CvMeta;
-  content: string;
-}
 
 const Cv = () => {
   const [cv, setCv] = useState<CvItem[]>([]);

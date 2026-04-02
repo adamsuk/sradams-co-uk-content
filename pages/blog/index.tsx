@@ -9,37 +9,19 @@ import Loader from '../../components/Loader';
 import BlogCard from '../../components/BlogCard';
 import BlogFilters from '../../components/BlogFilters';
 
-interface BlogMeta {
-  slug?: string;
-  title?: string;
-  desc?: string;
-  date?: string;
-  public?: boolean;
-  tags?: string[];
-}
+import { parsePost } from './helper';
+import { BlogPost } from './models';
 
-interface BlogPost {
-  name: string;
-  slug?: string;
-  meta: BlogMeta;
-  content: string;
-  error?: boolean;
-}
-
-function calculateReadingTime(content: string): string {
+const calculateReadingTime = (content: string): string => {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.ceil(words / wordsPerMinute);
   return `${minutes} min read`;
-}
+};
 
-function BlogIndex() {
+const BlogIndex = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [pageMeta, setPageMeta] = useState<{
-    title: string;
-    desc: string;
-    content: string;
-  } | null>(null);
+  const [pageMeta, setPageMeta] = useState<BlogPost>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -60,11 +42,7 @@ function BlogIndex() {
           (post: BlogPost) => post.name === 'blog.md',
         );
         if (blogMd) {
-          setPageMeta({
-            title: blogMd.meta.title || 'Blog',
-            desc: blogMd.meta.desc || '',
-            content: blogMd.content || '',
-          });
+          setPageMeta(parsePost(blogMd));
           setPosts(
             filteredPosts.filter((post: BlogPost) => post.name !== 'blog.md'),
           );
@@ -117,20 +95,18 @@ function BlogIndex() {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-extrabold text-center mb-2">
-          {pageMeta?.title || 'Blog'}
-        </h1>
-        {pageMeta?.content ? (
-          <div className="prose prose-lg dark:prose-invert mx-auto text-center max-w-3xl">
+      <div className="mb-2">
+        {pageMeta?.meta?.title && (
+          <h1 className="text-4xl font-extrabold text-center mb-2">
+            {pageMeta?.meta?.title}
+          </h1>
+        )}
+        {pageMeta?.content && (
+          <div className="prose prose-lg max-w-none dark:prose-invert mx-auto text-center">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {pageMeta.content}
             </ReactMarkdown>
           </div>
-        ) : (
-          <p className="text-center text-gray-600 dark:text-gray-400">
-            {pageMeta?.desc || 'Thoughts on development, technology, and more'}
-          </p>
         )}
       </div>
 
@@ -178,6 +154,6 @@ function BlogIndex() {
       )}
     </div>
   );
-}
+};
 
 export default BlogIndex;
