@@ -7,7 +7,7 @@
 
   // Starts the dev server in the background on every Codespace open/resume.
   // Logs available at /tmp/next-dev.log
-  "postStartCommand": "npm run dev > /tmp/next-dev.log 2>&1 &",
+  "postStartCommand": "nohup npm run dev > /tmp/next-dev.log 2>&1 &",
 
   "forwardPorts": [3000],
   "portsAttributes": {
