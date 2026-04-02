@@ -9,8 +9,8 @@ import Loader from '../../components/Loader';
 import BlogCard from '../../components/BlogCard';
 import BlogFilters from '../../components/BlogFilters';
 
-import { parsePost } from './helper';
-import { BlogPost } from './models';
+import { parsePost } from '../../helpers/blogPosts';
+import { BlogPost } from '../../models/blogPosts';
 
 const calculateReadingTime = (content: string): string => {
   const wordsPerMinute = 200;

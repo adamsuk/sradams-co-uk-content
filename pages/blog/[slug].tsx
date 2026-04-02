@@ -11,8 +11,8 @@ import env from '../../default-env';
 import MarkdownImg from '../../components/MarkdownImg';
 import Loader from '../../components/Loader';
 
-import { BlogPost } from './models';
-import { parsePost } from './helper';
+import { BlogPost } from '../../models/blogPosts';
+import { parsePost } from '../../helpers/blogPosts';
 
 function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;

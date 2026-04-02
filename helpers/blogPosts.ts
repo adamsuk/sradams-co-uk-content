@@ -1,5 +1,5 @@
-import env from '../../default-env';
-import { BlogPost } from './models';
+import env from '../default-env';
+import { BlogPost } from '../models/blogPosts';
 
 export const parsePost = (post: BlogPost): BlogPost => {
   let processedContent = post.content;
