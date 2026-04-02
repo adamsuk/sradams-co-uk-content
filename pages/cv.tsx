@@ -11,6 +11,8 @@ import Loader from '../components/Loader';
 import NavBar from '../components/NavBar';
 import MarkdownImg from '../components/MarkdownImg';
 
+import { BlogMeta, BlogPost } from '../models/blogPosts';
+
 const fonts = Object.keys(theme.fontSize);
 
 interface CvSectionProps {
@@ -21,8 +23,21 @@ interface CvSectionProps {
   level?: number;
 }
 
+interface CvMeta extends BlogMeta {
+  collapsable?: boolean;
+  level?: number;
+}
+
+interface CvItem extends BlogPost {
+  meta: CvMeta;
+}
+
 const CvSection = ({
-  title, content, collapsable = false, baseFontSize = 6, level = 1,
+  title,
+  content,
+  collapsable = false,
+  baseFontSize = 6,
+  level = 1,
 }: CvSectionProps) => {
   const [collapsed, setCollapsed] = useState(collapsable);
   const [headerFont, setHeaderFont] = useState('2xl');
@@ -48,23 +63,23 @@ const CvSection = ({
           onClick={toggleCollapsable}
           onKeyPress={toggleCollapsable}
           role="button"
-          className={`${collapsable ? 'cursor-pointer' : ''} flex text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
+          className={`${
+            collapsable ? 'cursor-pointer' : ''
+          } flex text-${headerFont} font-bold pb-1 print:text-sm print:font-semibold`}
         >
-          <div className="w-full">
-            {title}
-          </div>
+          <div className="w-full">{title}</div>
           <div className="m-auto print:hidden">
-            {(collapsable && collapsed)
-              && <BsChevronDown size={24} />}
-            {(collapsable && !collapsed)
-              && <BsChevronUp size={24} />}
+            {collapsable && collapsed && <BsChevronDown size={24} />}
+            {collapsable && !collapsed && <BsChevronUp size={24} />}
           </div>
         </div>
       )}
       <Markdown
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rehypePlugins={[rehypeRaw] as any}
-        className={`${collapsed ? 'hidden' : 'shown'} prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
+        className={`${
+          collapsed ? 'hidden' : 'shown'
+        } prose dark:prose-invert whitespace-no-wrap max-w-full print:hidden`}
         disallowedElements={['h2']}
         components={{
           img: MarkdownImg,
@@ -86,18 +101,6 @@ const CvSection = ({
   );
 };
 
-interface CvMeta {
-  title?: string;
-  collapsable?: boolean;
-  level?: number;
-}
-
-interface CvItem {
-  name: string;
-  meta: CvMeta;
-  content: string;
-}
-
 const Cv = () => {
   const [cv, setCv] = useState<CvItem[]>([]);
   const [meta, setMeta] = useState<CvItem | undefined>();
@@ -107,21 +110,30 @@ const Cv = () => {
   const githubProfile = env.NEXT_PUBLIC_GITHUB_PROFILE;
 
   useEffect(() => {
-    axios
-      .get(`${env.NEXT_PUBLIC_CMS_URL}/cv`)
-      .then((response) => {
-        const raw: CvItem[] = response.data.filter((section: CvItem) => section.meta);
-        setMeta(raw.find((section: CvItem) => section.name === 'cv.md'));
-        setCv(raw.filter((section: CvItem) => section.name !== 'cv.md'));
-      });
+    axios.get(`${env.NEXT_PUBLIC_CMS_URL}/cv`).then((response) => {
+      const raw: CvItem[] = response.data.filter(
+        (section: CvItem) => section.meta,
+      );
+      setMeta(raw.find((section: CvItem) => section.name === 'cv.md'));
+      setCv(raw.filter((section: CvItem) => section.name !== 'cv.md'));
+    });
   }, []);
 
   return (
-    <div className={cn('flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black', { 'h-full': !cv })}>
+    <div
+      className={cn(
+        'flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black',
+        { 'h-full': !cv },
+      )}
+    >
       {cv.length ? (
         <>
           <div className="flex justify-end pt-1 print:hidden">
-            <BsPrinterFill className="cursor-pointer" onClick={print} size={24} />
+            <BsPrinterFill
+              className="cursor-pointer"
+              onClick={print}
+              size={24}
+            />
           </div>
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta?.meta?.title}
@@ -146,7 +158,9 @@ const Cv = () => {
             ))}
           </div>
         </>
-      ) : <Loader />}
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };
