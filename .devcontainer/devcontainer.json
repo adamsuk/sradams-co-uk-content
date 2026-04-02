@@ -1,0 +1,54 @@
+{
+  "name": "sradams.co.uk",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+
+  // Installs dependencies and triggers husky install via the prepare script
+  "postCreateCommand": "npm install",
+
+  // Starts the dev server in the background on every Codespace open/resume.
+  // Logs available at /tmp/next-dev.log
+  "postStartCommand": "nohup npm run dev > /tmp/next-dev.log 2>&1 &",
+
+  "portsAttributes": {
+    "3000": {
+      "label": "Dev Server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-typescript-next",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[javascriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+    }
+  },
+
+  // Pass NEXT_PUBLIC_GITHUB_PROFILE through from a Codespace secret if set.
+  // Falls back to "adamsuk" via default-env.ts if not set.
+  // NEXT_PUBLIC_CMS_URL is intentionally omitted — see .env.local.example for
+  // details on the CORS limitation when running in a Codespace preview.
+  "remoteEnv": {
+    "NEXT_PUBLIC_GITHUB_PROFILE": "${localEnv:NEXT_PUBLIC_GITHUB_PROFILE}"
+  }
+}
