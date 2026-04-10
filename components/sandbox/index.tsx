@@ -1,6 +1,6 @@
 import React from 'react';
 import Calculator from './Calculator';
-// import MusicPlayer from './MediaPlayer';
+import MusicPlayer from './MediaPlayer';
 import Quiz from './quiz';
 import Pico8 from './Pico8';
 
@@ -11,11 +11,6 @@ interface SandboxItem {
 }
 
 const sandboxes: SandboxItem[] = [
-  // {
-  //   title: "Podcast Player",
-  //   slug: 'podcast-player',
-  //   component: MusicPlayer
-  // },
   {
     title: 'Pico8 Game',
     slug: 'pico8',
@@ -30,6 +25,11 @@ const sandboxes: SandboxItem[] = [
     title: 'Calculator',
     slug: 'calculator',
     component: Calculator as React.ComponentType<Record<string, unknown>>,
+  },
+  {
+    title: 'Podcast Player',
+    slug: 'podcast-player',
+    component: MusicPlayer,
   },
 ];
 

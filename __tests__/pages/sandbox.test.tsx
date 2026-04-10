@@ -1,7 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import axios from 'axios';
 
 import Sandbox from '../../pages/sandbox';
+
+jest.mock('axios');
+const mockAxios = axios as jest.Mocked<typeof axios>;
 
 const mockPush = jest.fn();
 let mockQuery: Record<string, string> = {};
@@ -17,13 +21,19 @@ jest.mock('next/router', () => ({
 
 jest.mock('react-icons/vsc', () => ({
   VscClose: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="close-btn" onClick={onClick}>Close</button>
+    <button type="button" data-testid="close-btn" onClick={onClick}>
+      Close
+    </button>
   ),
   VscChevronRight: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-lg" onClick={onClick}>Open</button>
+    <button type="button" data-testid="open-btn-lg" onClick={onClick}>
+      Open
+    </button>
   ),
   VscChevronDown: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-sm" onClick={onClick}>Open</button>
+    <button type="button" data-testid="open-btn-sm" onClick={onClick}>
+      Open
+    </button>
   ),
 }));
 
@@ -31,8 +41,15 @@ describe('Sandbox page', () => {
   beforeEach(() => {
     mockPush.mockClear();
     mockQuery = {};
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1024 });
-    Object.defineProperty(window, 'innerHeight', { writable: true, value: 768 });
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      value: 1024,
+    });
+    Object.defineProperty(window, 'innerHeight', {
+      writable: true,
+      value: 768,
+    });
+    mockAxios.get.mockResolvedValue({ data: [] });
   });
 
   it('renders without crashing', () => {

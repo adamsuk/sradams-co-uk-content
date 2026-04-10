@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import type { AppProps } from 'next/app';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import type { AppProps } from "next/app";
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from "next-themes";
 
-import '../styles/globals.css';
+import "../styles/globals.css";
 
-import Head from 'next/head';
-import NavBar from '../components/NavBar';
-import Header from '../components/Header';
+import Head from "next/head";
+import NavBar from "../components/NavBar";
+import Header from "../components/Header";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -22,9 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       setLoading(false);
     };
 
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
   }, [router]);
 
   return (
@@ -34,10 +34,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <ThemeProvider attribute="class">
-        <div key="generic" className="flex flex-col min-h-dvh h-dvh justify-between">
+        <div
+          key="generic"
+          className="flex flex-col min-h-dvh h-dvh justify-between"
+        >
           <Header />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <Component {...{ ...pageProps, setLoading, loading }} />
+          <Component {...pageProps} setLoading={setLoading} loading={loading} />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <NavBar {...pageProps} />
         </div>
