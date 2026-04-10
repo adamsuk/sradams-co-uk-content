@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import axios from "axios";
 
 import Play from "./icons/Play";
@@ -30,30 +32,30 @@ const useAudio = ({ podcasts }: UseAudioArgs) => {
   const toggle = () => setPlaying(!playing);
   const randomise = () => setRandom(!random);
   const nextSong = () => {
-    if (random) {
-      setCounter(Math.floor(Math.random() * podcasts.length));
-    } else {
-      setCounter(
-        counter >= podcasts.length - 1 ? podcasts.length - 1 : counter + 1,
-      );
-    }
+    setCounter((prev) => {
+      if (random && podcasts.length > 0) {
+        return Math.floor(Math.random() * podcasts.length);
+      }
+      return prev >= podcasts.length - 1 ? podcasts.length - 1 : prev + 1;
+    });
   };
   const previousSong = () => {
-    if (random) {
-      setCounter(Math.floor(Math.random() * podcasts.length));
-    } else {
-      setCounter(counter <= 0 ? 0 : counter - 1);
-    }
+    setCounter((prev) => {
+      if (random && podcasts.length > 0) {
+        return Math.floor(Math.random() * podcasts.length);
+      }
+      return prev <= 0 ? 0 : prev - 1;
+    });
   };
 
   useEffect(() => {
-    if (audio) {
+    if (audio && podcasts.length > 0 && podcasts[counter]?.url) {
       audio.src = podcasts[counter].url;
       audio.load();
       if (playing) {
         audio.play();
       }
-    } else if (podcasts.length > 0) {
+    } else if (!audio && podcasts.length > 0 && podcasts[counter]?.url) {
       setState(new Audio(podcasts[counter].url));
     }
   }, [counter, podcasts]);
@@ -76,13 +78,12 @@ const useAudio = ({ podcasts }: UseAudioArgs) => {
   }, [next]);
 
   useEffect(() => {
-    if (audio) {
-      audio.addEventListener("ended", () => setNext(true));
-      return () => {
-        audio.removeEventListener("ended", () => setNext(false));
-      };
-    }
-    return undefined;
+    if (!audio) return undefined;
+    const handleEnded = () => setNext(true);
+    audio.addEventListener("ended", handleEnded);
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+    };
   }, [audio]);
 
   return {
@@ -120,16 +121,34 @@ function Player() {
     strokeWidth: "4",
   };
 
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    isMounted.current = true;
     axios
       .get("https://podcasts.sradams.co.uk/all-podcasts")
       .then((res) => {
-        setPodcasts(res.data);
+        if (isMounted.current && res.data) {
+          setPodcasts(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
+
+  const audioControls = useAudio({ podcasts });
+
+  if (podcasts.length === 0) {
+    return (
+      <div style={{ ...sectionStyle, gridTemplateColumns: "1fr" }}>
+        <p>Loading podcasts...</p>
+      </div>
+    );
+  }
 
   const {
     playing,
@@ -139,9 +158,7 @@ function Player() {
     previousSong,
     nextSong,
     counter,
-  } = useAudio({ podcasts });
-
-  if (podcasts.length === 0) return null;
+  } = audioControls;
 
   return (
     <div style={{ ...sectionStyle, gridTemplateColumns: "1fr" }}>
