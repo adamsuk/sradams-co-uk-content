@@ -123,7 +123,7 @@ function Player() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/all-podcasts')
+      .get('https://podcasts.sradams.co.uk/all-podcasts')
       .then((res) => {
         setPodcasts(res.data);
       })
