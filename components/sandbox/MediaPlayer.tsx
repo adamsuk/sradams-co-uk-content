@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 import Play from "./icons/Play";
@@ -97,35 +98,15 @@ const useAudio = ({ podcasts }: UseAudioArgs) => {
   };
 };
 
-function Player() {
+const Player = () => {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
-
-  const sectionStyle: React.CSSProperties = {
-    display: "grid",
-    height: "100%",
-    width: "100%",
-    maxHeight: "500px",
-    maxWidth: "500px",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gridAutoRows: "1fr",
-    textAlign: "center",
-  };
-
-  const iconStyle: React.CSSProperties = {
-    height: "100%",
-    width: "100%",
-    maxHeight: "50px",
-    maxWidth: "50px",
-    fill: "white",
-    stroke: "black",
-    strokeWidth: "4",
-  };
 
   const isMounted = useRef(false);
 
   useEffect(() => {
     isMounted.current = true;
     axios
+      // TODO: lets have something a little less grim than everything
       .get("https://podcasts.sradams.co.uk/all-podcasts")
       .then((res) => {
         if (isMounted.current && res.data) {
@@ -144,8 +125,8 @@ function Player() {
 
   if (podcasts.length === 0) {
     return (
-      <div style={{ ...sectionStyle, gridTemplateColumns: "1fr" }}>
-        <p>Loading podcasts...</p>
+      <div className="flex items-center justify-center h-64 w-full max-w-md mx-auto">
+        <p className="text-gray-500">Loading podcasts...</p>
       </div>
     );
   }
@@ -161,52 +142,81 @@ function Player() {
   } = audioControls;
 
   return (
-    <div style={{ ...sectionStyle, gridTemplateColumns: "1fr" }}>
-      <h3 style={{ margin: "0" }}>{podcasts[counter]?.show}</h3>
-      <p style={{ marginTop: "0" }}>{podcasts[counter]?.title}</p>
-      <div onClick={randomise} style={{ position: "relative" }}>
-        {podcasts[counter]?.image !== undefined && (
+    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+      <div className="relative mb-4">
+        {podcasts[counter]?.image && (
           <img
-            alt=""
-            src={podcasts[counter].image}
-            className="h-full w-full max-h-[400px] max-w-[400px] rounded-[15%]"
+            alt={podcasts[counter]?.title || "Podcast cover"}
+            src={podcasts[counter]?.image}
+            className="w-48 h-48 rounded-lg object-cover shadow-md"
           />
         )}
-        <div
-          style={{
-            position: "absolute",
-            top: "0",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            height: "100%",
-            width: "100%",
-          }}
+        {random && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+            <Shuffle className="w-12 h-12 text-white" />
+          </div>
+        )}
+      </div>
+
+      {/* Track Info */}
+      <div className="text-center mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+          {podcasts[counter]?.show}
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          {podcasts[counter]?.title}
+        </p>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center space-x-6">
+        <button
+          type="button"
+          onClick={previousSong}
+          className="p-2 rounded-full hover:bg-gray-500 bg-gray-700 transition-colors"
+          aria-label="Previous track"
         >
-          {random && (
-            <Shuffle
-              style={{ ...iconStyle, maxHeight: "100%", maxWidth: "100%" }}
-            />
-          )}
-        </div>
-      </div>
-      <div style={{ ...sectionStyle, paddingTop: "12px" }}>
-        <div>
-          <Previous style={iconStyle} onClick={previousSong} />
-        </div>
-        <div>
+          <Previous className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        </button>
+
+        <button
+          type="button"
+          onClick={toggle}
+          className="p-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors shadow-md"
+          aria-label={playing ? "Pause" : "Play"}
+        >
           {playing ? (
-            <Pause style={iconStyle} onClick={toggle} />
+            <Pause className="w-6 h-6" />
           ) : (
-            <Play style={iconStyle} onClick={toggle} />
+            <Play className="w-6 h-6" />
           )}
-        </div>
-        <div>
-          <Next style={iconStyle} onClick={nextSong} />
-        </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={nextSong}
+          className="p-2 rounded-full hover:bg-gray-500 bg-gray-700 transition-colors"
+          aria-label="Next track"
+        >
+          <Next className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        </button>
       </div>
+
+      {/* Shuffle Toggle */}
+      <button
+        type="button"
+        onClick={randomise}
+        className={`mt-4 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+          random
+            ? "bg-blue-500 text-white"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+        }`}
+        aria-label="Toggle shuffle"
+      >
+        Shuffle
+      </button>
     </div>
   );
-}
+};
 
 export default Player;
