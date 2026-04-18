@@ -1,11 +1,11 @@
 // TODO: sort out a11y
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import cn from 'classnames';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import cn from "classnames";
 
-import { VscClose, VscChevronRight, VscChevronDown } from 'react-icons/vsc';
+import { VscClose, VscChevronRight, VscChevronDown } from "react-icons/vsc";
 
 interface ChangeRoutingArgs {
   index: number;
@@ -25,16 +25,16 @@ interface SideBarProps {
   changeRouting?: ((args: ChangeRoutingArgs) => void) | null;
 }
 
-function SideBar({
+const SideBar = ({
   children,
   childrenProps = {},
   sidebarItems,
   SidebarItem,
   error,
-  className = '',
+  className = "",
   index = 0,
   changeRouting,
-}: SideBarProps) {
+}: SideBarProps) => {
   const [sideActive, setSideActive] = useState(true);
   const [itemIndex, setItemIndex] = useState(index);
   type WindowSize = { width: number | undefined; height: number | undefined };
@@ -55,13 +55,13 @@ function SideBar({
         height: window.innerHeight,
       });
     }
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
   }, []);
 
   useEffect(() => {
     if (error) {
-      router.push('/404');
+      router.push("/404");
     }
   }, [error]);
 
@@ -86,7 +86,7 @@ function SideBar({
   const Component = children({ index: itemIndex, items: sidebarItems });
 
   return (
-    <div className={cn(className, 'h-full')}>
+    <div className={cn(className, "h-full")}>
       {!sideActive && (
         <>
           <div className="hidden lg:block z-30 items-center justify-center lg:fixed rounded-r-lg bg-gray-200 dark:bg-gray-700">
@@ -103,19 +103,19 @@ function SideBar({
       )}
       <div
         className={`${
-          windowSize.width && windowSize.width > maxSize ? '' : 'flex flex-wrap flex-col'
+          windowSize.width && windowSize.width > maxSize
+            ? ""
+            : "flex flex-wrap flex-col"
         } h-full mb-auto md:flex-row md:px-0 max-w-screen w-full justify-between ${
-          sideActive ? 'lg:flex-row' : 'mx-auto'
+          sideActive ? "lg:flex-row" : "mx-auto"
         }`}
       >
         <div
           className={`${
-            sideActive ? 'visible h-dvh' : 'hidden'
+            sideActive ? "visible h-dvh" : "hidden"
           } md:max-w-[500px] md:w-2/5 w-full`}
         >
-          <div
-            className="md:fixed flex flex-col overflow-y-auto rounded-r-lg bg-gray-200 h-full dark:bg-gray-800 md:h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3"
-          >
+          <div className="md:fixed flex flex-col overflow-y-auto rounded-r-lg bg-gray-200 h-full dark:bg-gray-800 md:h-[80%] md:max-w-[500px] md:w-2/5 w-full p-3">
             {sideActive && (
               <>
                 <div className="flex w-full items-end justify-end">
@@ -130,8 +130,8 @@ function SideBar({
                       key={`blog-${i}-div1`}
                       className={`hover:bg-white hover:dark:bg-gray-600 p-2 ${
                         i === sidebarItems.length - 1
-                          ? ''
-                          : 'border-b-4 border-gray-300'
+                          ? ""
+                          : "border-b-4 border-gray-300"
                       }`}
                     >
                       <div
@@ -140,7 +140,8 @@ function SideBar({
                         className=""
                         onClick={changeItem(
                           i,
-                          windowSize.width !== undefined && windowSize.width <= mobileSize,
+                          windowSize.width !== undefined
+                            && windowSize.width <= mobileSize,
                         )}
                       >
                         <SidebarItem item={item} index={i} />
@@ -154,27 +155,25 @@ function SideBar({
         </div>
         <div
           className={`${
-            sideActive ? 'hidden md:block' : ''
+            sideActive ? "hidden md:block" : ""
           } flex-1 flex-col max-w-screen w-full mx-auto items-center pb-4 px-4 max-w-7xl`}
         >
           {/* eslint-disable-next-line no-nested-ternary */}
-          {typeof Component === 'function' ? (
-            React.isValidElement((Component as () => React.ReactNode)()) ? (
-              (() => {
+          {React.isValidElement(Component)
+            ? Component
+            : typeof Component === "function"
+              ? (() => {
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                const TypedComponent = Component as React.ComponentType<Record<string, unknown>>;
+                const TypedComponent = Component as React.ComponentType<
+                Record<string, unknown>
+                >;
                 return <TypedComponent {...childrenProps} />;
               })()
-            ) : (
-              (Component as () => React.ReactNode)()
-            )
-          ) : (
-            Component
-          )}
+              : Component}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SideBar;
