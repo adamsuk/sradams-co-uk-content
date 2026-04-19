@@ -142,7 +142,7 @@ const Player = () => {
   } = audioControls;
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+    <div data-testid="podcast-player" className="flex flex-col items-center justify-center w-full max-w-md mx-auto bg-gray-100 dark:bg-gray-800 rounded-lg p-6 shadow-lg">
       <div className="relative mb-4">
         {podcasts[counter]?.image && (
           <img
