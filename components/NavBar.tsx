@@ -1,32 +1,32 @@
-import React from 'react';
-import cn from 'classnames';
-import env from '../default-env';
+import React from "react";
+import cn from "classnames";
+import env from "../default-env";
 
 interface NavBarProps {
   className?: string;
 }
 
-function NavBar({ className = '' }: NavBarProps) {
+const NavBar = ({ className = "" }: NavBarProps) => {
   const menuItems = [
     {
-      title: 'Github',
+      title: "Github",
       url: `https://github.com/${env.NEXT_PUBLIC_GITHUB_PROFILE}`,
-      img: '/Navbar/Github/GitHub-Mark-120px-plus.png',
+      img: "/Navbar/Github/GitHub-Mark-120px-plus.png",
     },
     {
-      title: 'LinkedIn',
-      url: 'https://linkedin.com/in/scott-adams-a3b070192',
-      img: '/Navbar/LinkedIn/linkedin.png',
+      title: "LinkedIn",
+      url: "https://linkedin.com/in/scott-adams-a3b070192",
+      img: "/Navbar/LinkedIn/linkedin.png",
     },
     {
-      title: 'Email',
-      url: 'mailto:sra405@protonmail.com',
-      img: '/Navbar/email.png',
+      title: "Email",
+      url: "mailto:sra405@protonmail.com",
+      img: "/Navbar/email.png",
     },
     {
-      title: 'Phone',
-      url: 'tel:+447840579704',
-      img: '/Navbar/phone.webp',
+      title: "Phone",
+      url: "tel:+447840579704",
+      img: "/Navbar/phone.webp",
     },
   ];
 
@@ -35,20 +35,20 @@ function NavBar({ className = '' }: NavBarProps) {
       <footer
         className={cn(
           className,
-          'mx-auto w-full justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5',
+          "mx-auto w-full justify-center z-20 backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5",
         )}
       >
         <div className="flex max-w-7xl mx-auto py-2 justify-evenly print:py-1">
           {menuItems?.map((item) => (
             <>
-              <a key={item?.title} href={item?.url} className="print:hidden">
+              <a key={`link-${item?.title}`} href={item?.url} className="print:hidden">
                 <img
                   className="visible dark:invert h-6"
                   src={item?.img}
                   alt={item?.title}
                 />
               </a>
-              <div className="hidden flex print:visible print:text-2xs print:block">
+              <div key={`url-${item?.title}`} className="hidden flex print:visible print:text-2xs print:block">
                 <p>{item?.url}</p>
               </div>
             </>
@@ -57,6 +57,6 @@ function NavBar({ className = '' }: NavBarProps) {
       </footer>
     </div>
   );
-}
+};
 
 export default NavBar;
