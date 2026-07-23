@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import axios from "axios";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
@@ -21,48 +21,12 @@ function calculateReadingTime(content: string): string {
   return `${minutes} min read`;
 }
 
-function BlogPostPage() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+interface BlogPostPageProps {
+  post: BlogPost;
+}
 
-  useEffect(() => {
-    if (!slug) return;
-
-    const normalizedSlug = normalizeBlogSlug(slug);
-
-    axios
-      .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
-      .then((response) => {
-        const posts: BlogPost[] = response.data;
-        const foundPost = posts.find(
-          (p) => normalizeBlogSlug(p.slug) === normalizedSlug,
-        );
-
-        if (!foundPost || !foundPost.meta || foundPost.meta.public === false) {
-          setError(true);
-          return;
-        }
-
-        setPost(parsePost(foundPost));
-      })
-      .catch(() => {
-        setError(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [slug]);
-
-  useEffect(() => {
-    if (error) {
-      router.push("/404");
-    }
-  }, [error, router]);
-
-  if (loading || !post) {
+function BlogPostPage({ post }: BlogPostPageProps) {
+  if (!post) {
     return <Loader />;
   }
 
@@ -132,5 +96,54 @@ function BlogPostPage() {
     </div>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const response = await axios.get(`${env.NEXT_PUBLIC_CMS_URL}/blog`);
+    const posts: BlogPost[] = response.data;
+
+    const paths = posts
+      .filter((post) => post.meta && post.meta.public !== false && post.slug)
+      .map((post) => ({
+        params: { slug: normalizeBlogSlug(post.slug) },
+      }));
+
+    return {
+      paths,
+      fallback: false,
+    };
+  } catch {
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+};
+
+export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({
+  params,
+}) => {
+  const slug = normalizeBlogSlug(params?.slug);
+
+  try {
+    const response = await axios.get(`${env.NEXT_PUBLIC_CMS_URL}/blog`);
+    const posts: BlogPost[] = response.data;
+    const foundPost = posts.find(
+      (post) => normalizeBlogSlug(post.slug) === slug,
+    );
+
+    if (!foundPost || !foundPost.meta || foundPost.meta.public === false) {
+      return { notFound: true };
+    }
+
+    return {
+      props: {
+        post: parsePost(foundPost),
+      },
+    };
+  } catch {
+    return { notFound: true };
+  }
+};
 
 export default BlogPostPage;
