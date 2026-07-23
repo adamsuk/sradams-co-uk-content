@@ -1,5 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
+
+import { normalizeBlogSlug } from "../helpers/blogPosts";
 
 interface BlogCardProps {
   title: string;
@@ -20,9 +22,10 @@ function BlogCard({
 }: BlogCardProps) {
   const displayTags = tags.slice(0, 3);
   const remainingCount = tags.length - 3;
+  const normalizedSlug = normalizeBlogSlug(slug);
 
   return (
-    <Link href={`/blog/${slug}`}>
+    <Link href={`/blog/${normalizedSlug}`}>
       <article className="group flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
         <div className="p-5 flex flex-col flex-1">
           <h2 className="text-xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -52,10 +55,10 @@ function BlogCard({
 
           <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-700">
             <time dateTime={date}>
-              {new Date(date).toLocaleDateString('en-GB', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
+              {new Date(date).toLocaleDateString("en-GB", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
               })}
             </time>
             <span>{readingTime}</span>

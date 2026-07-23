@@ -1,20 +1,33 @@
-import env from '../default-env';
-import { BlogPost } from '../models/blogPosts';
+import env from "../default-env";
+import { BlogPost } from "../models/blogPosts";
+
+export const normalizeBlogSlug = (slug?: string | string[]): string => {
+  if (!slug) {
+    return "";
+  }
+
+  const value = Array.isArray(slug) ? slug[0] : slug;
+  if (!value) {
+    return "";
+  }
+
+  return value.replace(/^blog\./, "").replace(/^blog$/, value);
+};
 
 export const parsePost = (post: BlogPost): BlogPost => {
   let processedContent = post.content;
 
   const phpStreams: Record<string, string> = {
-    'page://': `${env.NEXT_PUBLIC_CMS_URL}/user/pages/`,
+    "page://": `${env.NEXT_PUBLIC_CMS_URL}/user/pages/`,
   };
 
   Object.entries(phpStreams).forEach(([stream, url]) => {
-    const regex = new RegExp(stream, 'g');
+    const regex = new RegExp(stream, "g");
     processedContent = processedContent.replace(regex, url);
   });
 
-  if (processedContent.startsWith('---')) {
-    const endIndex = processedContent.indexOf('---', 3);
+  if (processedContent.startsWith("---")) {
+    const endIndex = processedContent.indexOf("---", 3);
     if (endIndex !== -1) {
       processedContent = processedContent.slice(endIndex + 3).trim();
     }

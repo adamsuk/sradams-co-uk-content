@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import Markdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
-import { VscArrowLeft } from 'react-icons/vsc';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
+import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import { VscArrowLeft } from "react-icons/vsc";
 
-import env from '../../default-env';
-import MarkdownImg from '../../components/MarkdownImg';
-import Loader from '../../components/Loader';
+import env from "../../default-env";
+import MarkdownImg from "../../components/MarkdownImg";
+import Loader from "../../components/Loader";
 
-import { BlogPost } from '../../models/blogPosts';
-import { parsePost } from '../../helpers/blogPosts';
+import { BlogPost } from "../../models/blogPosts";
+import { parsePost, normalizeBlogSlug } from "../../helpers/blogPosts";
 
 function calculateReadingTime(content: string): string {
   const wordsPerMinute = 200;
@@ -31,11 +31,15 @@ function BlogPostPage() {
   useEffect(() => {
     if (!slug) return;
 
+    const normalizedSlug = normalizeBlogSlug(slug);
+
     axios
       .get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
       .then((response) => {
         const posts: BlogPost[] = response.data;
-        const foundPost = posts.find((p) => p.slug === slug);
+        const foundPost = posts.find(
+          (p) => normalizeBlogSlug(p.slug) === normalizedSlug,
+        );
 
         if (!foundPost || !foundPost.meta || foundPost.meta.public === false) {
           setError(true);
@@ -54,7 +58,7 @@ function BlogPostPage() {
 
   useEffect(() => {
     if (error) {
-      router.push('/404');
+      router.push("/404");
     }
   }, [error, router]);
 
@@ -80,10 +84,10 @@ function BlogPostPage() {
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
             <time dateTime={post.meta.date}>
-              {new Date(post.meta.date || '').toLocaleDateString('en-GB', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+              {new Date(post.meta.date || "").toLocaleDateString("en-GB", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               })}
             </time>
             <span className="text-gray-400">•</span>
