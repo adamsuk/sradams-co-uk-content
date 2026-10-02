@@ -47,6 +47,10 @@ const README_CONTENT = '# Hello World\n\nThis is a test README.';
 describe('Homepage', () => {
   beforeEach(() => {
     axiosMock.reset();
+    axiosMock.onGet('https://activities.sradams.co.uk/feed.json').reply(200, {
+      source: 'intervals',
+      activities: [],
+    });
     mockPush.mockClear();
     mockQuery = {};
     mockIsReady = true;
