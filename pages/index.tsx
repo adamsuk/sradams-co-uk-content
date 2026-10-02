@@ -10,6 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 import MarkdownImg from '../components/MarkdownImg';
+import RecentActivity from '../components/RecentActivity';
 
 interface HomepageProps {
   className?: string;
@@ -97,6 +98,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 />
               )}
             </div>
+            <RecentActivity />
             <br />
             <hr />
           </div>
@@ -115,8 +117,8 @@ function Homepage({ className = '' }: HomepageProps) {
             </Markdown>
           </div>
 
-          <div className="hidden md:block relative md:w-2/5 w-full overflow-y-hidden">
-            <div className="items-center justify-center max-h-[80%] md:w-3/10 md:pr-7 md:fixed">
+          <div className="hidden md:block relative md:w-2/5 w-full">
+            <div className="items-center justify-center max-h-[85vh] overflow-y-auto md:w-3/10 md:pr-7 md:fixed">
               {githubProfile && (
                 <img
                   alt="ME!"
@@ -124,6 +126,7 @@ function Homepage({ className = '' }: HomepageProps) {
                   src={`https://github.com/${githubProfile}.png`}
                 />
               )}
+              <RecentActivity />
             </div>
           </div>
         </div>
