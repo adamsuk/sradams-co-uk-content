@@ -51,7 +51,6 @@ describe('Homepage', () => {
       source: 'intervals',
       activities: [],
     });
-    axiosMock.onPost('https://api.github.com/graphql').reply(200, { data: {} });
     mockPush.mockClear();
     mockQuery = {};
     mockIsReady = true;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export const GITHUB_GRAPHQL = 'https://api.github.com/graphql';
-const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+import { FEED_URL } from './RecentActivity';
 
 export interface AccountStats {
   login: string;
@@ -11,36 +10,20 @@ export interface AccountStats {
   commits: number;
   pullRequests: number;
   reviews: number;
-}
-
-interface Collection {
-  contributionCalendar?: { totalContributions?: number };
-  totalCommitContributions?: number;
-  totalPullRequestContributions?: number;
-  totalPullRequestReviewContributions?: number;
-}
-
-interface GraphqlBody {
-  data?: {
-    personal?: { w?: Collection };
-    work?: { w?: Collection };
-  };
+  issues: number;
 }
 
 const ACCOUNTS = [
-  { login: 'adamsuk', label: 'Personal', field: 'personal' },
-  { login: 'sra405', label: 'Work', field: 'work' },
+  { login: 'adamsuk', label: 'Personal' },
+  { login: 'sra405', label: 'Work' },
 ] as const;
-
-export function weekRange(now = Date.now()): { from: string; to: string } {
-  return {
-    from: new Date(now - WEEK_MS).toISOString(),
-    to: new Date(now).toISOString(),
-  };
-}
 
 function count(value: number, singular: string, plural = `${singular}s`): string {
   return `${value} ${value === 1 ? singular : plural}`;
+}
+
+function numeric(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 export function accountDetail(stats: AccountStats): string {
@@ -48,67 +31,44 @@ export function accountDetail(stats: AccountStats): string {
   if (stats.commits > 0) parts.push(count(stats.commits, 'commit'));
   if (stats.pullRequests > 0) parts.push(count(stats.pullRequests, 'PR'));
   if (stats.reviews > 0) parts.push(count(stats.reviews, 'review'));
+  if (stats.issues > 0) parts.push(count(stats.issues, 'issue'));
   if (parts.length > 0) return parts.join(' · ');
   if (stats.contributions > 0) return count(stats.contributions, 'contribution');
   return 'Quiet week';
 }
 
-function readCollection(
-  collection: Collection | undefined,
-  login: string,
-  label: string,
-): AccountStats {
-  return {
-    login,
-    label,
-    contributions: collection?.contributionCalendar?.totalContributions ?? 0,
-    commits: collection?.totalCommitContributions ?? 0,
-    pullRequests: collection?.totalPullRequestContributions ?? 0,
-    reviews: collection?.totalPullRequestReviewContributions ?? 0,
-  };
+export function accountsFromFeed(body: unknown): AccountStats[] | null {
+  if (!body || typeof body !== 'object' || !('github' in body)) return null;
+  const { github } = body as { github?: { accounts?: unknown } };
+  if (!github || !Array.isArray(github.accounts)) return null;
+  const rows = github.accounts.filter(
+    (item): item is AccountStats => Boolean(item) && typeof item === 'object',
+  );
+  const accounts = ACCOUNTS.map((known) => {
+    const row = rows.find((item) => item.login === known.login);
+    if (!row) return null;
+    return {
+      login: known.login,
+      label: known.label,
+      contributions: numeric(row.contributions),
+      commits: numeric(row.commits),
+      pullRequests: numeric(row.pullRequests),
+      reviews: numeric(row.reviews),
+      issues: numeric(row.issues),
+    };
+  }).filter((account): account is AccountStats => account !== null);
+  return accounts.length === ACCOUNTS.length ? accounts : null;
 }
 
-export function accountsFromGraphql(body: GraphqlBody): AccountStats[] {
-  return ACCOUNTS.map((account) => readCollection(
-    body.data?.[account.field]?.w,
-    account.login,
-    account.label,
-  ));
-}
-
-const QUERY = `query($from: DateTime!, $to: DateTime!) {
-  personal: user(login: "adamsuk") {
-    w: contributionsCollection(from: $from, to: $to) {
-      contributionCalendar { totalContributions }
-      totalCommitContributions
-      totalPullRequestContributions
-      totalPullRequestReviewContributions
-    }
-  }
-  work: user(login: "sra405") {
-    w: contributionsCollection(from: $from, to: $to) {
-      contributionCalendar { totalContributions }
-      totalCommitContributions
-      totalPullRequestContributions
-      totalPullRequestReviewContributions
-    }
-  }
-}`;
-
-interface GithubWeekProps {
-  now?: number;
-}
-
-function GithubWeek({ now = Date.now() }: GithubWeekProps) {
+function GithubWeek() {
   const [accounts, setAccounts] = useState<AccountStats[] | null>(null);
 
   useEffect(() => {
     let cancel = false;
-    const range = weekRange(now);
-    axios.post(GITHUB_GRAPHQL, { query: QUERY, variables: range })
+    axios.get(FEED_URL)
       .then((response) => {
         if (cancel) return;
-        setAccounts(accountsFromGraphql(response.data as GraphqlBody));
+        setAccounts(accountsFromFeed(response.data));
       })
       .catch(() => {
         if (!cancel) setAccounts(null);
@@ -116,7 +76,7 @@ function GithubWeek({ now = Date.now() }: GithubWeekProps) {
     return () => {
       cancel = true;
     };
-  }, [now]);
+  }, []);
 
   if (!accounts) return null;
 
