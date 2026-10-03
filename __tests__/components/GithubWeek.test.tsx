@@ -46,18 +46,23 @@ describe('github week summary', () => {
     expect(accountDetail(stats())).toBe('Quiet week');
   });
 
-  it('reads both accounts from the activity feed', () => {
+  it('reads the accounts the feed publishes', () => {
     const accounts = accountsFromFeed({
       github: {
         accounts: [
-          { login: 'adamsuk', commits: 2, contributions: 3 },
-          { login: 'someone-else', commits: 9 },
-          { login: 'sra405', contributions: 5 },
+          {
+            login: 'adamsuk',
+            label: 'Personal',
+            commits: 2,
+            contributions: 3,
+          },
+          { login: 'not a login', commits: 9 },
+          { login: 'octocat', label: 'Lab', contributions: 5 },
         ],
       },
     });
-    expect(accounts?.map((account) => account.login)).toEqual(['adamsuk', 'sra405']);
-    expect(accounts?.[1].contributions).toBe(5);
+    expect(accounts?.map((account) => account.login)).toEqual(['adamsuk', 'octocat']);
+    expect(accounts?.[1].label).toBe('Lab');
     expect(accountsFromFeed({ activities: [] })).toBeNull();
   });
 });
@@ -73,6 +78,7 @@ describe('GithubWeek', () => {
         accounts: [
           {
             login: 'adamsuk',
+            label: 'Personal',
             contributions: 114,
             commits: 64,
             pullRequests: 17,
@@ -81,6 +87,7 @@ describe('GithubWeek', () => {
           },
           {
             login: 'sra405',
+            label: 'Work',
             contributions: 43,
             commits: 0,
             pullRequests: 0,

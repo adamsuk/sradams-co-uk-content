@@ -13,10 +13,13 @@ export interface AccountStats {
   issues: number;
 }
 
-const ACCOUNTS = [
-  { login: 'adamsuk', label: 'Personal' },
-  { login: 'sra405', label: 'Work' },
-] as const;
+const LOGIN = /^[A-Za-z0-9-]{1,39}$/;
+
+function cleanLabel(value: unknown, fallback: string): string {
+  if (typeof value !== 'string') return fallback;
+  const label = value.replace(/\s+/g, ' ').trim().slice(0, 40);
+  return label || fallback;
+}
 
 function count(value: number, singular: string, plural = `${singular}s`): string {
   return `${value} ${value === 1 ? singular : plural}`;
@@ -44,20 +47,19 @@ export function accountsFromFeed(body: unknown): AccountStats[] | null {
   const rows = github.accounts.filter(
     (item): item is AccountStats => Boolean(item) && typeof item === 'object',
   );
-  const accounts = ACCOUNTS.map((known) => {
-    const row = rows.find((item) => item.login === known.login);
-    if (!row) return null;
-    return {
-      login: known.login,
-      label: known.label,
+  const accounts = rows.flatMap((row) => {
+    if (typeof row.login !== 'string' || !LOGIN.test(row.login)) return [];
+    return [{
+      login: row.login,
+      label: cleanLabel(row.label, row.login),
       contributions: numeric(row.contributions),
       commits: numeric(row.commits),
       pullRequests: numeric(row.pullRequests),
       reviews: numeric(row.reviews),
       issues: numeric(row.issues),
-    };
-  }).filter((account): account is AccountStats => account !== null);
-  return accounts.length === ACCOUNTS.length ? accounts : null;
+    }];
+  });
+  return accounts.length > 0 ? accounts : null;
 }
 
 function GithubWeek() {
