@@ -11,6 +11,7 @@ import env from '../default-env';
 import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import MarkdownImg from '../components/MarkdownImg';
+import ProfilePhoto from '../components/ProfilePhoto';
 
 interface HomepageProps {
   className?: string;
@@ -89,14 +90,8 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="visible md:hidden relative w-full overflow-y-hidden">
             <hr />
             <br />
-            <div className="flex flex-col items-center justify-center mx-auto w-auto h-auto max-w-[400px] max-h-[400px]">
-              {githubProfile && (
-                <img
-                  alt="ME!"
-                  className="mx-auto rounded-full items-center justify-center w-full h-full"
-                  src={`https://github.com/${githubProfile}.png`}
-                />
-              )}
+            <div className="mx-auto w-full max-w-[400px]">
+              {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>
             <HomeStats />
             <br />
@@ -119,13 +114,7 @@ function Homepage({ className = '' }: HomepageProps) {
 
           <div className="hidden md:block relative md:w-2/5 w-full">
             <div className="items-center justify-center max-h-[85vh] overflow-y-auto md:w-3/10 md:pr-7 md:fixed">
-              {githubProfile && (
-                <img
-                  alt="ME!"
-                  className="mx-auto rounded-full items-center justify-center"
-                  src={`https://github.com/${githubProfile}.png`}
-                />
-              )}
+              {githubProfile && <ProfilePhoto login={githubProfile} />}
               <HomeStats />
             </div>
           </div>
