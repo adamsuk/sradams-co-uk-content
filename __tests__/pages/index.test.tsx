@@ -68,6 +68,8 @@ describe('Homepage', () => {
     render(<Homepage />);
     await waitFor(() => expect(screen.getByTestId('markdown')).toBeInTheDocument());
     expect(screen.getByTestId('markdown')).toHaveTextContent('Hello World');
+    expect(screen.getByRole('region', { name: 'Profile' })).toBeInTheDocument();
+    expect(screen.getByText(/taken from my GitHub profile/)).toBeInTheDocument();
   });
 
   it('falls back to master branch when main branch 404s', async () => {

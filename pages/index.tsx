@@ -106,17 +106,28 @@ function Homepage({ className = '' }: HomepageProps) {
           </div>
 
           <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
-            <Markdown
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-              remarkPlugins={[remarkGfm]}
-              className="prose dark:prose-invert whitespace-no-wrap max-w-full"
-              components={{
-                img: MarkdownImg,
-              }}
+            <section
+              aria-label="Profile"
+              className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
             >
-              {markdownText}
-            </Markdown>
+              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                Profile
+              </p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+                A personal description, taken from my GitHub profile.
+              </p>
+              <Markdown
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                remarkPlugins={[remarkGfm]}
+                className="prose dark:prose-invert mt-4 max-w-full border-t border-gray-200 pt-4 dark:border-gray-700"
+                components={{
+                  img: MarkdownImg,
+                }}
+              >
+                {markdownText}
+              </Markdown>
+            </section>
           </div>
 
           <div className="hidden md:block relative md:w-2/5 w-full">
