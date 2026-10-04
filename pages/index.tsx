@@ -8,11 +8,10 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
-import GithubWeek from '../components/GithubWeek';
+import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
-import RecentActivity from '../components/RecentActivity';
 
 interface HomepageProps {
   className?: string;
@@ -94,8 +93,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <div className="mx-auto w-full max-w-[400px]">
               {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>
-            <RecentActivity />
-            <GithubWeek />
+            <HomeStats />
             <br />
             <hr />
           </div>
@@ -117,8 +115,7 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="hidden md:block relative md:w-2/5 w-full">
             <div className="items-center justify-center max-h-[85vh] overflow-y-auto md:w-3/10 md:pr-7 md:fixed">
               {githubProfile && <ProfilePhoto login={githubProfile} />}
-              <RecentActivity />
-              <GithubWeek />
+              <HomeStats />
             </div>
           </div>
         </div>
