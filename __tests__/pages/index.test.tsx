@@ -70,6 +70,7 @@ describe('Homepage', () => {
     render(<Homepage />);
     await waitFor(() => expect(screen.getByTestId('markdown')).toBeInTheDocument());
     expect(screen.getByTestId('markdown')).toHaveTextContent('Hello World');
+    expect(screen.getByRole('region', { name: 'Profile' })).toBeInTheDocument();
   });
 
   it('falls back to master branch when main branch 404s', async () => {

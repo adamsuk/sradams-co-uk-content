@@ -102,17 +102,22 @@ function Homepage({ className = '' }: HomepageProps) {
           </div>
 
           <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
-            <Markdown
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-              remarkPlugins={[remarkGfm]}
-              className="prose dark:prose-invert whitespace-no-wrap max-w-full"
-              components={{
-                img: MarkdownImg,
-              }}
+            <section
+              aria-label="Profile"
+              className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
             >
-              {markdownText}
-            </Markdown>
+              <Markdown
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                remarkPlugins={[remarkGfm]}
+                className="prose dark:prose-invert max-w-full"
+                components={{
+                  img: MarkdownImg,
+                }}
+              >
+                {markdownText}
+              </Markdown>
+            </section>
           </div>
 
           <div className="hidden md:block relative md:w-2/5 w-full">
