@@ -4,6 +4,7 @@ import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
 import Homepage from '../../pages/index';
+import env from '../../default-env';
 
 const mockPush = jest.fn();
 let mockQuery: Record<string, string> = {};
@@ -51,6 +52,7 @@ describe('Homepage', () => {
       source: 'intervals',
       activities: [],
     });
+    axiosMock.onGet(`${env.NEXT_PUBLIC_CMS_URL}/blog`).reply(200, []);
     mockPush.mockClear();
     mockQuery = {};
     mockIsReady = true;

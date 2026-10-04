@@ -10,6 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import GithubWeek from '../components/GithubWeek';
 import Loader from '../components/Loader';
+import LatestPost from '../components/LatestPost';
 import MarkdownImg from '../components/MarkdownImg';
 import RecentActivity from '../components/RecentActivity';
 
@@ -101,6 +102,7 @@ function Homepage({ className = '' }: HomepageProps) {
             </div>
             <RecentActivity />
             <GithubWeek />
+            <LatestPost />
             <br />
             <hr />
           </div>
@@ -130,6 +132,7 @@ function Homepage({ className = '' }: HomepageProps) {
               )}
               <RecentActivity />
               <GithubWeek />
+              <LatestPost />
             </div>
           </div>
         </div>
