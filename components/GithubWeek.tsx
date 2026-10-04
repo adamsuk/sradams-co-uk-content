@@ -84,7 +84,7 @@ function GithubWeek() {
 
   return (
     <section
-      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100"
+      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100 md:mx-0 md:max-w-none"
       aria-label="GitHub last 7 days"
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -101,7 +101,7 @@ function GithubWeek() {
             >
               {account.label}
             </a>
-            <span className="text-right tabular-nums">{accountDetail(account)}</span>
+            <span className="min-w-0 text-right tabular-nums">{accountDetail(account)}</span>
           </li>
         ))}
       </ul>

@@ -135,13 +135,11 @@ function Homepage({ className = '' }: HomepageProps) {
           </div>
 
           <div className="hidden md:block relative md:w-2/5 w-full">
-            <div className="md:pr-7">
-              <div className="mx-auto w-full max-w-xs">
-                {githubProfile && <ProfilePhoto login={githubProfile} />}
-              </div>
-              <HomeStats />
-              <LatestPost post={latestPost} />
+            <div className="mx-auto w-full max-w-xs">
+              {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>
+            <HomeStats />
+            <LatestPost post={latestPost} />
           </div>
         </div>
         {previewMode && <div className="pt-4">{previewBanner}</div>}
