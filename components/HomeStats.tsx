@@ -22,7 +22,7 @@ function HomeStats() {
               strokeLinejoin="round"
             />
           </svg>
-          This week's metrics
+          {'This week\'s metrics'}
         </summary>
         <RecentActivity />
         <GithubWeek />
