@@ -8,10 +8,9 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
-import GithubWeek from '../components/GithubWeek';
+import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import MarkdownImg from '../components/MarkdownImg';
-import RecentActivity from '../components/RecentActivity';
 
 interface HomepageProps {
   className?: string;
@@ -99,8 +98,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 />
               )}
             </div>
-            <RecentActivity />
-            <GithubWeek />
+            <HomeStats />
             <br />
             <hr />
           </div>
@@ -139,8 +137,7 @@ function Homepage({ className = '' }: HomepageProps) {
                   src={`https://github.com/${githubProfile}.png`}
                 />
               )}
-              <RecentActivity />
-              <GithubWeek />
+              <HomeStats />
             </div>
           </div>
         </div>
