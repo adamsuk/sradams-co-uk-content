@@ -18,6 +18,13 @@ interface HomepageProps {
   className?: string;
 }
 
+/** The personal introduction, without the badge catalogues that follow it. */
+export function profileIntro(markdown: string): string {
+  const marker = markdown.search(/\n#{2,3} /);
+  if (marker === -1) return markdown.trim();
+  return markdown.slice(0, marker).trim();
+}
+
 function Homepage({ className = '' }: HomepageProps) {
   const router = useRouter();
   const [markdownText, setMarkdownText] = useState('');
@@ -82,7 +89,7 @@ function Homepage({ className = '' }: HomepageProps) {
     </div>
   );
 
-  if (!renderReady) return <Loader />;
+  if (!githubProfile) return <Loader />;
 
   return (
     <div className={className}>
@@ -106,17 +113,26 @@ function Homepage({ className = '' }: HomepageProps) {
               aria-label="Profile"
               className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
             >
-              <Markdown
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-                remarkPlugins={[remarkGfm]}
-                className="prose dark:prose-invert max-w-full"
-                components={{
-                  img: MarkdownImg,
-                }}
-              >
-                {markdownText}
-              </Markdown>
+              {renderReady ? (
+                <Markdown
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                  remarkPlugins={[remarkGfm]}
+                  className="prose dark:prose-invert max-w-full"
+                  components={{
+                    img: MarkdownImg,
+                  }}
+                >
+                  {profileIntro(markdownText)}
+                </Markdown>
+              ) : (
+                <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
+                  <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+                </div>
+              )}
             </section>
           </div>
 
