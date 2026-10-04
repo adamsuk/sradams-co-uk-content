@@ -36,11 +36,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class">
         <div
           key="generic"
-          className="flex flex-col min-h-dvh h-dvh justify-between"
+          className="flex flex-col min-h-dvh"
         >
           <Header />
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <Component {...pageProps} setLoading={setLoading} loading={loading} />
+          <main className="flex-1">
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Component {...pageProps} setLoading={setLoading} loading={loading} />
+          </main>
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <NavBar {...pageProps} />
         </div>

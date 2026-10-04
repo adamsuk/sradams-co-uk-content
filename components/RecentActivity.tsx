@@ -119,7 +119,7 @@ function RecentActivity({ now = Date.now() }: RecentActivityProps) {
 
   return (
     <section
-      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100"
+      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100 md:mx-0 md:max-w-none"
       aria-label="Last 7 days"
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
