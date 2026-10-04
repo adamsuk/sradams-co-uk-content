@@ -132,9 +132,6 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
-            <div className="hidden md:block">
-              <LatestPost post={latestPost} />
-            </div>
           </div>
 
           <div className="hidden md:block relative md:w-2/5 w-full">
@@ -143,6 +140,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 {githubProfile && <ProfilePhoto login={githubProfile} />}
               </div>
               <HomeStats />
+              <LatestPost post={latestPost} />
             </div>
           </div>
         </div>
