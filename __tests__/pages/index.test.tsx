@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-import Homepage from '../../pages/index';
+import Homepage, { profileIntro } from '../../pages/index';
 import env from '../../default-env';
 
 const mockPush = jest.fn();
@@ -59,10 +59,17 @@ describe('Homepage', () => {
     capturedComponents = undefined;
   });
 
-  it('shows a loader while content is not yet ready', () => {
+  it('shows the page shell while the profile text is still loading', () => {
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
-    expect(screen.getByTestId('pacman-loader')).toBeInTheDocument();
+    expect(screen.getByTestId('intro-skeleton')).toBeInTheDocument();
+    expect(screen.queryByTestId('pacman-loader')).not.toBeInTheDocument();
+  });
+
+  it('keeps the introduction and drops the badge catalogues', () => {
+    const readme = '# Hi\n\nI build things.\n\n### Tech Stack\n\n![JS](https://img.shields.io/badge/js)\n\n## How to reach me?\n';
+    expect(profileIntro(readme)).toBe('# Hi\n\nI build things.');
+    expect(profileIntro('# Only an introduction')).toBe('# Only an introduction');
   });
 
   it('renders markdown content after a successful fetch', async () => {
