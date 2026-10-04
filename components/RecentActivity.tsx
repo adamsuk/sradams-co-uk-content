@@ -156,6 +156,8 @@ function RecentActivity({ now = Date.now() }: RecentActivityProps) {
                 </span>
                 <span className="shrink-0 tabular-nums">
                   {formatDistance(activity.distanceM)}
+                  {' · '}
+                  {formatMoving(activity.movingS)}
                 </span>
               </a>
             </li>

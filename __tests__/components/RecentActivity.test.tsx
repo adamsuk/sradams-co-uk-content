@@ -93,7 +93,8 @@ describe('RecentActivity', () => {
       'href',
       'https://intervals.icu/activities/ball',
     );
-    expect(screen.getByRole('link', { name: /Run/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Football/ })).toHaveTextContent('49m');
+    expect(screen.getByRole('link', { name: /Run/ })).toHaveTextContent('31m');
     expect(screen.queryByRole('link', { name: /1 Aug|Aug/ })).not.toBeInTheDocument();
   });
 
