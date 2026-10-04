@@ -106,7 +106,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <LatestPost post={latestPost} />
           </div>
 
-          <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
+          <div className="mt-12 flex-1 flex-col max-w-full md:mt-0 md:w-3/5 items-center overflow-y-hidden md:pr-7">
             <section
               aria-label="Profile"
               className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
