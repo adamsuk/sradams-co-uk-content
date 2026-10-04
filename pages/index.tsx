@@ -10,6 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
+import LatestPost, { useLatestPost } from '../components/LatestPost';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -23,6 +24,7 @@ function Homepage({ className = '' }: HomepageProps) {
   const [githubProfile, setGithubProfile] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
+  const latestPost = useLatestPost();
 
   const isPreview = useCallback(() => {
     if (router.query.githubProfile) {
@@ -94,6 +96,7 @@ function Homepage({ className = '' }: HomepageProps) {
               {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>
             <HomeStats />
+            <LatestPost post={latestPost} />
             <br />
             <hr />
           </div>
@@ -116,6 +119,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <div className="items-center justify-center max-h-[85vh] overflow-y-auto md:w-3/10 md:pr-7 md:fixed">
               {githubProfile && <ProfilePhoto login={githubProfile} />}
               <HomeStats />
+              <LatestPost post={latestPost} />
             </div>
           </div>
         </div>
