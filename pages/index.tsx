@@ -8,6 +8,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
+import GithubWeek from '../components/GithubWeek';
 import Loader from '../components/Loader';
 import MarkdownImg from '../components/MarkdownImg';
 import RecentActivity from '../components/RecentActivity';
@@ -99,6 +100,7 @@ function Homepage({ className = '' }: HomepageProps) {
               )}
             </div>
             <RecentActivity />
+            <GithubWeek />
             <br />
             <hr />
           </div>
@@ -127,6 +129,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 />
               )}
               <RecentActivity />
+              <GithubWeek />
             </div>
           </div>
         </div>

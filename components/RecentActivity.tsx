@@ -12,10 +12,18 @@ export interface FeedActivity {
   distanceM: number;
   movingS: number;
   url: string;
+  account?: string;
 }
 
 interface Feed {
   activities?: unknown;
+}
+
+export function activityAccount(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  const label = value.replace(/\s+/g, ' ').trim();
+  if (!label || label.length > 40 || /[<>]/.test(label)) return '';
+  return label;
 }
 
 export function isFeedActivity(value: unknown): value is FeedActivity {
@@ -141,6 +149,7 @@ function RecentActivity({ now = Date.now() }: RecentActivityProps) {
                 target="_blank"
               >
                 <span>
+                  {activityAccount(activity.account) ? `${activityAccount(activity.account)} · ` : ''}
                   {formatWhen(activity.start)}
                   {' · '}
                   {activityLabel(activity)}
