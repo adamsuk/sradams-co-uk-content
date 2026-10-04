@@ -108,17 +108,11 @@ function Homepage({ className = '' }: HomepageProps) {
               aria-label="Profile"
               className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
             >
-              <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                Profile
-              </p>
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-                A personal description, taken from my GitHub profile.
-              </p>
               <Markdown
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
                 remarkPlugins={[remarkGfm]}
-                className="prose dark:prose-invert mt-4 max-w-full border-t border-gray-200 pt-4 dark:border-gray-700"
+                className="prose dark:prose-invert max-w-full"
                 components={{
                   img: MarkdownImg,
                 }}
