@@ -16,9 +16,10 @@ describe('HomeStats', () => {
 
   it('starts collapsed on the mobile disclosure and leaves a desktop copy open', async () => {
     render(<HomeStats />);
-    const summary = await screen.findByText('This week');
+    const summary = await screen.findByText("This week's metrics");
     const details = summary.closest('details');
     expect(details).not.toHaveAttribute('open');
+    expect(details?.querySelector('svg')).toHaveClass('group-open:rotate-90');
     expect(details?.className).toContain('md:hidden');
     await waitFor(() => {
       expect(screen.getAllByRole('region', { name: 'Last 7 days' }).length).toBeGreaterThan(0);
