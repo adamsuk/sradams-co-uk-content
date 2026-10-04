@@ -93,7 +93,7 @@ function Homepage({ className = '' }: HomepageProps) {
 
   return (
     <div className={className}>
-      <div className="flex flex-col pt-7 pb-2 h-full justify-between">
+      <div className="flex flex-col pt-7 pb-5">
         {previewMode && <div className="pb-4">{previewBanner}</div>}
         <div className="relative container px-4 sm:px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
           <div className="visible md:hidden relative mb-6 w-full overflow-y-hidden">
@@ -106,7 +106,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <LatestPost post={latestPost} />
           </div>
 
-          <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
+          <div className="flex-1 flex-col max-w-full md:w-3/5 md:pr-7">
             <section
               aria-label="Profile"
               className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
@@ -132,13 +132,17 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
+            <div className="hidden md:block">
+              <LatestPost post={latestPost} />
+            </div>
           </div>
 
           <div className="hidden md:block relative md:w-2/5 w-full">
-            <div className="items-center justify-center max-h-[85vh] overflow-y-auto md:w-3/10 md:pr-7 md:fixed">
-              {githubProfile && <ProfilePhoto login={githubProfile} />}
+            <div className="md:pr-7">
+              <div className="mx-auto w-full max-w-xs">
+                {githubProfile && <ProfilePhoto login={githubProfile} />}
+              </div>
               <HomeStats />
-              <LatestPost post={latestPost} />
             </div>
           </div>
         </div>
