@@ -104,8 +104,6 @@ function Homepage({ className = '' }: HomepageProps) {
             </div>
             <HomeStats />
             <LatestPost post={latestPost} />
-            <br />
-            <hr />
           </div>
 
           <div className="flex-1 flex-col max-w-full md:w-3/5 items-center overflow-y-hidden md:pr-7">
