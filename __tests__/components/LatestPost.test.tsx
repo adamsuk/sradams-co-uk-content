@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-import LatestPost, { newestPost } from '../../components/LatestPost';
+import LatestPost, { newestPost, useLatestPost } from '../../components/LatestPost';
 import env from '../../default-env';
 import { BlogPost } from '../../models/blogPosts';
 
@@ -40,12 +40,16 @@ describe('newestPost', () => {
   });
 });
 
+function Preview() {
+  return <LatestPost post={useLatestPost()} />;
+}
+
 describe('LatestPost', () => {
   beforeEach(() => {
     axiosMock.reset();
   });
 
-  it('links the newest post beside the stats', async () => {
+  it('holds a skeleton, then swaps in the newest post without a second request', async () => {
     axiosMock.onGet(`${env.NEXT_PUBLIC_CMS_URL}/blog`).reply(200, [
       post({ title: 'Older', date: '2024-01-01', slug: 'blog.older' }),
       post({
@@ -55,17 +59,18 @@ describe('LatestPost', () => {
         content: 'one two three',
       }),
     ]);
-    render(<LatestPost />);
+    render(<Preview />);
+    expect(screen.getByTestId('latest-post-skeleton')).toBeInTheDocument();
     const link = await screen.findByRole('link', { name: /Ship the feed/ });
     expect(link).toHaveAttribute('href', '/blog/ship-the-feed');
-    expect(screen.getByText('Latest post')).toBeInTheDocument();
-    await waitFor(() => expect(screen.getByText(/min read/)).toBeInTheDocument());
+    expect(screen.queryByTestId('latest-post-skeleton')).not.toBeInTheDocument();
+    expect(axiosMock.history.get).toHaveLength(1);
   });
 
-  it('renders nothing when the blog cannot be loaded', async () => {
+  it('drops the skeleton when the blog cannot be loaded', async () => {
     axiosMock.onGet(`${env.NEXT_PUBLIC_CMS_URL}/blog`).reply(500);
-    const { container } = render(<LatestPost />);
-    await waitFor(() => expect(axiosMock.history.get.length).toBe(1));
-    expect(container).toBeEmptyDOMElement();
+    const { container } = render(<Preview />);
+    expect(screen.getByTestId('latest-post-skeleton')).toBeInTheDocument();
+    await waitFor(() => expect(container).toBeEmptyDOMElement());
   });
 });

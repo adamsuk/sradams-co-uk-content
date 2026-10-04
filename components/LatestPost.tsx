@@ -7,6 +7,7 @@ import { normalizeBlogSlug } from '../helpers/blogPosts';
 import { BlogPost } from '../models/blogPosts';
 
 const WORDS_PER_MINUTE = 200;
+const shell = 'mx-auto mt-5 block min-h-[9.5rem] w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800';
 
 export function newestPost(posts: BlogPost[]): BlogPost | null {
   const published = posts.filter((post) => (
@@ -27,15 +28,16 @@ function readingTime(content: string): string {
   return `${minutes} min read`;
 }
 
-function LatestPost() {
-  const [post, setPost] = useState<BlogPost | null>(null);
+/** Starts with the page, so it is not waiting on the GitHub profile. */
+export function useLatestPost(): BlogPost | null | undefined {
+  const [post, setPost] = useState<BlogPost | null | undefined>(undefined);
 
   useEffect(() => {
     let cancel = false;
     axios.get(`${env.NEXT_PUBLIC_CMS_URL}/blog`)
       .then((response) => {
-        if (cancel || !Array.isArray(response.data)) return;
-        setPost(newestPost(response.data));
+        if (cancel) return;
+        setPost(Array.isArray(response.data) ? newestPost(response.data) : null);
       })
       .catch(() => {
         if (!cancel) setPost(null);
@@ -45,6 +47,24 @@ function LatestPost() {
     };
   }, []);
 
+  return post;
+}
+
+function LatestPostSkeleton() {
+  return (
+    <div className={shell} data-testid="latest-post-skeleton" aria-hidden="true">
+      <div className="h-3 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mt-3 h-4 w-11/12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mt-2 h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mt-3 h-3 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mt-1 h-3 w-4/5 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mt-3 h-3 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+    </div>
+  );
+}
+
+function LatestPost({ post }: { post: BlogPost | null | undefined }) {
+  if (post === undefined) return <LatestPostSkeleton />;
   if (!post?.meta.title) return null;
 
   const slug = normalizeBlogSlug(post.slug || post.name);
@@ -53,12 +73,12 @@ function LatestPost() {
   return (
     <Link
       href={`/blog/${slug}`}
-      className="mx-auto mt-5 block w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+      className={`${shell} text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md`}
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
         Latest post
       </p>
-      <h2 className="mt-1 text-base font-semibold text-gray-900 dark:text-gray-100">
+      <h2 className="mt-1 line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">
         {post.meta.title}
       </h2>
       {post.meta.desc && (

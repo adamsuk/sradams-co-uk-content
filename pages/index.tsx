@@ -10,7 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
-import LatestPost from '../components/LatestPost';
+import LatestPost, { useLatestPost } from '../components/LatestPost';
 import MarkdownImg from '../components/MarkdownImg';
 
 interface HomepageProps {
@@ -23,6 +23,7 @@ function Homepage({ className = '' }: HomepageProps) {
   const [githubProfile, setGithubProfile] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
+  const latestPost = useLatestPost();
 
   const isPreview = useCallback(() => {
     if (router.query.githubProfile) {
@@ -100,7 +101,7 @@ function Homepage({ className = '' }: HomepageProps) {
               )}
             </div>
             <HomeStats />
-            <LatestPost />
+            <LatestPost post={latestPost} />
             <br />
             <hr />
           </div>
@@ -129,7 +130,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 />
               )}
               <HomeStats />
-              <LatestPost />
+              <LatestPost post={latestPost} />
             </div>
           </div>
         </div>
