@@ -8,7 +8,6 @@ import { BsPrinterFill, BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import env from '../default-env';
 import { theme } from '../tailwind.config';
 import Loader from '../components/Loader';
-import NavBar from '../components/NavBar';
 import MarkdownImg from '../components/MarkdownImg';
 
 import { BlogMeta, BlogPost } from '../models/blogPosts';
@@ -138,7 +137,6 @@ const Cv = () => {
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta?.meta?.title}
           </h1>
-          <NavBar className="hidden print:block" />
           <div className="overflow-hidden">
             {githubProfile && (
               <img

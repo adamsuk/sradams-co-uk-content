@@ -1,78 +1,68 @@
-import React, { useEffect } from 'react';
-import { Menu } from '@headlessui/react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import cn from 'classnames';
 import { useTheme } from 'next-themes';
 import { WiDaySunny, WiMoonAltWaxingCrescent3 } from 'react-icons/wi';
 
-interface MenuItem {
-  title: string;
-  url?: string;
-  options?: unknown[];
+const menuItems = [
+  { title: 'Blog', url: '/blog' },
+  { title: 'Sandbox', url: '/sandbox' },
+  { title: 'CV', url: '/cv' },
+];
+
+function isCurrent(pathname: string, url: string) {
+  return pathname === url || pathname.startsWith(`${url}/`);
 }
 
 function Header() {
-  const { theme, setTheme } = useTheme();
-
-  const menuItems: MenuItem[] = [
-    { title: 'Blog', url: '/blog' },
-    { title: 'Sandbox', url: '/sandbox' },
-    { title: 'CV', url: '/cv' },
-  ];
+  const { resolvedTheme, setTheme } = useTheme();
+  const { pathname } = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const userTheme = localStorage.getItem('theme');
-    if (userTheme) {
-      setTheme(userTheme);
-    } else {
-      setTheme('light');
-    }
+    setMounted(true);
   }, []);
 
   return (
-    <header
-      className="fixed w-full overflow-x-scroll no-scrollbar backdrop-filter backdrop-blur-lg bg-white/50 dark:bg-white/5 z-20 trasition ease-in-out duration-500 print:hidden"
-    >
-      <div className="max-w-7xl mx-auto ">
-        <div
-          className="flex max-w-screen-xl py-2 mx-auto items-center justify-between px-4 trasition ease-in-out duration-500"
-        >
-          <a href="/" className="hidden md:block text-xl font-bold tracking-tighter">
+    <header className="fixed z-20 w-full bg-white/50 backdrop-blur-lg backdrop-filter transition duration-500 ease-in-out dark:bg-white/5 print:hidden">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-2 transition duration-500 ease-in-out">
+          <Link href="/" className="text-xl font-bold tracking-tighter">
             Scott Adams
-          </a>
-          <a href="/" className="visible md:hidden text-xl font-bold tracking-tighter pr-2">
-            SA
-          </a>
+          </Link>
           <nav>
             <ul className="flex items-center justify-end">
-              {menuItems?.map((item) => {
-                if (item.options) {
-                  return (
-                    <Menu as="li" key={item?.title}>
-                      <Menu.Button
-                        key={item?.title}
-                        className="inline-flex justify-center w-full px-2 lg:px-6"
-                      >
-                        {item?.title}
-                      </Menu.Button>
-                    </Menu>
-                  );
-                }
+              {menuItems.map((item) => {
+                const active = isCurrent(pathname, item.url);
                 return (
-                  <li key={item?.title}>
-                    <a href={item?.url} className="uppercase px-2 lg:px-6 py-2 border-b-2 border-transparent leading-[22px] md:px-3">
-                      {item?.title}
-                    </a>
+                  <li key={item.title}>
+                    <Link
+                      href={item.url}
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'border-b-2 px-2 py-2 uppercase leading-[22px] md:px-3 lg:px-6',
+                        active ? 'border-current' : 'border-transparent',
+                      )}
+                    >
+                      {item.title}
+                    </Link>
                   </li>
                 );
               })}
-              <li key="dark-mode">
+              <li>
                 <button
                   aria-label="Toggle Dark Mode"
                   type="button"
-                  className="align-middle pl-2 md:pl-3"
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="pl-2 align-middle md:pl-3"
+                  onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
                 >
-                  {theme === 'light' && <WiMoonAltWaxingCrescent3 size={24} />}
-                  {theme === 'dark' && <WiDaySunny size={24} />}
+                  <span className="inline-flex h-6 w-6 items-center justify-center">
+                    {mounted && resolvedTheme === 'dark' && <WiDaySunny size={24} />}
+                    {mounted && resolvedTheme !== 'dark' && (
+                      <WiMoonAltWaxingCrescent3 size={24} />
+                    )}
+                  </span>
                 </button>
               </li>
             </ul>
