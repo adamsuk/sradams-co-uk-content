@@ -26,49 +26,41 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-20 w-full border-b border-gray-200 bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100 print:hidden">
-      <div className="mx-auto max-w-7xl">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-2 transition duration-500 ease-in-out">
-          <Link href="/" className="shrink-0 pr-2 text-xl font-bold tracking-tighter">
-            <span className="hidden md:inline">Scott Adams</span>
-            <span className="md:hidden">SA</span>
-          </Link>
-          <nav>
-            <ul className="flex items-center justify-end">
-              {menuItems.map((item) => {
-                const active = isCurrent(pathname, item.url);
-                return (
-                  <li key={item.title}>
-                    <Link
-                      href={item.url}
-                      aria-current={active ? 'page' : undefined}
-                      className={cn(
-                        'border-b-2 px-2 py-2 uppercase leading-[22px] md:px-3 lg:px-6',
-                        active ? 'border-current' : 'border-transparent',
-                      )}
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                );
-              })}
-              <li>
-                <button
-                  aria-label="Toggle Dark Mode"
-                  type="button"
-                  className="pl-2 align-middle md:pl-3"
-                  onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                >
-                  <span className="inline-flex h-6 w-6 items-center justify-center">
-                    {mounted && resolvedTheme === 'dark' && <WiDaySunny size={24} />}
-                    {mounted && resolvedTheme !== 'dark' && (
-                      <WiMoonAltWaxingCrescent3 size={24} />
+      <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:gap-4">
+        <Link href="/" className="shrink-0 text-xl font-bold tracking-tighter">
+          <span className="md:hidden">SA</span>
+          <span className="hidden md:inline">Scott Adams</span>
+        </Link>
+        <nav className="min-w-0">
+          <ul className="flex items-center">
+            {menuItems.map((item) => {
+              const active = isCurrent(pathname, item.url);
+              return (
+                <li key={item.title}>
+                  <Link
+                    href={item.url}
+                    aria-current={active ? 'page' : undefined}
+                    className={cn(
+                      'inline-block border-b-2 px-2 py-2 uppercase leading-[22px] md:px-3 lg:px-4',
+                      active ? 'border-current' : 'border-transparent',
                     )}
-                  </span>
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+        <button
+          aria-label="Toggle Dark Mode"
+          type="button"
+          className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center"
+          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+        >
+          {mounted && resolvedTheme === 'dark' && <WiDaySunny size={24} />}
+          {mounted && resolvedTheme !== 'dark' && <WiMoonAltWaxingCrescent3 size={24} />}
+        </button>
       </div>
     </header>
   );
