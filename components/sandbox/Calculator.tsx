@@ -56,7 +56,7 @@ function Calculator() {
     // eslint-disable-next-line max-len
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
-      className="rounded absolute items-center max-w-full h-auto bg-gray-200 p-3"
+      className="relative mx-auto w-full max-w-sm rounded-xl bg-gray-200 p-3 dark:bg-gray-800"
       onClick={handleClick}
     >
       <input
