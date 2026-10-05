@@ -26,10 +26,12 @@ describe('Header', () => {
     mockPathname = '/';
   });
 
-  it('renders a single home link', () => {
+  it('uses a short name on small screens', () => {
     render(<Header />);
-    expect(screen.getByRole('link', { name: 'Scott Adams' })).toHaveAttribute('href', '/');
-    expect(screen.queryByText('SA')).not.toBeInTheDocument();
+    const home = screen.getByRole('link', { name: /Scott Adams/ });
+    expect(home).toHaveAttribute('href', '/');
+    expect(screen.getByText('Scott Adams')).toHaveClass('hidden', 'md:inline');
+    expect(screen.getByText('SA')).toHaveClass('md:hidden');
   });
 
   it('renders navigation links', () => {

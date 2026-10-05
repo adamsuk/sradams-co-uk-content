@@ -28,8 +28,9 @@ function Header() {
     <header className="fixed z-20 w-full bg-white/50 backdrop-blur-lg backdrop-filter transition duration-500 ease-in-out dark:bg-white/5 print:hidden">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-2 transition duration-500 ease-in-out">
-          <Link href="/" className="text-xl font-bold tracking-tighter">
-            Scott Adams
+          <Link href="/" className="shrink-0 pr-2 text-xl font-bold tracking-tighter">
+            <span className="hidden md:inline">Scott Adams</span>
+            <span className="md:hidden">SA</span>
           </Link>
           <nav>
             <ul className="flex items-center justify-end">
