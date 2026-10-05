@@ -33,7 +33,7 @@ function BlogPostPage({ post }: BlogPostPageProps) {
   const readingTime = calculateReadingTime(post.content);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full max-w-7xl mx-auto px-4 pt-4 pb-8">
       <Link
         href="/blog"
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-8 transition-colors"

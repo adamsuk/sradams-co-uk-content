@@ -5,29 +5,40 @@ import Header from '../../components/Header';
 
 const mockSetTheme = jest.fn();
 let mockTheme = 'light';
+let mockPathname = '/';
 
 jest.mock('next-themes', () => ({
-  useTheme: () => ({ theme: mockTheme, setTheme: mockSetTheme }),
+  useTheme: () => ({
+    theme: mockTheme,
+    resolvedTheme: mockTheme,
+    setTheme: mockSetTheme,
+  }),
 }));
 
-jest.mock('@headlessui/react', () => ({
-  Menu: Object.assign(
-    ({ children }: { children: React.ReactNode }) => <ul>{children}</ul>,
-    {
-      Button: ({ children }: { children: React.ReactNode }) => <button type="button">{children}</button>,
-    },
-  ),
+jest.mock('next/router', () => ({
+  useRouter: () => ({ pathname: mockPathname }),
 }));
 
 describe('Header', () => {
   beforeEach(() => {
     mockSetTheme.mockClear();
     mockTheme = 'light';
+    mockPathname = '/';
   });
 
-  it('renders the site name', () => {
+  it('stays in view without covering the page', () => {
+    const { container } = render(<Header />);
+    const header = container.querySelector('header');
+    expect(header).toHaveClass('sticky');
+    expect(header).not.toHaveClass('fixed');
+  });
+
+  it('uses a short name on small screens', () => {
     render(<Header />);
-    expect(screen.getAllByText('Scott Adams').length).toBeGreaterThan(0);
+    const home = screen.getByRole('link', { name: /Scott Adams/ });
+    expect(home).toHaveAttribute('href', '/');
+    expect(screen.getByText('Scott Adams')).toHaveClass('hidden', 'md:inline');
+    expect(screen.getByText('SA')).toHaveClass('md:hidden');
   });
 
   it('renders navigation links', () => {
@@ -42,6 +53,13 @@ describe('Header', () => {
     expect(screen.getByText('Blog').closest('a')).toHaveAttribute('href', '/blog');
     expect(screen.getByText('Sandbox').closest('a')).toHaveAttribute('href', '/sandbox');
     expect(screen.getByText('CV').closest('a')).toHaveAttribute('href', '/cv');
+  });
+
+  it('marks the current page', () => {
+    mockPathname = '/blog/[slug]';
+    render(<Header />);
+    expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'CV' })).not.toHaveAttribute('aria-current');
   });
 
   it('renders a dark mode toggle button', () => {
@@ -64,21 +82,8 @@ describe('Header', () => {
     expect(mockSetTheme).toHaveBeenCalledWith('light');
   });
 
-  it('reads theme from localStorage on mount and applies it', () => {
-    Object.defineProperty(window, 'localStorage', {
-      value: { getItem: jest.fn(() => 'dark'), setItem: jest.fn() },
-      writable: true,
-    });
+  it('does not set the theme itself on mount', () => {
     render(<Header />);
-    expect(mockSetTheme).toHaveBeenCalledWith('dark');
-  });
-
-  it('defaults to light theme when localStorage has no saved theme', () => {
-    Object.defineProperty(window, 'localStorage', {
-      value: { getItem: jest.fn(() => null), setItem: jest.fn() },
-      writable: true,
-    });
-    render(<Header />);
-    expect(mockSetTheme).toHaveBeenCalledWith('light');
+    expect(mockSetTheme).not.toHaveBeenCalled();
   });
 });

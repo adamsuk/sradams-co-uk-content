@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Scott Adams</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <ThemeProvider attribute="class">
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
         <div
           key="generic"
           className="flex flex-col min-h-dvh"

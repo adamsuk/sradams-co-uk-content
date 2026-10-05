@@ -94,7 +94,7 @@ const BlogIndex = () => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full max-w-7xl mx-auto px-4 pt-4 pb-8">
       <div className="mb-2">
         {pageMeta?.meta?.title && (
           <h1 className="text-4xl font-extrabold mb-2">

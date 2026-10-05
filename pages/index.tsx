@@ -93,12 +93,10 @@ function Homepage({ className = '' }: HomepageProps) {
 
   return (
     <div className={className}>
-      <div className="flex flex-col pt-7 pb-5">
+      <div className="flex flex-col pt-5 pb-5">
         {previewMode && <div className="pb-4">{previewBanner}</div>}
-        <div className="relative container px-4 sm:px-7 mb-auto flex flex-wrap flex-col md:flex-row md:px-0 w-full max-w-7xl mx-auto justify-between">
+        <div className="relative mx-auto mb-auto flex w-full max-w-7xl flex-col flex-wrap justify-between px-4 md:flex-row">
           <div className="visible md:hidden relative mb-6 w-full overflow-y-hidden">
-            <hr />
-            <br />
             <div className="mx-auto w-full max-w-[400px]">
               {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>

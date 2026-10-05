@@ -38,4 +38,12 @@ describe('NavBar', () => {
     const footer = document.querySelector('footer');
     expect(footer).toHaveClass('test-class');
   });
+
+  it('only inverts the GitHub mark in dark mode', () => {
+    render(<NavBar />);
+    expect(screen.getByAltText('Github')).toHaveClass('dark:invert');
+    expect(screen.getByAltText('LinkedIn')).not.toHaveClass('dark:invert');
+    expect(screen.getByAltText('Email')).not.toHaveClass('dark:invert');
+    expect(screen.getByAltText('Phone')).not.toHaveClass('dark:invert');
+  });
 });
