@@ -97,8 +97,6 @@ function Homepage({ className = '' }: HomepageProps) {
         {previewMode && <div className="pb-4">{previewBanner}</div>}
         <div className="relative mx-auto mb-auto flex w-full max-w-7xl flex-col flex-wrap justify-between px-4 md:flex-row">
           <div className="visible md:hidden relative mb-6 w-full overflow-y-hidden">
-            <hr />
-            <br />
             <div className="mx-auto w-full max-w-[400px]">
               {githubProfile && <ProfilePhoto login={githubProfile} />}
             </div>
