@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           className="flex flex-col min-h-dvh"
         >
           <Header />
-          <main className="flex-1">
+          <main className="flex flex-1 flex-col">
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} setLoading={setLoading} loading={loading} />
           </main>
