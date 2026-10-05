@@ -44,9 +44,10 @@ describe('Quiz', () => {
     expect(screen.getByText('Address')).toBeInTheDocument();
   });
 
-  it('does not dump the question JSON on the page', () => {
+  it('prints the answers as JSON and not the question definition', () => {
     render(<Quiz sandbox={{ name: 'test' }} />);
     expect(screen.queryByText(/INPUT:/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/OUTPUT:/)).not.toBeInTheDocument();
+    expect(screen.getByText('Output')).toBeInTheDocument();
+    expect(screen.getByTestId('quiz-output')).toHaveTextContent(/"name": "test"/);
   });
 });

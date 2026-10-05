@@ -61,6 +61,15 @@ function Quiz({ sandbox = {}, setSandbox = null, nextQuestion }: QuizProps) {
         output={sandbox}
         setOutput={setSandbox}
       />
+      <div className="mt-6">
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Output</p>
+        <pre
+          data-testid="quiz-output"
+          className="mt-2 overflow-x-auto rounded-lg bg-gray-900 p-4 text-left text-sm text-gray-100"
+        >
+          {JSON.stringify(sandbox, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 }

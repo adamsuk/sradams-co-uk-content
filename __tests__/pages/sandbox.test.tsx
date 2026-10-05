@@ -21,24 +21,6 @@ jest.mock("next/router", () => ({
   }),
 }));
 
-jest.mock("react-icons/vsc", () => ({
-  VscClose: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="close-btn" onClick={onClick}>
-      Close
-    </button>
-  ),
-  VscChevronRight: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-lg" onClick={onClick}>
-      Open
-    </button>
-  ),
-  VscChevronDown: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-sm" onClick={onClick}>
-      Open
-    </button>
-  ),
-}));
-
 describe("Sandbox page", () => {
   beforeEach(() => {
     mockPush.mockClear();
