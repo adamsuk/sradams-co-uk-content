@@ -121,7 +121,7 @@ const Cv = () => {
   return (
     <div
       className={cn(
-        'flex flex-col max-w-7xl m-auto pb-4 pt-8 px-4 print:p-2 print:text-black',
+        'flex flex-col max-w-7xl m-auto pb-4 pt-4 px-4 print:p-2 print:text-black',
         { 'h-full': !cv },
       )}
     >

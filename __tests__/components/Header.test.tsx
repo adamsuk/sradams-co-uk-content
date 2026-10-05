@@ -26,6 +26,13 @@ describe('Header', () => {
     mockPathname = '/';
   });
 
+  it('stays in view without covering the page', () => {
+    const { container } = render(<Header />);
+    const header = container.querySelector('header');
+    expect(header).toHaveClass('sticky');
+    expect(header).not.toHaveClass('fixed');
+  });
+
   it('uses a short name on small screens', () => {
     render(<Header />);
     const home = screen.getByRole('link', { name: /Scott Adams/ });

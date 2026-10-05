@@ -25,7 +25,7 @@ function Header() {
   }, []);
 
   return (
-    <header className="fixed z-20 w-full bg-white/50 backdrop-blur-lg backdrop-filter transition duration-500 ease-in-out dark:bg-white/5 print:hidden">
+    <header className="sticky top-0 z-20 w-full border-b border-gray-200 bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100 print:hidden">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-2 transition duration-500 ease-in-out">
           <Link href="/" className="shrink-0 pr-2 text-xl font-bold tracking-tighter">

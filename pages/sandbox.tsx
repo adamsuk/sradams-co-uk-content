@@ -34,7 +34,7 @@ function Sandbox({ className = '' }: SandboxProps) {
   const Active = sandboxes[itemIndex]?.component;
 
   return (
-    <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-10 pt-8')}>
+    <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-10 pt-4')}>
       <h1 className="text-3xl font-bold tracking-tight">Sandbox</h1>
       <p className="mt-2 max-w-2xl text-gray-600 dark:text-gray-400">
         Small experiments. Pick one.
