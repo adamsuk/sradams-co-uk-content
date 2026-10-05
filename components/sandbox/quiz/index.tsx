@@ -1,10 +1,33 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { useState } from 'react';
 
-import { has } from 'ramda';
+import FormText from './FormText';
+import questions from './questions.json';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { firstQuestion, questionSet } = require('./questions.json');
+const { firstQuestion, questionSet } = questions as {
+  firstQuestion: string;
+  questionSet: Record<string, Question>;
+};
+
+interface NextQuestion {
+  default?: string;
+  exact_answer?: Record<string, string>;
+}
+
+interface Question {
+  title: string;
+  inputName: string;
+  component: string;
+  nextQuestion?: NextQuestion;
+}
+
+const questionComponents: Record<string, React.ComponentType<{
+  questionProps: { inputName: string; title: string };
+  renderNextQuestion: () => void;
+  output?: Record<string, string>;
+  setOutput?: ((output: Record<string, string>) => void) | null;
+}>> = {
+  FormText,
+};
 
 interface QuizProps {
   sandbox?: Record<string, string>;
@@ -12,47 +35,43 @@ interface QuizProps {
   nextQuestion?: string;
 }
 
-function Quiz(props: QuizProps) {
-  const output = props?.sandbox;
-  const setOutput = props?.setSandbox;
-  let question = props?.nextQuestion || firstQuestion;
+function Quiz({ sandbox = {}, setSandbox = null, nextQuestion }: QuizProps) {
+  const [question, setQuestion] = useState(nextQuestion || firstQuestion);
+  const current = questionSet[question];
+  const QuestionComponent = questionComponents[current.component] || FormText;
 
-  // eslint-disable-next-line import/no-dynamic-require, global-require, @typescript-eslint/no-var-requires
-  const QuestionComponent = require(`./${questionSet[question].component}`).default;
-
-  const renderNextQuestion = (out: Record<string, string> | undefined) => () => {
-    const nextProps = questionSet[question];
-    if (has('exact_answer', nextProps.question)) {
-      const userAnswer = out?.[nextProps.inputName]?.toLowerCase();
-      const filterAnswers = nextProps.question.exact_answer;
-      if (userAnswer && has(userAnswer, filterAnswers)) {
-        question = filterAnswers[userAnswer];
-      }
-    } else if (has('default', nextProps.question)) {
-      question = nextProps.question.default;
+  const goNext = () => {
+    const next = current.nextQuestion;
+    if (!next) return;
+    const answer = sandbox[current.inputName]?.trim().toLowerCase();
+    if (answer && next.exact_answer?.[answer]) {
+      setQuestion(next.exact_answer[answer]);
+      return;
+    }
+    if (next.default) {
+      setQuestion(next.default);
     }
   };
 
   return (
-    <>
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-gray-200 bg-gray-50 px-5 py-6 dark:border-gray-700 dark:bg-gray-900/40">
       <QuestionComponent
-        questionProps={questionSet[question]}
-        renderNextQuestion={renderNextQuestion(output)}
-        output={output}
-        setOutput={setOutput}
+        questionProps={current}
+        renderNextQuestion={goNext}
+        output={sandbox}
+        setOutput={setSandbox}
       />
-      <pre>
-        INPUT:
-        {JSON.stringify(questionSet[question], null, 2)}
-      </pre>
-      <pre style={{ textAlign: 'right', right: '0px' }}>
-        OUTPUT:
-        {JSON.stringify(output, null, 2)}
-      </pre>
-    </>
+      <div className="mt-6">
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Output</p>
+        <pre
+          data-testid="quiz-output"
+          className="mt-2 overflow-x-auto rounded-lg bg-gray-900 p-4 text-left text-sm text-gray-100"
+        >
+          {JSON.stringify(sandbox, null, 2)}
+        </pre>
+      </div>
+    </div>
   );
 }
-
-Quiz.getInitialProps = () => questionSet[firstQuestion];
 
 export default Quiz;

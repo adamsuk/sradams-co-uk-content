@@ -173,16 +173,16 @@ const Player = () => {
         <button
           type="button"
           onClick={previousSong}
-          className="p-2 rounded-full hover:bg-gray-500 bg-gray-700 transition-colors"
+          className="rounded-full bg-gray-800 p-2 text-white transition-colors hover:bg-gray-700"
           aria-label="Previous track"
         >
-          <Previous className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+          <Previous className="h-6 w-6" />
         </button>
 
         <button
           type="button"
           onClick={toggle}
-          className="p-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors shadow-md"
+          className="rounded-full bg-blue-500 p-3 text-white shadow-md transition-colors hover:bg-blue-600"
           aria-label={playing ? "Pause" : "Play"}
         >
           {playing ? (
@@ -195,10 +195,10 @@ const Player = () => {
         <button
           type="button"
           onClick={nextSong}
-          className="p-2 rounded-full hover:bg-gray-500 bg-gray-700 transition-colors"
+          className="rounded-full bg-gray-800 p-2 text-white transition-colors hover:bg-gray-700"
           aria-label="Next track"
         >
-          <Next className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+          <Next className="h-6 w-6" />
         </button>
       </div>
 

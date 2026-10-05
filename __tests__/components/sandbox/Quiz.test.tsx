@@ -38,9 +38,16 @@ describe('Quiz', () => {
     expect(screen.getByText('Address')).toBeInTheDocument();
   });
 
-  it('displays INPUT and OUTPUT debug pre blocks', () => {
+  it('moves to the next question', () => {
+    render(<Quiz sandbox={{ name: 'Ada' }} setSandbox={mockSetSandbox} />);
+    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    expect(screen.getByText('Address')).toBeInTheDocument();
+  });
+
+  it('prints the answers as JSON and not the question definition', () => {
     render(<Quiz sandbox={{ name: 'test' }} />);
-    expect(screen.getByText(/INPUT:/)).toBeInTheDocument();
-    expect(screen.getByText(/OUTPUT:/)).toBeInTheDocument();
+    expect(screen.queryByText(/INPUT:/)).not.toBeInTheDocument();
+    expect(screen.getByText('Output')).toBeInTheDocument();
+    expect(screen.getByTestId('quiz-output')).toHaveTextContent(/"name": "test"/);
   });
 });

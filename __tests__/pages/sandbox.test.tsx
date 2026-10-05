@@ -21,24 +21,6 @@ jest.mock("next/router", () => ({
   }),
 }));
 
-jest.mock("react-icons/vsc", () => ({
-  VscClose: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="close-btn" onClick={onClick}>
-      Close
-    </button>
-  ),
-  VscChevronRight: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-lg" onClick={onClick}>
-      Open
-    </button>
-  ),
-  VscChevronDown: ({ onClick }: { onClick: () => void }) => (
-    <button type="button" data-testid="open-btn-sm" onClick={onClick}>
-      Open
-    </button>
-  ),
-}));
-
 describe("Sandbox page", () => {
   beforeEach(() => {
     mockPush.mockClear();
@@ -58,10 +40,10 @@ describe("Sandbox page", () => {
 
   it("renders without crashing", () => {
     render(<Sandbox />);
-    expect(screen.getByText(/Under Construction/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Sandbox" })).toBeInTheDocument();
   });
 
-  it("renders sandbox items in the sidebar", () => {
+  it("renders the experiment switcher", () => {
     render(<Sandbox />);
     expect(screen.getByText("Podcast Player")).toBeInTheDocument();
     expect(screen.getByText("Pico8 Game")).toBeInTheDocument();
@@ -83,10 +65,9 @@ describe("Sandbox page", () => {
     expect(screen.getByRole("button", { name: "7" })).toBeInTheDocument();
   });
 
-  it("calls router.push with the slug when a sidebar item is clicked", () => {
+  it("calls router.push with the slug when an experiment is chosen", () => {
     render(<Sandbox />);
-    // Click "Calculator" in the sidebar to trigger changeRouting
-    fireEvent.click(screen.getByText("Calculator"));
+    fireEvent.click(screen.getByRole("tab", { name: "Calculator" }));
     expect(mockPush).toHaveBeenCalledWith(
       "/sandbox/?component=calculator",
       undefined,
