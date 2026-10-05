@@ -25,18 +25,30 @@ function FormText({
   };
 
   return (
-    <div>
-      <br />
-      <form>
-        <div>{title}</div>
-        <input type="text" name={inputName} onChange={storeUserAnswer} />
-      </form>
-      <br />
-      <button type="button" onClick={renderNextQuestion}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        renderNextQuestion();
+      }}
+    >
+      <label htmlFor={inputName} className="block text-lg font-medium">
+        {title}
+      </label>
+      <input
+        id={inputName}
+        type="text"
+        name={inputName}
+        value={output[inputName] || ''}
+        onChange={storeUserAnswer}
+        className="mt-3 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+      />
+      <button
+        type="submit"
+        className="mt-4 rounded-full bg-gray-900 px-5 py-2 text-sm font-medium text-white dark:bg-white dark:text-gray-900"
+      >
         Next
       </button>
-      <br />
-    </div>
+    </form>
   );
 }
 
