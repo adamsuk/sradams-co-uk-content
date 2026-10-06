@@ -62,7 +62,7 @@ export function accountsFromFeed(body: unknown): AccountStats[] | null {
   return accounts.length > 0 ? accounts : null;
 }
 
-function GithubWeek() {
+function GithubWeek({ plain = false }: { plain?: boolean }) {
   const [accounts, setAccounts] = useState<AccountStats[] | null>(null);
 
   useEffect(() => {
@@ -84,13 +84,15 @@ function GithubWeek() {
 
   return (
     <section
-      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100 md:mx-0 md:max-w-none"
+      className={plain
+        ? 'w-full text-left text-gray-800 dark:text-gray-100'
+        : 'w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100'}
       aria-label="GitHub last 7 days"
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
         GitHub · last 7 days
       </p>
-      <ul className="mt-2 divide-y divide-gray-200 dark:divide-gray-700">
+      <ul className="mt-3 divide-y divide-gray-200 dark:divide-gray-700">
         {accounts.map((account) => (
           <li key={account.login} className="flex items-baseline justify-between gap-3 py-1.5 text-sm">
             <a
