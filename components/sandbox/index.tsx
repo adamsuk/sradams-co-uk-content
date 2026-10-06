@@ -13,14 +13,14 @@ interface SandboxItem {
 
 const sandboxes: SandboxItem[] = [
   {
-    title: 'Factory sim',
-    slug: 'factory-sim',
-    component: FactorySim as React.ComponentType<Record<string, unknown>>,
-  },
-  {
     title: 'Podcast Player',
     slug: 'podcast-player',
     component: MusicPlayer,
+  },
+  {
+    title: 'Factory sim',
+    slug: 'factory-sim',
+    component: FactorySim as React.ComponentType<Record<string, unknown>>,
   },
   {
     title: 'Pico8 Game',
