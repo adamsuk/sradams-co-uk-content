@@ -3,6 +3,7 @@ import Calculator from './Calculator';
 import MusicPlayer from './MediaPlayer';
 import Quiz from './quiz';
 import Pico8 from './Pico8';
+import FactorySim from './factorySim';
 
 interface SandboxItem {
   title: string;
@@ -11,6 +12,11 @@ interface SandboxItem {
 }
 
 const sandboxes: SandboxItem[] = [
+  {
+    title: 'Factory sim',
+    slug: 'factory-sim',
+    component: FactorySim as React.ComponentType<Record<string, unknown>>,
+  },
   {
     title: 'Podcast Player',
     slug: 'podcast-player',
