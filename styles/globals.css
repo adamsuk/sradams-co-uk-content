@@ -18,6 +18,11 @@
   }
 }
 
+html {
+  /* Keep the viewport width stable so the nav does not shift when a scrollbar appears. */
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   padding: 0;
