@@ -94,8 +94,8 @@ function Homepage({ className = '' }: HomepageProps) {
   if (!githubProfile) return <Loader />;
 
   return (
-    <div className={`${className} flex flex-1 flex-col`}>
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-6 pt-4">
+    <div className={className}>
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 pb-6 pt-4">
         {previewMode && <div className="pb-4">{previewBanner}</div>}
         <div className="flex flex-col md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
           <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
@@ -132,7 +132,7 @@ function Homepage({ className = '' }: HomepageProps) {
           </section>
         </div>
         <div className="home-board mt-6 hidden gap-4">
-          <div className="home-activity h-full">
+          <div className="home-activity">
             <RecentActivity />
           </div>
           <GithubWeek />
