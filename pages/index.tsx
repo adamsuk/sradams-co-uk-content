@@ -126,7 +126,7 @@ function Homepage({ className = '' }: HomepageProps) {
             )}
           </section>
         </div>
-        <div className="mt-8 grid gap-8 md:grid-cols-2">
+        <div className="mt-8 grid items-start gap-8 md:grid-cols-2">
           <RecentActivity />
           <GithubWeek />
           <div className="md:col-span-2">
