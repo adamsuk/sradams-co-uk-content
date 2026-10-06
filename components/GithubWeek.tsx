@@ -84,7 +84,7 @@ function GithubWeek() {
 
   return (
     <section
-      className="mx-auto mt-5 w-full max-w-sm text-left text-gray-800 dark:text-gray-100 md:mx-0 md:mt-0 md:h-full md:max-w-none md:rounded-2xl md:border md:border-gray-200 md:bg-gray-50 md:p-4 dark:md:border-gray-700 dark:md:bg-gray-900/40"
+      className="w-full text-left text-gray-800 dark:text-gray-100"
       aria-label="GitHub last 7 days"
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">

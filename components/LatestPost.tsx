@@ -7,7 +7,7 @@ import { normalizeBlogSlug } from '../helpers/blogPosts';
 import { BlogPost } from '../models/blogPosts';
 
 const WORDS_PER_MINUTE = 200;
-const shell = 'mx-auto mt-5 block min-h-[9.5rem] w-full max-w-sm rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/40 md:mx-0 md:mt-0 md:h-full md:max-w-none';
+const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/40 md:p-8';
 
 export function newestPost(posts: BlogPost[]): BlogPost | null {
   const published = posts.filter((post) => (
