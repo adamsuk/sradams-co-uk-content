@@ -64,7 +64,9 @@ function Sandbox({ className = '' }: SandboxProps) {
       <details
         ref={menuRef}
         onToggle={onToggle}
-        className="mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+        className={
+          'mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
+        }
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
           Choose an experiment
