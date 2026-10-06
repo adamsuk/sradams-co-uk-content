@@ -1,4 +1,5 @@
 import React from 'react';
+import FactorySim from 'factory-sim-viz';
 import Calculator from './Calculator';
 import MusicPlayer from './MediaPlayer';
 import Quiz from './quiz';
@@ -15,6 +16,11 @@ const sandboxes: SandboxItem[] = [
     title: 'Podcast Player',
     slug: 'podcast-player',
     component: MusicPlayer,
+  },
+  {
+    title: 'Factory sim',
+    slug: 'factory-sim',
+    component: FactorySim as React.ComponentType<Record<string, unknown>>,
   },
   {
     title: 'Pico8 Game',
