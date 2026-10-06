@@ -95,7 +95,11 @@ export function activityWeeks(activities: FeedActivity[], limit = MAX_WEEKS): Ac
     week.movingS += activity.movingS;
     buckets.set(start, week);
   });
-  const keys = [...buckets.keys()].sort();
+  const keys: string[] = [];
+  buckets.forEach((_week, start) => {
+    keys.push(start);
+  });
+  keys.sort();
   if (keys.length === 0) return [];
   const filled: ActivityWeek[] = [];
   for (let cursor = keys[0]; cursor <= keys[keys.length - 1]; cursor = addDays(cursor, 7)) {
