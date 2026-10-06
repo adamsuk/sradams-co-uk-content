@@ -24,7 +24,7 @@ const sandboxes: SandboxItem[] = [
     component: MegaChess as React.ComponentType<Record<string, unknown>>,
   },
   {
-    title: 'Factory sim',
+    title: 'Factory Sim',
     slug: 'factory-sim',
     component: FactorySim as React.ComponentType<Record<string, unknown>>,
   },
