@@ -8,6 +8,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
+import ActivityTracker from '../components/ActivityTracker';
 import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
@@ -138,6 +139,7 @@ function Homepage({ className = '' }: HomepageProps) {
           <GithubWeek />
           <LatestPost post={latestPost} />
         </div>
+        <ActivityTracker />
         {previewMode && <div className="pt-4">{previewBanner}</div>}
       </div>
     </div>
