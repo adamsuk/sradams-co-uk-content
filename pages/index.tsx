@@ -8,14 +8,10 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 
 import env from '../default-env';
-import ActivityTracker from '../components/ActivityTracker';
-import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
-import GithubWeek from '../components/GithubWeek';
 import MarkdownImg from '../components/MarkdownImg';
-import ProfilePhoto from '../components/ProfilePhoto';
-import RecentActivity from '../components/RecentActivity';
+import ProfileWeek from '../components/ProfileWeek';
 
 interface HomepageProps {
   className?: string;
@@ -98,17 +94,16 @@ function Homepage({ className = '' }: HomepageProps) {
     <div className={className}>
       <div className="mx-auto flex w-full max-w-7xl flex-col px-4 pb-6 pt-4">
         {previewMode && <div className="pb-4">{previewBanner}</div>}
-        <div className="flex flex-col md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
-          <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
-            {githubProfile && <ProfilePhoto login={githubProfile} />}
+        <div className="flex flex-col md:landscape:grid md:landscape:grid-cols-[16rem_minmax(0,1fr)] md:landscape:items-center md:landscape:gap-x-10 md:landscape:gap-y-6">
+          <div className="mx-auto w-full md:landscape:col-start-1 md:landscape:row-start-1">
+            {githubProfile && <ProfileWeek login={githubProfile} />}
           </div>
-          <div className="order-2 md:hidden">
-            <HomeStats />
+          <div className="md:landscape:col-span-2 md:landscape:col-start-1 md:landscape:row-start-2">
             <LatestPost post={latestPost} />
           </div>
           <section
             aria-label="Profile"
-            className="order-3 mt-6 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40 md:order-2 md:mt-0 md:border-0 md:bg-transparent md:p-0 dark:md:bg-transparent"
+            className="order-last mt-6 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40 md:landscape:order-none md:landscape:col-start-2 md:landscape:row-start-1 md:landscape:mt-0 md:landscape:border-0 md:landscape:bg-transparent md:landscape:p-0 md:landscape:dark:bg-transparent"
           >
             {renderReady ? (
               <Markdown
@@ -132,14 +127,6 @@ function Homepage({ className = '' }: HomepageProps) {
             )}
           </section>
         </div>
-        <div className="home-board mt-6 hidden gap-4">
-          <div className="home-activity">
-            <RecentActivity />
-          </div>
-          <GithubWeek />
-          <LatestPost post={latestPost} />
-        </div>
-        <ActivityTracker />
         {previewMode && <div className="pt-4">{previewBanner}</div>}
       </div>
     </div>
