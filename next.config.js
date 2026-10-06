@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ['factory-sim-viz'],
+  transpilePackages: ['factory-sim-viz', 'megachess-viz'],
   output: 'export',
   webpack(config) {
     // eslint-disable-next-line no-param-reassign

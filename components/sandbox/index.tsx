@@ -1,5 +1,6 @@
 import React from 'react';
 import FactorySim from 'factory-sim-viz';
+import MegaChess from 'megachess-viz';
 import Calculator from './Calculator';
 import MusicPlayer from './MediaPlayer';
 import Quiz from './quiz';
@@ -16,6 +17,11 @@ const sandboxes: SandboxItem[] = [
     title: 'Podcast Player',
     slug: 'podcast-player',
     component: MusicPlayer,
+  },
+  {
+    title: 'megaChess',
+    slug: 'megachess',
+    component: MegaChess as React.ComponentType<Record<string, unknown>>,
   },
   {
     title: 'Factory sim',
