@@ -3,7 +3,7 @@ import Calculator from './Calculator';
 import MusicPlayer from './MediaPlayer';
 import Quiz from './quiz';
 import Pico8 from './Pico8';
-import FactorySim from './factorySim';
+import FactorySim from 'factory-sim-viz';
 
 interface SandboxItem {
   title: string;
