@@ -46,7 +46,7 @@ function Sandbox({ className = '' }: SandboxProps) {
   };
 
   const onToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
-    const open = event.currentTarget.open;
+    const { open } = event.currentTarget;
     const current = slugFromLocation() || sandboxes[0].slug;
     setHighlighted(open ? current : null);
   };
@@ -54,6 +54,7 @@ function Sandbox({ className = '' }: SandboxProps) {
   const Active = sandboxes[itemIndex]?.component;
   const idle = 'bg-gray-100 text-gray-800 hover:bg-gray-200';
   const idleDark = 'dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700';
+  const menuClass = 'mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900';
 
   return (
     <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-6 pt-4')}>
@@ -64,9 +65,7 @@ function Sandbox({ className = '' }: SandboxProps) {
       <details
         ref={menuRef}
         onToggle={onToggle}
-        className={
-          'mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
-        }
+        className={menuClass}
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
           Choose an experiment
