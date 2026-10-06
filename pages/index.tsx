@@ -100,6 +100,29 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="mx-auto w-full max-w-[16rem]">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
+          <details className="group rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40 md:hidden">
+            <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+              >
+                <path
+                  d="M7 5l6 5-6 5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {'This week\'s metrics'}
+            </summary>
+            <div className="mt-6 grid gap-6">
+              <RecentActivity />
+              <GithubWeek />
+            </div>
+          </details>
           <section
             aria-label="Profile"
             className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
@@ -127,8 +150,12 @@ function Homepage({ className = '' }: HomepageProps) {
           </section>
         </div>
         <div className="grid items-start gap-6 md:grid-cols-2">
-          <RecentActivity />
-          <GithubWeek />
+          <div className="hidden md:block">
+            <RecentActivity />
+          </div>
+          <div className="hidden md:block">
+            <GithubWeek />
+          </div>
           <div className="md:col-span-2">
             <LatestPost post={latestPost} />
           </div>
