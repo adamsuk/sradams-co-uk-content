@@ -2,20 +2,25 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import {
+  activityLabel,
   FEED_URL,
   formatDistance,
   formatMoving,
+  formatWhen,
   isFeedActivity,
   type FeedActivity,
 } from './RecentActivity';
 
 const MAX_WEEKS = 16;
 
+type Metric = 'distance' | 'time';
+
 export interface ActivityWeek {
   start: string;
   label: string;
   distanceM: number;
   movingS: number;
+  sessions: FeedActivity[];
 }
 
 function londonParts(iso: string): { year: number; month: number; day: number } | null {
@@ -65,19 +70,16 @@ function weekLabel(iso: string): string {
   }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
-export function shortMoving(seconds: number): string {
-  const safe = Math.max(0, Math.round(seconds));
-  const hours = Math.floor(safe / 3600);
-  const minutes = Math.round((safe % 3600) / 60);
-  if (minutes === 60) return hours + 1 === 0 ? '60m' : `${hours + 1}h`;
-  if (hours === 0) return `${minutes}m`;
-  if (minutes === 0) return `${hours}h`;
-  return `${hours}h${minutes}`;
+function sessionTitle(activity: FeedActivity): string {
+  const name = (activity.name || '').trim();
+  const split = name.split(' - ');
+  const detail = split.length > 1 ? split.slice(1).join(' - ').trim() : activityLabel(activity);
+  if (!detail) return activityLabel(activity);
+  return detail.length > 48 ? `${detail.slice(0, 47)}…` : detail;
 }
 
-export function kmTick(metres: number): string {
-  const km = metres / 1000;
-  return km >= 10 ? km.toFixed(0) : km.toFixed(1);
+function metricValue(week: ActivityWeek, metric: Metric): number {
+  return metric === 'distance' ? week.distanceM : week.movingS;
 }
 
 export function activityWeeks(activities: FeedActivity[], limit = MAX_WEEKS): ActivityWeek[] {
@@ -90,9 +92,11 @@ export function activityWeeks(activities: FeedActivity[], limit = MAX_WEEKS): Ac
       label: weekLabel(start),
       distanceM: 0,
       movingS: 0,
+      sessions: [],
     };
     week.distanceM += activity.distanceM;
     week.movingS += activity.movingS;
+    week.sessions.push(activity);
     buckets.set(start, week);
   });
   const keys: string[] = [];
@@ -108,13 +112,26 @@ export function activityWeeks(activities: FeedActivity[], limit = MAX_WEEKS): Ac
       label: weekLabel(cursor),
       distanceM: 0,
       movingS: 0,
+      sessions: [],
     });
   }
+  filled.forEach((week) => {
+    week.sessions.sort((left, right) => Date.parse(right.start) - Date.parse(left.start));
+  });
   return filled.slice(-limit);
+}
+
+function latestWeek(weeks: ActivityWeek[]): string {
+  for (let index = weeks.length - 1; index >= 0; index -= 1) {
+    if (weeks[index].sessions.length > 0) return weeks[index].start;
+  }
+  return weeks[weeks.length - 1].start;
 }
 
 function ActivityTracker() {
   const [weeks, setWeeks] = useState<ActivityWeek[] | null>(null);
+  const [metric, setMetric] = useState<Metric>('distance');
+  const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
     let cancel = false;
@@ -125,7 +142,9 @@ function ActivityTracker() {
         const rows = Array.isArray(body?.activities)
           ? body.activities.filter(isFeedActivity)
           : [];
-        setWeeks(activityWeeks(rows));
+        const next = activityWeeks(rows);
+        setWeeks(next);
+        setSelected(next.length > 0 ? latestWeek(next) : null);
       })
       .catch(() => {
         if (!cancel) setWeeks([]);
@@ -137,55 +156,130 @@ function ActivityTracker() {
 
   if (!weeks || weeks.length === 0) return null;
 
-  const maxDistance = Math.max(...weeks.map((week) => week.distanceM), 1);
+  const chosen = weeks.find((week) => week.start === selected) ?? weeks[weeks.length - 1];
+  const max = weeks.reduce((peak, week) => Math.max(peak, metricValue(week, metric)), 1);
   const distanceM = weeks.reduce((sum, week) => sum + week.distanceM, 0);
   const movingS = weeks.reduce((sum, week) => sum + week.movingS, 0);
+
+  const move = (delta: number) => {
+    const index = weeks.findIndex((week) => week.start === chosen.start);
+    const next = weeks[index + delta];
+    if (next) setSelected(next.start);
+  };
 
   return (
     <section
       aria-label="Training"
       className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100"
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-          Training
-        </p>
-        <p className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
-          {formatDistance(distanceM)}
-          {' · '}
-          {formatMoving(movingS)}
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            Training
+          </p>
+          <p className="mt-1 text-sm tabular-nums">
+            {formatDistance(distanceM)}
+            {' · '}
+            {formatMoving(movingS)}
+          </p>
+        </div>
+        <div className="flex rounded-full border border-gray-200 p-0.5 text-xs dark:border-gray-700">
+          {(['distance', 'time'] as Metric[]).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={metric === option}
+              className={`rounded-full px-3 py-1 capitalize ${
+                metric === option
+                  ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900'
+                  : 'text-gray-600 dark:text-gray-300'
+              }`}
+              onClick={() => setMetric(option)}
+            >
+              {option === 'distance' ? 'Distance' : 'Time'}
+            </button>
+          ))}
+        </div>
       </div>
-      <ul className="sr-only">
-        {weeks.map((week) => (
-          <li key={week.start}>
-            {week.label}
-            {': '}
-            {formatDistance(week.distanceM)}
-            {' in '}
-            {formatMoving(week.movingS)}
-          </li>
-        ))}
-      </ul>
-      <div className="mt-3 flex items-end gap-2 overflow-x-auto" aria-hidden="true">
-        {weeks.map((week) => (
-          <div key={week.start} className="flex w-11 shrink-0 flex-col items-center sm:w-auto sm:min-w-[2.75rem] sm:flex-1">
-            <span className="text-2xs tabular-nums text-gray-500 dark:text-gray-400">
-              {kmTick(week.distanceM)}
-            </span>
-            <div className="mt-1 flex h-16 w-full max-w-[2.25rem] items-end rounded-sm bg-gray-200 dark:bg-gray-800">
-              <div
-                className="w-full rounded-sm bg-gray-900 dark:bg-gray-100"
-                style={{ height: `${Math.round((week.distanceM / maxDistance) * 100)}%` }}
-                title={`${week.label}: ${formatDistance(week.distanceM)} · ${formatMoving(week.movingS)}`}
-              />
-            </div>
-            <span className="mt-1 text-2xs text-gray-500 dark:text-gray-400">{week.label}</span>
-            <span className="text-2xs tabular-nums text-gray-700 dark:text-gray-300">
-              {shortMoving(week.movingS)}
-            </span>
-          </div>
-        ))}
+
+      <div className="mt-4 flex items-end gap-1" role="group" aria-label="Weeks">
+        {weeks.map((week) => {
+          const value = metricValue(week, metric);
+          const height = value <= 0 ? 0 : Math.max(8, Math.round((value / max) * 100));
+          const active = week.start === chosen.start;
+          return (
+            <button
+              key={week.start}
+              type="button"
+              aria-pressed={active}
+              aria-label={`${week.label}, ${formatDistance(week.distanceM)}, ${formatMoving(week.movingS)}`}
+              className="flex min-w-0 flex-1 flex-col items-center"
+              onClick={() => setSelected(week.start)}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowRight') {
+                  event.preventDefault();
+                  move(1);
+                }
+                if (event.key === 'ArrowLeft') {
+                  event.preventDefault();
+                  move(-1);
+                }
+              }}
+            >
+              <span className="flex h-24 w-full items-end px-0.5">
+                <span
+                  className={`block w-full rounded-t ${
+                    active
+                      ? 'bg-gray-900 dark:bg-gray-100'
+                      : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
+                  }`}
+                  style={{ height: `${height}%` }}
+                />
+              </span>
+              <span className={`mt-1 truncate text-2xs ${active ? 'font-medium' : 'text-gray-500 dark:text-gray-400'}`}>
+                {week.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 border-t border-gray-200 pt-3 dark:border-gray-700" aria-live="polite">
+        <p className="text-sm font-medium">
+          {chosen.label}
+          <span className="ml-2 font-normal tabular-nums text-gray-500 dark:text-gray-400">
+            {formatDistance(chosen.distanceM)}
+            {' · '}
+            {formatMoving(chosen.movingS)}
+          </span>
+        </p>
+        {chosen.sessions.length === 0 ? (
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Nothing this week.</p>
+        ) : (
+          <ul className="mt-2 divide-y divide-gray-200 dark:divide-gray-700">
+            {chosen.sessions.map((session) => (
+              <li key={session.id}>
+                <a
+                  href={session.url}
+                  className="flex items-baseline justify-between gap-3 py-1.5 text-sm hover:underline"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <span>
+                    {formatWhen(session.start)}
+                    {' · '}
+                    {sessionTitle(session)}
+                  </span>
+                  <span className="shrink-0 tabular-nums">
+                    {formatDistance(session.distanceM)}
+                    {' · '}
+                    {formatMoving(session.movingS)}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );
