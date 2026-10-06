@@ -96,43 +96,41 @@ function Homepage({ className = '' }: HomepageProps) {
     <div className={className}>
       <div className="mx-auto w-full max-w-5xl px-5 pb-12 pt-8 md:px-10 md:pb-16 md:pt-14">
         {previewMode && <div className="pb-8">{previewBanner}</div>}
-        <div className="flex flex-col gap-8 md:grid md:grid-cols-2 md:items-start md:gap-x-16 md:gap-y-0">
-          <div className="order-3 flex flex-col gap-8 md:order-1">
-            <section
-              aria-label="Profile"
-              className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-6 dark:border-gray-700 dark:bg-gray-900/40 md:px-8 md:py-8"
-            >
-              {renderReady ? (
-                <Markdown
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-                  remarkPlugins={[remarkGfm]}
-                  className="prose dark:prose-invert max-w-none prose-headings:mt-0 prose-p:my-3"
-                  components={{
-                    img: MarkdownImg,
-                  }}
-                >
-                  {profileIntro(markdownText)}
-                </Markdown>
-              ) : (
-                <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
-                  <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
-                </div>
-              )}
-            </section>
-            <LatestPost post={latestPost} />
+        <div className="flex flex-col gap-8 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-16">
+          <div className="mx-auto w-full max-w-[16rem]">
+            {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <div className="contents md:flex md:flex-col md:gap-10">
-            <div className="order-1 mx-auto w-full max-w-[17rem] md:order-none md:max-w-[20rem]">
-              {githubProfile && <ProfilePhoto login={githubProfile} />}
-            </div>
-            <div className="order-2 space-y-8 md:order-none">
-              <RecentActivity />
-              <GithubWeek />
-            </div>
+          <section
+            aria-label="Profile"
+            className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-6 dark:border-gray-700 dark:bg-gray-900/40 md:px-8 md:py-8"
+          >
+            {renderReady ? (
+              <Markdown
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                remarkPlugins={[remarkGfm]}
+                className="prose dark:prose-invert max-w-none prose-headings:mt-0 prose-p:my-3"
+                components={{
+                  img: MarkdownImg,
+                }}
+              >
+                {profileIntro(markdownText)}
+              </Markdown>
+            ) : (
+              <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
+                <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+              </div>
+            )}
+          </section>
+        </div>
+        <div className="mt-8 grid gap-8 md:grid-cols-2">
+          <RecentActivity />
+          <GithubWeek />
+          <div className="md:col-span-2">
+            <LatestPost post={latestPost} />
           </div>
         </div>
         {previewMode && <div className="pt-8">{previewBanner}</div>}
