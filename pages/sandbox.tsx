@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
 
@@ -10,16 +10,26 @@ interface SandboxProps {
 
 function Sandbox({ className = '' }: SandboxProps) {
   const menuRef = useRef<HTMLDetailsElement>(null);
-  const [sandbox, setSandbox] = React.useState({});
+  const openedOnLoad = useRef(false);
+  const [chosenSlug, setChosenSlug] = useState<string | null>(null);
+  const [sandbox, setSandbox] = useState({});
   const router = useRouter();
-  const slug = typeof router.query.component === 'string' ? router.query.component : undefined;
-  const itemIndex = !router.isReady
+  const querySlug = typeof router.query.component === 'string' ? router.query.component : undefined;
+  const slug = chosenSlug ?? querySlug;
+  const itemIndex = !router.isReady && !chosenSlug
     ? null
     : Math.max(0, slug ? sandboxes.findIndex((item) => item.slug === slug) : 0);
+
+  useEffect(() => {
+    if (openedOnLoad.current || !menuRef.current) return;
+    menuRef.current.open = true;
+    openedOnLoad.current = true;
+  }, []);
 
   const select = (index: number) => {
     const next = sandboxes[index]?.slug;
     if (!next) return;
+    setChosenSlug(next);
     if (menuRef.current) menuRef.current.open = false;
     router.push(`/sandbox/?component=${next}`, undefined, { shallow: true });
   };
@@ -34,7 +44,6 @@ function Sandbox({ className = '' }: SandboxProps) {
       </p>
       <details
         ref={menuRef}
-        open
         className="mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
