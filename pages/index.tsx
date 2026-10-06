@@ -11,8 +11,10 @@ import env from '../default-env';
 import HomeStats from '../components/HomeStats';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
+import GithubWeek from '../components/GithubWeek';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
+import RecentActivity from '../components/RecentActivity';
 
 interface HomepageProps {
   className?: string;
@@ -93,52 +95,46 @@ function Homepage({ className = '' }: HomepageProps) {
 
   return (
     <div className={className}>
-      <div className="flex flex-col pt-5 pb-5">
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 pb-6 pt-4">
         {previewMode && <div className="pb-4">{previewBanner}</div>}
-        <div className="relative mx-auto mb-auto flex w-full max-w-7xl flex-col flex-wrap justify-between px-4 md:flex-row">
-          <div className="visible md:hidden relative mb-6 w-full overflow-y-hidden">
-            <div className="mx-auto w-full max-w-[400px]">
-              {githubProfile && <ProfilePhoto login={githubProfile} />}
-            </div>
+        <div className="flex flex-col md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:items-center md:gap-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
+          <div className="order-1 mx-auto w-full max-w-[400px] md:max-w-none">
+            {githubProfile && <ProfilePhoto login={githubProfile} />}
+          </div>
+          <div className="order-2 md:hidden">
             <HomeStats />
             <LatestPost post={latestPost} />
           </div>
-
-          <div className="flex-1 flex-col max-w-full md:w-3/5 md:pr-7">
-            <section
-              aria-label="Profile"
-              className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40"
-            >
-              {renderReady ? (
-                <Markdown
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-                  remarkPlugins={[remarkGfm]}
-                  className="prose dark:prose-invert max-w-full"
-                  components={{
-                    img: MarkdownImg,
-                  }}
-                >
-                  {profileIntro(markdownText)}
-                </Markdown>
-              ) : (
-                <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
-                  <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
-                  <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
-                </div>
-              )}
-            </section>
-          </div>
-
-          <div className="hidden md:block relative md:w-2/5 w-full">
-            <div className="mx-auto w-full max-w-xs">
-              {githubProfile && <ProfilePhoto login={githubProfile} />}
-            </div>
-            <HomeStats />
-            <LatestPost post={latestPost} />
-          </div>
+          <section
+            aria-label="Profile"
+            className="order-3 mt-6 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 dark:border-gray-700 dark:bg-gray-900/40 md:order-2 md:mt-0 md:border-0 md:bg-transparent md:p-0 dark:md:bg-transparent"
+          >
+            {renderReady ? (
+              <Markdown
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                remarkPlugins={[remarkGfm]}
+                className="prose dark:prose-invert max-w-none"
+                components={{
+                  img: MarkdownImg,
+                }}
+              >
+                {profileIntro(markdownText)}
+              </Markdown>
+            ) : (
+              <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
+                <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+              </div>
+            )}
+          </section>
+        </div>
+        <div className="mt-6 hidden items-stretch gap-4 md:grid md:grid-cols-3">
+          <RecentActivity />
+          <GithubWeek />
+          <LatestPost post={latestPost} />
         </div>
         {previewMode && <div className="pt-4">{previewBanner}</div>}
       </div>
