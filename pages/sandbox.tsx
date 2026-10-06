@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
 
@@ -9,28 +9,19 @@ interface SandboxProps {
 }
 
 function Sandbox({ className = '' }: SandboxProps) {
-  const [itemIndex, setItemIndex] = useState<number | null>(null);
-  const [menuOpen, setMenuOpen] = useState(true);
-  const [sandbox, setSandbox] = useState({});
+  const menuRef = useRef<HTMLDetailsElement>(null);
+  const [sandbox, setSandbox] = React.useState({});
   const router = useRouter();
-
-  useEffect(() => {
-    if (!router.isReady) return;
-    const slug = router.query?.component;
-    if (typeof slug === 'string') {
-      const index = sandboxes.findIndex((item) => item.slug === slug);
-      setItemIndex(index === -1 ? 0 : index);
-      return;
-    }
-    setItemIndex(0);
-  }, [router.isReady, router.query]);
+  const slug = typeof router.query.component === 'string' ? router.query.component : undefined;
+  const itemIndex = !router.isReady
+    ? null
+    : Math.max(0, slug ? sandboxes.findIndex((item) => item.slug === slug) : 0);
 
   const select = (index: number) => {
-    const slug = sandboxes[index]?.slug;
-    if (!slug) return;
-    setItemIndex(index);
-    setMenuOpen(false);
-    router.push(`/sandbox/?component=${slug}`, undefined, { shallow: true });
+    const next = sandboxes[index]?.slug;
+    if (!next) return;
+    if (menuRef.current) menuRef.current.open = false;
+    router.push(`/sandbox/?component=${next}`, undefined, { shallow: true });
   };
 
   const Active = itemIndex == null ? null : sandboxes[itemIndex]?.component;
@@ -42,8 +33,8 @@ function Sandbox({ className = '' }: SandboxProps) {
         Small experiments. Pick one.
       </p>
       <details
-        open={menuOpen}
-        onToggle={(event) => setMenuOpen(event.currentTarget.open)}
+        ref={menuRef}
+        open
         className="mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
