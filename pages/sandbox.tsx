@@ -9,21 +9,21 @@ interface SandboxProps {
 }
 
 function Sandbox({ className = '' }: SandboxProps) {
-  const [itemIndex, setItemIndex] = useState(0);
+  const [itemIndex, setItemIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(true);
   const [sandbox, setSandbox] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query?.component) {
-      const index = sandboxes.findIndex(
-        (item) => item.slug === router.query.component,
-      );
-      if (index !== -1) {
-        setItemIndex(index);
-      }
+    if (!router.isReady) return;
+    const slug = router.query?.component;
+    if (typeof slug === 'string') {
+      const index = sandboxes.findIndex((item) => item.slug === slug);
+      setItemIndex(index === -1 ? 0 : index);
+      return;
     }
-  }, [router.query]);
+    setItemIndex(0);
+  }, [router.isReady, router.query]);
 
   const select = (index: number) => {
     const slug = sandboxes[index]?.slug;
@@ -33,9 +33,10 @@ function Sandbox({ className = '' }: SandboxProps) {
     router.push(`/sandbox/?component=${slug}`, undefined, { shallow: true });
   };
 
-  const Active = sandboxes[itemIndex]?.component;
+  const Active = itemIndex == null ? null : sandboxes[itemIndex]?.component;
+
   return (
-    <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-10 pt-4')}>
+    <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-6 pt-4')}>
       <h1 className="text-3xl font-bold tracking-tight">Sandbox</h1>
       <p className="mt-2 max-w-2xl text-gray-600 dark:text-gray-400">
         Small experiments. Pick one.
@@ -43,7 +44,7 @@ function Sandbox({ className = '' }: SandboxProps) {
       <details
         open={menuOpen}
         onToggle={(event) => setMenuOpen(event.currentTarget.open)}
-        className="mt-6 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
+        className="mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
           Choose an experiment
@@ -71,7 +72,7 @@ function Sandbox({ className = '' }: SandboxProps) {
           })}
         </div>
       </details>
-      <div className="mt-8">
+      <div className="mt-3">
         {Active ? <Active sandbox={sandbox} setSandbox={setSandbox} /> : null}
       </div>
     </div>
