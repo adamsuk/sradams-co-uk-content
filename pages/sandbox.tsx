@@ -34,8 +34,6 @@ function Sandbox({ className = '' }: SandboxProps) {
   };
 
   const Active = sandboxes[itemIndex]?.component;
-  const current = sandboxes[itemIndex];
-
   return (
     <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-10 pt-4')}>
       <h1 className="text-3xl font-bold tracking-tight">Sandbox</h1>
@@ -48,7 +46,7 @@ function Sandbox({ className = '' }: SandboxProps) {
         className="mt-6 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
-          {current ? current.title : 'Experiments'}
+          Choose an experiment
         </summary>
         <div className="flex flex-wrap gap-2 px-4 pb-3" role="tablist" aria-label="Experiments">
           {sandboxes.map((item, index) => {
