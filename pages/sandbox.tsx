@@ -8,33 +8,40 @@ interface SandboxProps {
   className?: string;
 }
 
+function slugFromLocation() {
+  if (typeof window === 'undefined') return undefined;
+  return new URLSearchParams(window.location.search).get('component') || undefined;
+}
+
 function Sandbox({ className = '' }: SandboxProps) {
   const menuRef = useRef<HTMLDetailsElement>(null);
-  const openedOnLoad = useRef(false);
-  const [chosenSlug, setChosenSlug] = useState<string | null>(null);
+  const [chosenSlug, setChosenSlug] = useState<string | undefined>(slugFromLocation);
   const [sandbox, setSandbox] = useState({});
   const router = useRouter();
   const querySlug = typeof router.query.component === 'string' ? router.query.component : undefined;
-  const slug = chosenSlug ?? querySlug;
-  const itemIndex = !router.isReady && !chosenSlug
-    ? null
-    : Math.max(0, slug ? sandboxes.findIndex((item) => item.slug === slug) : 0);
+  const slug = chosenSlug ?? querySlug ?? slugFromLocation();
+  const itemIndex = slug
+    ? Math.max(0, sandboxes.findIndex((item) => item.slug === slug))
+    : 0;
 
   useEffect(() => {
-    if (openedOnLoad.current || !menuRef.current) return;
-    menuRef.current.open = true;
-    openedOnLoad.current = true;
+    const menu = menuRef.current;
+    if (!menu || window.sessionStorage.getItem('sandbox-menu-opened')) return;
+    menu.open = true;
+    window.sessionStorage.setItem('sandbox-menu-opened', '1');
   }, []);
 
   const select = (index: number) => {
     const next = sandboxes[index]?.slug;
     if (!next) return;
+    const href = `/sandbox/?component=${next}`;
     setChosenSlug(next);
+    window.history.replaceState(window.history.state, '', href);
     if (menuRef.current) menuRef.current.open = false;
-    router.push(`/sandbox/?component=${next}`, undefined, { shallow: true });
+    router.replace(href, undefined, { shallow: true });
   };
 
-  const Active = itemIndex == null ? null : sandboxes[itemIndex]?.component;
+  const Active = sandboxes[itemIndex]?.component;
 
   return (
     <div className={cn(className, 'mx-auto w-full max-w-5xl px-4 pb-6 pt-4')}>
