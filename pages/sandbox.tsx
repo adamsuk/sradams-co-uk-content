@@ -16,6 +16,7 @@ function slugFromLocation() {
 function Sandbox({ className = '' }: SandboxProps) {
   const menuRef = useRef<HTMLDetailsElement>(null);
   const [chosenSlug, setChosenSlug] = useState<string | undefined>(slugFromLocation);
+  const [highlighted, setHighlighted] = useState<string | null>(null);
   const [sandbox, setSandbox] = useState({});
   const router = useRouter();
   const querySlug = typeof router.query.component === 'string' ? router.query.component : undefined;
@@ -29,12 +30,14 @@ function Sandbox({ className = '' }: SandboxProps) {
     if (!menu || window.sessionStorage.getItem('sandbox-menu-opened')) return;
     menu.open = true;
     window.sessionStorage.setItem('sandbox-menu-opened', '1');
+    setHighlighted(slugFromLocation() || sandboxes[0].slug);
   }, []);
 
   const select = (index: number) => {
     const next = sandboxes[index]?.slug;
     if (!next) return;
     const href = `/sandbox/?component=${next}`;
+    setHighlighted(null);
     setChosenSlug(next);
     window.history.replaceState(window.history.state, '', href);
     if (menuRef.current) menuRef.current.open = false;
@@ -51,6 +54,9 @@ function Sandbox({ className = '' }: SandboxProps) {
       </p>
       <details
         ref={menuRef}
+        onToggle={(event) => {
+          setHighlighted(event.currentTarget.open ? (slugFromLocation() || sandboxes[0].slug) : null);
+        }}
         className="mt-3 rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"
       >
         <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
@@ -58,7 +64,7 @@ function Sandbox({ className = '' }: SandboxProps) {
         </summary>
         <div className="flex flex-wrap gap-2 px-4 pb-3" role="tablist" aria-label="Experiments">
           {sandboxes.map((item, index) => {
-            const selected = index === itemIndex;
+            const selected = highlighted === item.slug;
             return (
               <button
                 key={item.slug}
@@ -80,7 +86,7 @@ function Sandbox({ className = '' }: SandboxProps) {
         </div>
       </details>
       <div className="mt-3">
-        {Active ? <Active sandbox={sandbox} setSandbox={setSandbox} /> : null}
+        {Active ? <Active key={sandboxes[itemIndex].slug} sandbox={sandbox} setSandbox={setSandbox} /> : null}
       </div>
     </div>
   );
