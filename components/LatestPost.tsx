@@ -7,7 +7,7 @@ import { normalizeBlogSlug } from '../helpers/blogPosts';
 import { BlogPost } from '../models/blogPosts';
 
 const WORDS_PER_MINUTE = 200;
-const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/40 md:p-8';
+const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
 
 export function newestPost(posts: BlogPost[]): BlogPost | null {
   const published = posts.filter((post) => (
@@ -73,7 +73,7 @@ function LatestPost({ post }: { post: BlogPost | null | undefined }) {
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`${shell} text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md`}
+      className={`${shell} shadow-sm transition hover:-translate-y-0.5 hover:shadow-md`}
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
         Latest post

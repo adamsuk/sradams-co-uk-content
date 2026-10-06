@@ -94,22 +94,22 @@ function Homepage({ className = '' }: HomepageProps) {
 
   return (
     <div className={className}>
-      <div className="mx-auto w-full max-w-5xl px-5 pb-12 pt-8 md:px-10 md:pb-16 md:pt-14">
-        {previewMode && <div className="pb-8">{previewBanner}</div>}
-        <div className="flex flex-col gap-8 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-16">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
+        {previewMode && <div>{previewBanner}</div>}
+        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-10">
           <div className="mx-auto w-full max-w-[16rem]">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
           <section
             aria-label="Profile"
-            className="rounded-2xl border border-gray-200 bg-gray-50 px-6 py-6 dark:border-gray-700 dark:bg-gray-900/40 md:px-8 md:py-8"
+            className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
           >
             {renderReady ? (
               <Markdown
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
                 remarkPlugins={[remarkGfm]}
-                className="prose dark:prose-invert max-w-none prose-headings:mt-0 prose-p:my-3"
+                className="prose dark:prose-invert max-w-none prose-headings:mb-2 prose-headings:mt-0 prose-p:my-2 prose-ul:my-2"
                 components={{
                   img: MarkdownImg,
                 }}
@@ -126,14 +126,14 @@ function Homepage({ className = '' }: HomepageProps) {
             )}
           </section>
         </div>
-        <div className="mt-8 grid items-start gap-8 md:grid-cols-2">
+        <div className="grid items-start gap-6 md:grid-cols-2">
           <RecentActivity />
           <GithubWeek />
           <div className="md:col-span-2">
             <LatestPost post={latestPost} />
           </div>
         </div>
-        {previewMode && <div className="pt-8">{previewBanner}</div>}
+        {previewMode && <div>{previewBanner}</div>}
       </div>
     </div>
   );
