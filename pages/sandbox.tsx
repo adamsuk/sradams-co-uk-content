@@ -38,7 +38,7 @@ function Sandbox({ className = '' }: SandboxProps) {
     setChosenSlug(next);
     window.history.replaceState(window.history.state, '', href);
     if (menuRef.current) menuRef.current.open = false;
-    router.replace(href, undefined, { shallow: true });
+    router.push(href, undefined, { shallow: true });
   };
 
   const Active = sandboxes[itemIndex]?.component;
