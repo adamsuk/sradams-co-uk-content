@@ -62,7 +62,7 @@ export function accountsFromFeed(body: unknown): AccountStats[] | null {
   return accounts.length > 0 ? accounts : null;
 }
 
-function GithubWeek() {
+function GithubWeek({ plain = false }: { plain?: boolean }) {
   const [accounts, setAccounts] = useState<AccountStats[] | null>(null);
 
   useEffect(() => {
@@ -84,7 +84,9 @@ function GithubWeek() {
 
   return (
     <section
-      className="w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100"
+      className={plain
+        ? 'w-full text-left text-gray-800 dark:text-gray-100'
+        : 'w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100'}
       aria-label="GitHub last 7 days"
     >
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">

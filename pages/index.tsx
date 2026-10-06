@@ -100,7 +100,7 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="mx-auto w-full max-w-[16rem]">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <details className="group rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40 md:hidden">
+          <details className="group md:hidden">
             <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
               <svg
                 aria-hidden="true"
@@ -118,9 +118,9 @@ function Homepage({ className = '' }: HomepageProps) {
               </svg>
               {'This week\'s metrics'}
             </summary>
-            <div className="mt-6 grid gap-6">
-              <RecentActivity />
-              <GithubWeek />
+            <div className="mt-4 space-y-4">
+              <RecentActivity plain />
+              <GithubWeek plain />
             </div>
           </details>
           <section
