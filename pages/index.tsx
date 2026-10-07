@@ -100,7 +100,7 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="mx-auto w-full max-w-[16rem]">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <details className="group md:hidden">
+          <details className="group">
             <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
               <svg
                 aria-hidden="true"
@@ -149,17 +149,7 @@ function Homepage({ className = '' }: HomepageProps) {
             )}
           </section>
         </div>
-        <div className="grid items-start gap-6 md:grid-cols-2">
-          <div className="hidden md:block">
-            <RecentActivity />
-          </div>
-          <div className="hidden md:block">
-            <GithubWeek />
-          </div>
-          <div className="md:col-span-2">
-            <LatestPost post={latestPost} />
-          </div>
-        </div>
+        <LatestPost post={latestPost} />
         {previewMode && <div>{previewBanner}</div>}
       </div>
     </div>
