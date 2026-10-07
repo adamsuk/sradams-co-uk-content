@@ -113,10 +113,11 @@ function Homepage({ className = '' }: HomepageProps) {
     <div className={className}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
-        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-10">
-          <div className="mx-auto w-full max-w-[16rem]">
+        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-10">
+          <div className="mx-auto w-full max-w-[16rem] lg:landscape:mx-0">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
+          <div className="flex min-w-0 flex-col gap-6">
           <details className="group">
             <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
               <svg
@@ -165,6 +166,7 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             )}
           </section>
+          </div>
         </div>
         <LatestPost post={latestPost} />
         {previewMode && <div>{previewBanner}</div>}
