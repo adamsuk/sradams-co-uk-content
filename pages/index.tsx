@@ -140,6 +140,7 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             </details>
           </div>
+          <div className="flex min-w-0 flex-col gap-4">
           <section
             aria-label="Profile"
             className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
@@ -165,8 +166,9 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             )}
           </section>
+            <LatestPost post={latestPost} />
+          </div>
         </div>
-        <LatestPost post={latestPost} />
         {previewMode && <div>{previewBanner}</div>}
       </div>
     </div>
