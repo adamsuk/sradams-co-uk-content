@@ -45,10 +45,14 @@ describe("Sandbox page", () => {
 
   it("renders the experiment switcher", () => {
     render(<Sandbox />);
-    expect(screen.getByRole("option", { name: "Podcast Player" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Pico8 Game" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Dynamic Quiz" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Calculator" })).toBeInTheDocument();
+    const select = screen.getByLabelText("Experiment") as HTMLSelectElement;
+    const names = Array.from(select.options).map((option) => option.text);
+    expect(names).toEqual(expect.arrayContaining([
+      "Podcast Player",
+      "Pico8 Game",
+      "Dynamic Quiz",
+      "Calculator",
+    ]));
   });
 
   it("renders the first sandbox item (Podcast Player) by default", async () => {
