@@ -33,7 +33,10 @@ function Sandbox({ className = '' }: SandboxProps) {
         Experiment
         <select
           id="experiment"
-          className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
+          className={[
+            'mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2',
+            'dark:border-gray-700 dark:bg-gray-900',
+          ].join(' ')}
           value={current.slug}
           onChange={(event) => select(event.target.value)}
         >
