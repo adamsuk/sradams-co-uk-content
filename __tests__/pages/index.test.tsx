@@ -59,18 +59,18 @@ describe('Homepage', () => {
     capturedComponents = undefined;
   });
 
-  it('keeps this week behind an accordion until it is opened', () => {
+  it('keeps this week behind an accordion until it is opened', async () => {
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
-    const summary = screen.getByText('This week\'s metrics');
+    const summary = await screen.findByText('This week\'s metrics');
     expect(summary.closest('details')).not.toHaveAttribute('open');
   });
 
-  it('shows the page shell while the profile text is still loading', () => {
+  it('shows the pacman loader while the profile is still loading', () => {
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
-    expect(screen.getByTestId('intro-skeleton')).toBeInTheDocument();
-    expect(screen.queryByTestId('pacman-loader')).not.toBeInTheDocument();
+    expect(screen.getByTestId('pacman-loader')).toBeInTheDocument();
+    expect(screen.queryByTestId('intro-skeleton')).not.toBeInTheDocument();
   });
 
   it('keeps the introduction and drops the badge catalogues', () => {

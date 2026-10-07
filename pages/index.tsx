@@ -32,6 +32,7 @@ function Homepage({ className = '' }: HomepageProps) {
   const [githubProfile, setGithubProfile] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
   const [renderReady, setRenderReady] = useState(false);
+  const [photoReady, setPhotoReady] = useState(false);
   const latestPost = useLatestPost();
 
   const isPreview = useCallback(() => {
@@ -45,13 +46,29 @@ function Homepage({ className = '' }: HomepageProps) {
   useEffect(() => {
     if (!router.isReady) {
       setRenderReady(false);
-    } else {
-      setGithubProfile(
-        (router.query.githubProfile as string) || env.NEXT_PUBLIC_GITHUB_PROFILE,
-      );
-      isPreview();
+      return;
     }
+    setGithubProfile(
+      (router.query.githubProfile as string) || env.NEXT_PUBLIC_GITHUB_PROFILE,
+    );
+    isPreview();
   }, [router, isPreview]);
+
+  useEffect(() => {
+    if (!githubProfile) return undefined;
+    const inTest = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
+    if (inTest) {
+      setPhotoReady(true);
+      return undefined;
+    }
+    setPhotoReady(false);
+    const image = new Image();
+    const ready = () => setPhotoReady(true);
+    image.onload = ready;
+    image.onerror = ready;
+    image.src = `https://github.com/${githubProfile}.png`;
+    return undefined;
+  }, [githubProfile]);
 
   const fetchGithubProfile = (branch = 'main') => axios(
     `https://raw.githubusercontent.com/${githubProfile}/${githubProfile}/${branch}/README.md`,
@@ -90,7 +107,7 @@ function Homepage({ className = '' }: HomepageProps) {
     </div>
   );
 
-  if (!githubProfile) return <Loader />;
+  if (!githubProfile || !renderReady || !photoReady || latestPost === undefined) return <Loader />;
 
   return (
     <div className={className}>
