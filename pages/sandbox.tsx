@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
 
@@ -16,16 +16,23 @@ function slugFromLocation() {
 function Sandbox({ className = '' }: SandboxProps) {
   const router = useRouter();
   const [sandbox, setSandbox] = useState({});
+  const [checked, setChecked] = useState(false);
+  const [locationSlug, setLocationSlug] = useState<string | undefined>();
   const querySlug = typeof router.query.component === 'string'
     ? router.query.component
     : undefined;
-  const slug = querySlug || (
-    typeof window === 'undefined' ? undefined : (slugFromLocation() || sandboxes[0].slug)
-  );
+
+  useEffect(() => {
+    setLocationSlug(slugFromLocation());
+    setChecked(true);
+  }, []);
+
+  const slug = querySlug || (checked ? (locationSlug || sandboxes[0].slug) : undefined);
   const current = sandboxes.find((item) => item.slug === slug);
   const Active = current?.component;
 
   const select = (next: string) => {
+    setLocationSlug(next);
     router.push(`/sandbox/?component=${next}`, undefined, { shallow: true });
   };
 
@@ -43,15 +50,16 @@ function Sandbox({ className = '' }: SandboxProps) {
             'mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2',
             'dark:border-gray-700 dark:bg-gray-900',
           ].join(' ')}
-          value={current?.slug || sandboxes[0].slug}
+          value={slug || ''}
           onChange={(event) => select(event.target.value)}
         >
+          <option value="" disabled>Choose an experiment</option>
           {sandboxes.map((item) => (
             <option key={item.slug} value={item.slug}>{item.title}</option>
           ))}
         </select>
       </label>
-      {current ? (
+      {current && Active ? (
         <div className="mt-4">
           <Active key={current.slug} sandbox={sandbox} setSandbox={setSandbox} />
         </div>
