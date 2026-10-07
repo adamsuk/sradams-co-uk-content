@@ -41,7 +41,7 @@ function Sandbox({ className = '' }: SandboxProps) {
           onChange={(event) => select(event.target.value)}
         >
           {sandboxes.map((item) => (
-            <option key={item.slug} value={item.slug}>{item.name}</option>
+            <option key={item.slug} value={item.slug}>{item.title}</option>
           ))}
         </select>
       </label>
