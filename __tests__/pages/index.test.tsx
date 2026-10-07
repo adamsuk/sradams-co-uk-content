@@ -59,10 +59,10 @@ describe('Homepage', () => {
     capturedComponents = undefined;
   });
 
-  it('keeps this week behind an accordion until it is opened', () => {
+  it('keeps this week behind an accordion until it is opened', async () => {
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
-    const summary = screen.getByText('This week\'s metrics');
+    const summary = await screen.findByText('This week\'s metrics');
     expect(summary.closest('details')).not.toHaveAttribute('open');
   });
 
