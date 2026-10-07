@@ -45,11 +45,10 @@ describe("Sandbox page", () => {
 
   it("renders the experiment switcher", () => {
     render(<Sandbox />);
-    const select = screen.getByLabelText("Experiment");
-    expect(select).toHaveTextContent("Podcast Player");
-    expect(select).toHaveTextContent("Pico8 Game");
-    expect(select).toHaveTextContent("Dynamic Quiz");
-    expect(select).toHaveTextContent("Calculator");
+    expect(screen.getByRole("option", { name: "Podcast Player" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Pico8 Game" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Dynamic Quiz" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Calculator" })).toBeInTheDocument();
   });
 
   it("renders the first sandbox item (Podcast Player) by default", async () => {
