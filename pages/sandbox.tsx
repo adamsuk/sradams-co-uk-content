@@ -19,9 +19,11 @@ function Sandbox({ className = '' }: SandboxProps) {
   const querySlug = typeof router.query.component === 'string'
     ? router.query.component
     : undefined;
-  const slug = querySlug || slugFromLocation();
-  const current = sandboxes.find((item) => item.slug === slug) || sandboxes[0];
-  const Active = current.component;
+  const slug = querySlug || (
+    typeof window === 'undefined' ? undefined : (slugFromLocation() || sandboxes[0].slug)
+  );
+  const current = sandboxes.find((item) => item.slug === slug);
+  const Active = current?.component;
 
   const select = (next: string) => {
     router.push(`/sandbox/?component=${next}`, undefined, { shallow: true });
@@ -41,7 +43,7 @@ function Sandbox({ className = '' }: SandboxProps) {
             'mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2',
             'dark:border-gray-700 dark:bg-gray-900',
           ].join(' ')}
-          value={current.slug}
+          value={current?.slug || sandboxes[0].slug}
           onChange={(event) => select(event.target.value)}
         >
           {sandboxes.map((item) => (
@@ -49,7 +51,7 @@ function Sandbox({ className = '' }: SandboxProps) {
           ))}
         </select>
       </label>
-      {slug ? (
+      {current ? (
         <div className="mt-4">
           <Active key={current.slug} sandbox={sandbox} setSandbox={setSandbox} />
         </div>
