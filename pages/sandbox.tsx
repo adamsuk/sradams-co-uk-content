@@ -8,15 +8,19 @@ interface SandboxProps {
   className?: string;
 }
 
+function slugFromLocation() {
+  if (typeof window === 'undefined') return undefined;
+  return new URLSearchParams(window.location.search).get('component') || undefined;
+}
+
 function Sandbox({ className = '' }: SandboxProps) {
   const router = useRouter();
   const [sandbox, setSandbox] = useState({});
-  const slug = typeof router.query.component === 'string'
+  const querySlug = typeof router.query.component === 'string'
     ? router.query.component
     : undefined;
-  const found = sandboxes.findIndex((item) => item.slug === slug);
-  const itemIndex = found >= 0 ? found : 0;
-  const current = sandboxes[itemIndex];
+  const slug = querySlug || slugFromLocation();
+  const current = sandboxes.find((item) => item.slug === slug) || sandboxes[0];
   const Active = current.component;
 
   const select = (next: string) => {
@@ -45,9 +49,11 @@ function Sandbox({ className = '' }: SandboxProps) {
           ))}
         </select>
       </label>
-      <div className="mt-4">
-        <Active key={current.slug} sandbox={sandbox} setSandbox={setSandbox} />
-      </div>
+      {slug ? (
+        <div className="mt-4">
+          <Active key={current.slug} sandbox={sandbox} setSandbox={setSandbox} />
+        </div>
+      ) : null}
     </div>
   );
 }
