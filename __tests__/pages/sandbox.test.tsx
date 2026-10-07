@@ -45,10 +45,11 @@ describe("Sandbox page", () => {
 
   it("renders the experiment switcher", () => {
     render(<Sandbox />);
-    expect(screen.getByText("Podcast Player")).toBeInTheDocument();
-    expect(screen.getByText("Pico8 Game")).toBeInTheDocument();
-    expect(screen.getByText("Dynamic Quiz")).toBeInTheDocument();
-    expect(screen.getByText("Calculator")).toBeInTheDocument();
+    const select = screen.getByLabelText("Experiment");
+    expect(select).toHaveTextContent("Podcast Player");
+    expect(select).toHaveTextContent("Pico8 Game");
+    expect(select).toHaveTextContent("Dynamic Quiz");
+    expect(select).toHaveTextContent("Calculator");
   });
 
   it("renders the first sandbox item (Podcast Player) by default", async () => {
@@ -67,7 +68,7 @@ describe("Sandbox page", () => {
 
   it("calls router.push with the slug when an experiment is chosen", () => {
     render(<Sandbox />);
-    fireEvent.click(screen.getByRole("tab", { name: "Calculator" }));
+    fireEvent.change(screen.getByLabelText("Experiment"), { target: { value: "calculator" } });
     expect(mockPush).toHaveBeenCalledWith(
       "/sandbox/?component=calculator",
       undefined,
