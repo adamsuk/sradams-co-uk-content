@@ -142,7 +142,9 @@ function Homepage({ className = '' }: HomepageProps) {
                 aria-label="Show this week's metrics"
                 onClick={() => setMetricsOpen((open) => !open)}
               >
-                <span className="block transition-transform duration-200 group-hover/photo:-rotate-2">
+                <span
+                  className="block transition-transform duration-200 group-hover/photo:-rotate-2"
+                >
                   {githubProfile && <ProfilePhoto login={githubProfile} />}
                 </span>
                 <span
