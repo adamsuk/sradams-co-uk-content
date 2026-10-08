@@ -144,7 +144,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 {githubProfile && <ProfilePhoto login={githubProfile} />}
                 <span className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
                   <span aria-hidden="true">{metricsOpen ? '▾' : '›'}</span>
-                  This week's metrics
+                  {'This week\'s metrics'}
                 </span>
               </button>
             ) : githubProfile && <ProfilePhoto login={githubProfile} />}
