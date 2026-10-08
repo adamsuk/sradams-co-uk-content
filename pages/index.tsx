@@ -113,12 +113,14 @@ function Homepage({ className = '' }: HomepageProps) {
     <div className={className}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
-        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-10">
-          <div className="mx-auto w-full max-w-[16rem]">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+          <div className="mx-auto w-full max-w-[16rem] sm:mx-0 sm:w-64 sm:shrink-0">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <details className="group">
-            <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
+          <details className="group relative min-w-[12rem] flex-1">
+            <summary
+              className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden"
+            >
               <svg
                 aria-hidden="true"
                 viewBox="0 0 20 20"
@@ -135,37 +137,39 @@ function Homepage({ className = '' }: HomepageProps) {
               </svg>
               {'This week\'s metrics'}
             </summary>
-            <div className="mt-4 space-y-4">
+            <div
+              className="absolute left-0 right-0 top-full z-10 mt-2 max-h-80 space-y-4 overflow-auto bg-white dark:bg-gray-950"
+            >
               <RecentActivity plain />
               <GithubWeek plain />
             </div>
           </details>
-          <section
-            aria-label="Profile"
-            className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
-          >
-            {renderReady ? (
-              <Markdown
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-                remarkPlugins={[remarkGfm]}
-                className="prose dark:prose-invert max-w-none prose-headings:mb-2 prose-headings:mt-0 prose-p:my-2 prose-ul:my-2"
-                components={{
-                  img: MarkdownImg,
-                }}
-              >
-                {profileIntro(markdownText)}
-              </Markdown>
-            ) : (
-              <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
-                <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
-              </div>
-            )}
-          </section>
         </div>
+        <section
+          aria-label="Profile"
+          className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
+        >
+          {renderReady ? (
+            <Markdown
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+              remarkPlugins={[remarkGfm]}
+              className="prose dark:prose-invert max-w-none prose-headings:mb-2 prose-headings:mt-0 prose-p:my-2 prose-ul:my-2"
+              components={{
+                img: MarkdownImg,
+              }}
+            >
+              {profileIntro(markdownText)}
+            </Markdown>
+          ) : (
+            <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
+              <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+            </div>
+          )}
+        </section>
         <LatestPost post={latestPost} />
         {previewMode && <div>{previewBanner}</div>}
       </div>
