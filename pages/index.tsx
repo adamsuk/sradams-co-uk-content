@@ -110,13 +110,20 @@ function Homepage({ className = '' }: HomepageProps) {
   );
 
   const metricsRow = useRef<HTMLDivElement>(null);
-  const metrics = useRef<HTMLDetailsElement>(null);
+  const [metricsWide, setMetricsWide] = useState(false);
+  const [metricsOpen, setMetricsOpen] = useState(false);
 
   useEffect(() => {
     const row = metricsRow.current;
-    const panel = metrics.current;
-    if (!row || !panel) return;
-    panel.open = row.clientWidth >= 544;
+    if (!row) return undefined;
+    const measure = () => {
+      const wide = row.clientWidth >= 544;
+      setMetricsWide(wide);
+      if (!wide) setMetricsOpen(false);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
   }, []);
 
   if (!githubProfile || !renderReady || !photoReady || latestPost === undefined) return <Loader />;
@@ -127,36 +134,57 @@ function Homepage({ className = '' }: HomepageProps) {
         {previewMode && <div>{previewBanner}</div>}
         <div ref={metricsRow} className="flex flex-wrap items-center gap-x-8 gap-y-4">
           <div className="mx-auto w-full max-w-[16rem] sm:mx-0 sm:w-64 sm:shrink-0">
-            {githubProfile && <ProfilePhoto login={githubProfile} />}
-          </div>
-          <details ref={metrics} className="group min-w-[16rem] flex-1">
-            <summary
-              className={[
-                'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
-                'marker:hidden [&::-webkit-details-marker]:hidden',
-              ].join(' ')}
-            >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+            {metricsWide ? (
+              <button
+                type="button"
+                className="w-full text-left"
+                aria-expanded={metricsOpen}
+                onClick={() => setMetricsOpen((open) => !open)}
               >
-                <path
-                  d="M7 5l6 5-6 5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {'This week\'s metrics'}
-            </summary>
-            <div className="mt-4 space-y-4">
+                {githubProfile && <ProfilePhoto login={githubProfile} />}
+                <span className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
+                  <span aria-hidden="true">{metricsOpen ? '▾' : '›'}</span>
+                  This week's metrics
+                </span>
+              </button>
+            ) : githubProfile && <ProfilePhoto login={githubProfile} />}
+          </div>
+          {metricsWide && metricsOpen ? (
+            <div className="min-w-[16rem] flex-1 space-y-4">
               <RecentActivity plain />
               <GithubWeek plain />
             </div>
-          </details>
+          ) : null}
+          {!metricsWide ? (
+            <details className="group min-w-[16rem] flex-1">
+              <summary
+                className={[
+                  'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
+                  'marker:hidden [&::-webkit-details-marker]:hidden',
+                ].join(' ')}
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+                >
+                  <path
+                    d="M7 5l6 5-6 5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {'This week\'s metrics'}
+              </summary>
+              <div className="mt-4 space-y-4">
+                <RecentActivity plain />
+                <GithubWeek plain />
+              </div>
+            </details>
+          ) : null}
         </div>
         <section
           aria-label="Profile"
