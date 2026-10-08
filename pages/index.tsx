@@ -119,7 +119,10 @@ function Homepage({ className = '' }: HomepageProps) {
           </div>
           <details className="group relative min-w-[12rem] flex-1">
             <summary
-              className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden"
+              className={[
+                'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
+                'marker:hidden [&::-webkit-details-marker]:hidden',
+              ].join(' ')}
             >
               <svg
                 aria-hidden="true"
@@ -138,7 +141,10 @@ function Homepage({ className = '' }: HomepageProps) {
               {'This week\'s metrics'}
             </summary>
             <div
-              className="absolute left-0 right-0 top-full z-10 mt-2 max-h-80 space-y-4 overflow-auto bg-white dark:bg-gray-950"
+              className={[
+                'absolute left-0 right-0 top-full z-10 mt-2 max-h-80 space-y-4 overflow-auto',
+                'bg-white dark:bg-gray-950',
+              ].join(' ')}
             >
               <RecentActivity plain />
               <GithubWeek plain />
