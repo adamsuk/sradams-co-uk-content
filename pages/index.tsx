@@ -137,14 +137,24 @@ function Homepage({ className = '' }: HomepageProps) {
             {metricsWide ? (
               <button
                 type="button"
-                className="w-full text-left"
+                className="group/photo relative w-full text-left"
                 aria-expanded={metricsOpen}
+                aria-label="Show this week's metrics"
                 onClick={() => setMetricsOpen((open) => !open)}
               >
-                {githubProfile && <ProfilePhoto login={githubProfile} />}
-                <span className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
-                  <span aria-hidden="true">{metricsOpen ? '▾' : '›'}</span>
-                  {'This week\'s metrics'}
+                <span className="block transition-transform duration-200 group-hover/photo:-rotate-2">
+                  {githubProfile && <ProfilePhoto login={githubProfile} />}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={[
+                    'absolute right-1 top-8 flex h-11 w-11 items-center justify-center',
+                    'rounded-full border-2 border-gray-900 bg-white text-lg shadow-sm',
+                    'transition-transform group-hover/photo:translate-x-1',
+                    'dark:border-white dark:bg-gray-950',
+                  ].join(' ')}
+                >
+                  {metricsOpen ? '×' : '→'}
                 </span>
               </button>
             ) : githubProfile && <ProfilePhoto login={githubProfile} />}
