@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import axios from 'axios';
@@ -107,17 +107,27 @@ function Homepage({ className = '' }: HomepageProps) {
     </div>
   );
 
+  const metricsRow = useRef<HTMLDivElement>(null);
+  const metrics = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const row = metricsRow.current;
+    const panel = metrics.current;
+    if (!row || !panel) return;
+    panel.open = row.clientWidth >= 544;
+  }, []);
+
   if (!githubProfile || !renderReady || !photoReady || latestPost === undefined) return <Loader />;
 
   return (
     <div className={className}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <div ref={metricsRow} className="flex flex-wrap items-center gap-x-8 gap-y-4">
           <div className="mx-auto w-full max-w-[16rem] sm:mx-0 sm:w-64 sm:shrink-0">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <details className="group min-w-[16rem] flex-1">
+          <details ref={metrics} className="group min-w-[16rem] flex-1">
             <summary
               className={[
                 'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
