@@ -117,7 +117,7 @@ function Homepage({ className = '' }: HomepageProps) {
           <div className="mx-auto w-full max-w-[16rem] sm:mx-0 sm:w-64 sm:shrink-0">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
           </div>
-          <details className="group relative min-w-[12rem] flex-1">
+          <details className="group min-w-[16rem] flex-1">
             <summary
               className={[
                 'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
@@ -140,12 +140,7 @@ function Homepage({ className = '' }: HomepageProps) {
               </svg>
               {'This week\'s metrics'}
             </summary>
-            <div
-              className={[
-                'absolute left-0 right-0 top-full z-10 mt-2 max-h-80 space-y-4 overflow-auto',
-                'bg-white dark:bg-gray-950',
-              ].join(' ')}
-            >
+            <div className="mt-4 space-y-4">
               <RecentActivity plain />
               <GithubWeek plain />
             </div>
