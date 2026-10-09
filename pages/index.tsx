@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback,
+} from 'react';
 import { useRouter } from 'next/router';
 
 import axios from 'axios';
@@ -107,38 +109,101 @@ function Homepage({ className = '' }: HomepageProps) {
     </div>
   );
 
+  const [metricsWide, setMetricsWide] = useState(false);
+  const [metricsOpen, setMetricsOpen] = useState(false);
+
+  const pageReady = Boolean(githubProfile)
+    && renderReady
+    && photoReady
+    && latestPost !== undefined;
+
+  useEffect(() => {
+    if (!pageReady || typeof window.matchMedia !== 'function') return undefined;
+    const query = window.matchMedia('(min-width: 1024px) and (orientation: landscape)');
+    const apply = () => {
+      setMetricsWide(query.matches);
+      if (!query.matches) setMetricsOpen(false);
+    };
+    apply();
+    query.addEventListener('change', apply);
+    return () => query.removeEventListener('change', apply);
+  }, [pageReady]);
+
   if (!githubProfile || !renderReady || !photoReady || latestPost === undefined) return <Loader />;
 
   return (
     <div className={className}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
-        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
+        <div
+          className={[
+            'flex flex-col gap-6 lg:landscape:grid lg:landscape:items-start lg:landscape:gap-x-4',
+            'lg:landscape:grid-cols-[16rem_minmax(0,1fr)]',
+          ].join(' ')}
+        >
           <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 lg:landscape:mx-0">
-            {githubProfile && <ProfilePhoto login={githubProfile} />}
-            <details className="group">
-              <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 20 20"
-                  className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+            {metricsWide ? (
+              <button
+                type="button"
+                className="group/photo relative w-full text-left"
+                aria-expanded={metricsOpen}
+                aria-label="Show this week's metrics"
+                onClick={() => setMetricsOpen((open) => !open)}
+              >
+                <span
+                  className="block transition-transform duration-200 group-hover/photo:-rotate-2"
                 >
-                  <path
-                    d="M7 5l6 5-6 5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {'This week\'s metrics'}
-              </summary>
-              <div className="mt-4 space-y-4">
+                  {githubProfile && <ProfilePhoto login={githubProfile} />}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={[
+                    'absolute right-1 top-8 flex h-11 w-11 items-center justify-center',
+                    'rounded-full border-2 border-gray-900 bg-white text-lg shadow-sm',
+                    'transition-transform group-hover/photo:translate-x-1',
+                    'dark:border-white dark:bg-gray-950',
+                  ].join(' ')}
+                >
+                  {metricsOpen ? '×' : '→'}
+                </span>
+              </button>
+            ) : githubProfile && <ProfilePhoto login={githubProfile} />}
+            {metricsWide && metricsOpen ? (
+              <div className="space-y-4">
                 <RecentActivity plain />
                 <GithubWeek plain />
               </div>
-            </details>
+            ) : null}
+            {!metricsWide ? (
+              <details className="group">
+                <summary
+                  className={[
+                    'flex cursor-pointer list-none items-center gap-2 text-sm font-medium',
+                    'marker:hidden [&::-webkit-details-marker]:hidden',
+                  ].join(' ')}
+                >
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 20 20"
+                    className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+                  >
+                    <path
+                      d="M7 5l6 5-6 5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {'This week\'s metrics'}
+                </summary>
+                <div className="mt-4 space-y-4">
+                  <RecentActivity plain />
+                  <GithubWeek plain />
+                </div>
+              </details>
+            ) : null}
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section
