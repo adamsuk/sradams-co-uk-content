@@ -113,60 +113,62 @@ function Homepage({ className = '' }: HomepageProps) {
     <div className={className}>
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
-        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-center lg:landscape:gap-x-10">
-          <div className="mx-auto w-full max-w-[16rem]">
+        <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
+          <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 lg:landscape:mx-0">
             {githubProfile && <ProfilePhoto login={githubProfile} />}
-          </div>
-          <details className="group">
-            <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
-              >
-                <path
-                  d="M7 5l6 5-6 5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {'This week\'s metrics'}
-            </summary>
-            <div className="mt-4 space-y-4">
-              <RecentActivity plain />
-              <GithubWeek plain />
-            </div>
-          </details>
-          <section
-            aria-label="Profile"
-            className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
-          >
-            {renderReady ? (
-              <Markdown
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
-                remarkPlugins={[remarkGfm]}
-                className="prose dark:prose-invert max-w-none prose-headings:mb-2 prose-headings:mt-0 prose-p:my-2 prose-ul:my-2"
-                components={{
-                  img: MarkdownImg,
-                }}
-              >
-                {profileIntro(markdownText)}
-              </Markdown>
-            ) : (
-              <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
-                <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
-                <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+            <details className="group">
+              <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
+                >
+                  <path
+                    d="M7 5l6 5-6 5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {'This week\'s metrics'}
+              </summary>
+              <div className="mt-4 space-y-4">
+                <RecentActivity plain />
+                <GithubWeek plain />
               </div>
-            )}
-          </section>
+            </details>
+          </div>
+          <div className="flex min-w-0 flex-col gap-4">
+            <section
+              aria-label="Profile"
+              className="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40"
+            >
+              {renderReady ? (
+                <Markdown
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                  remarkPlugins={[remarkGfm]}
+                  className="prose dark:prose-invert max-w-none prose-headings:mb-2 prose-headings:mt-0 prose-p:my-2 prose-ul:my-2"
+                  components={{
+                    img: MarkdownImg,
+                  }}
+                >
+                  {profileIntro(markdownText)}
+                </Markdown>
+              ) : (
+                <div className="animate-pulse space-y-3" data-testid="intro-skeleton" aria-hidden="true">
+                  <div className="h-8 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-11/12 rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+                </div>
+              )}
+            </section>
+            <LatestPost post={latestPost} />
+          </div>
         </div>
-        <LatestPost post={latestPost} />
         {previewMode && <div>{previewBanner}</div>}
       </div>
     </div>
