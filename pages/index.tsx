@@ -113,7 +113,13 @@ function Homepage({ className = '' }: HomepageProps) {
   const [metricsWide, setMetricsWide] = useState(false);
   const [metricsOpen, setMetricsOpen] = useState(false);
 
+  const pageReady = Boolean(githubProfile)
+    && renderReady
+    && photoReady
+    && latestPost !== undefined;
+
   useEffect(() => {
+    if (!pageReady) return undefined;
     const row = metricsRow.current;
     if (!row) return undefined;
     const measure = () => {
@@ -124,7 +130,7 @@ function Homepage({ className = '' }: HomepageProps) {
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, []);
+  }, [pageReady]);
 
   if (!githubProfile || !renderReady || !photoReady || latestPost === undefined) return <Loader />;
 
