@@ -30,3 +30,22 @@ describe('ProfilePhoto', () => {
     expect(screen.getByRole('img', { name: 'Training' })).toHaveAttribute('src', 'https://github.com/adamsuk.png');
   });
 });
+
+describe('ProfilePhoto images that finish before hydration', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('shows an image that was already loaded before mount', () => {
+    jest.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockReturnValue(true);
+    jest.spyOn(HTMLImageElement.prototype, 'naturalWidth', 'get').mockReturnValue(100);
+    render(<ProfilePhoto src="https://example.com/a.png" label="GitHub" />);
+    expect(screen.getByRole('img')).toHaveClass('opacity-100');
+    expect(screen.getByTestId('profile-skeleton')).toHaveClass('hidden');
+  });
+
+  it('falls back when the image already failed before mount', () => {
+    jest.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockReturnValue(true);
+    jest.spyOn(HTMLImageElement.prototype, 'naturalWidth', 'get').mockReturnValue(0);
+    render(<ProfilePhoto src="https://example.com/bad.png" fallbackSrc="https://example.com/gh.png" label="X" />);
+    expect(screen.getByRole('img')).toHaveAttribute('src', 'https://example.com/gh.png');
+  });
+});

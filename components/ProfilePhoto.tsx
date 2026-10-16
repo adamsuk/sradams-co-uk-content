@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ProfilePhotoProps {
   login?: string;
@@ -21,9 +21,25 @@ function ProfilePhoto({
     setFailed(false);
   }, [primary]);
 
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // On a statically rendered page the browser can finish (or fail) loading the
+  // image before React hydrates, so onLoad/onError never fire. Check the
+  // element's real state whenever the source changes.
   useEffect(() => {
-    setLoaded(!imageSrc);
-  }, [imageSrc]);
+    const img = imgRef.current;
+    if (!imageSrc || !img) {
+      setLoaded(!imageSrc);
+      return;
+    }
+    if (img.complete) {
+      if (img.naturalWidth > 0) setLoaded(true);
+      else if (imageSrc !== fallbackSrc && fallbackSrc) setFailed(true);
+      else setLoaded(true);
+    } else {
+      setLoaded(false);
+    }
+  }, [imageSrc, fallbackSrc]);
 
   const photo = (
     <div className="relative mx-auto aspect-square w-full">
@@ -36,6 +52,8 @@ function ProfilePhoto({
         <img
           alt={label || 'ME!'}
           className={`absolute inset-0 h-full w-full rounded-full object-cover ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          ref={imgRef}
+          key={imageSrc}
           src={imageSrc}
           onLoad={() => setLoaded(true)}
           onError={() => {
