@@ -10,7 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
-import { SourceMetrics, useActivitySources } from '../components/ActivitySource';
+import { SourceMetrics, fallbackPicture, useActivitySources } from '../components/ActivitySource';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -126,6 +126,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 login={activeSource ? undefined : githubProfile}
                 src={activeSource?.profilePicture || undefined}
                 label={activeSource?.label}
+                fallbackSrc={fallbackPicture(sources, githubProfile)}
                 onCycle={sources && sources.length > 1 ? cycleSource : undefined}
               />
             )}

@@ -16,6 +16,8 @@ export interface ActivitySource {
   label: string;
   profileUrl: string;
   profilePicture: string;
+  /** Set by the feed on the source whose picture is the safe fallback (GitHub). */
+  fallbackPicture: boolean;
   summary: string;
   activity: SourceActivity[];
 }
@@ -60,10 +62,18 @@ export function sourcesFromFeed(body: unknown): ActivitySource[] {
       label: clean(source.label, 40) || id,
       profileUrl: https(source.profileUrl),
       profilePicture: https(source.profilePicture),
+      fallbackPicture: source.fallbackPicture === true,
       summary: clean(source.summary, 160),
       activity,
     }];
   });
+}
+
+/** The flagged fallback source's picture, else the GitHub profile picture. */
+export function fallbackPicture(sources: ActivitySource[] | null, login?: string): string {
+  const flagged = sources?.find((source) => source.fallbackPicture && source.profilePicture);
+  if (flagged) return flagged.profilePicture;
+  return login ? `https://github.com/${login}.png` : '';
 }
 
 export function useActivitySources(): ActivitySource[] | null {
