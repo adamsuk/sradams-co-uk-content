@@ -123,7 +123,7 @@ function Homepage({ className = '' }: HomepageProps) {
         <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
           <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 sm:max-w-none sm:flex-row sm:items-start sm:gap-6 lg:landscape:mx-0 lg:landscape:max-w-[16rem] lg:landscape:flex-col lg:landscape:gap-4">
             {githubProfile && (
-              <div className="w-full shrink-0 sm:w-48 lg:landscape:w-full">
+              <div className="w-full max-w-[16rem] shrink-0 sm:w-[14rem] md:w-[16rem] lg:landscape:w-full">
                 <ProfilePhoto
                   login={activeSource ? undefined : githubProfile}
                   src={activeSource?.profilePicture || undefined}
