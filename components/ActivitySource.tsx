@@ -137,7 +137,7 @@ export function SourceMetrics({ source }: { source: ActivitySource | null }) {
                   {row.label}
                 </a>
               ) : <span>{row.label}</span>}
-              <span className="min-w-0 text-right tabular-nums">{row.value}</span>
+              <span className="min-w-0 text-right tabular-nums sm:whitespace-nowrap lg:landscape:whitespace-normal">{row.value}</span>
             </li>
           ))}
         </ul>
