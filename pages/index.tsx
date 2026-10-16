@@ -36,6 +36,7 @@ function Homepage({ className = '' }: HomepageProps) {
   const sources = useActivitySources();
   const [sourceIndex, setSourceIndex] = useState(0);
   const activeSource = sources?.[sourceIndex] ?? null;
+  const showMetrics = Boolean(activeSource);
   const cycleSource = () => {
     if (!sources || sources.length < 2) return;
     setSourceIndex((index) => (index + 1) % sources.length);
@@ -130,6 +131,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 onCycle={sources && sources.length > 1 ? cycleSource : undefined}
               />
             )}
+            {showMetrics && (
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
                 <svg
@@ -152,6 +154,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 <SourceMetrics source={activeSource} />
               </div>
             </details>
+            )}
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section

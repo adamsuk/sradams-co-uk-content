@@ -76,14 +76,35 @@ export function fallbackPicture(sources: ActivitySource[] | null, login?: string
   return login ? `https://github.com/${login}.png` : '';
 }
 
+export const FEED_TIMEOUT_MS = 8000;
+
+/** A source worth showing: it has a summary or at least one activity row. */
+export function usableSources(sources: ActivitySource[]): ActivitySource[] {
+  return sources.filter((source) => source.summary || source.activity.length > 0);
+}
+
+/**
+ * Loads the activity feed. Resolves to [] when the feed errors, times out,
+ * returns non-OK or invalid JSON, or has no usable sources, so callers can
+ * fall back to the GitHub picture and hide the metrics.
+ */
 export function useActivitySources(): ActivitySource[] | null {
   const [sources, setSources] = useState<ActivitySource[] | null>(null);
 
   useEffect(() => {
     let cancel = false;
-    axios.get(FEED_URL)
+    axios.get(FEED_URL, { timeout: FEED_TIMEOUT_MS })
       .then((response) => {
-        if (!cancel) setSources(sourcesFromFeed(response.data));
+        if (cancel) return;
+        let { data } = response;
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data);
+          } catch {
+            data = null;
+          }
+        }
+        setSources(usableSources(sourcesFromFeed(data)));
       })
       .catch(() => {
         if (!cancel) setSources([]);

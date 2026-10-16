@@ -59,7 +59,61 @@ describe('Homepage', () => {
     capturedComponents = undefined;
   });
 
+  const FEED = 'https://activities.sradams.co.uk/feed.json';
+  const GITHUB_PIC = `https://github.com/${env.NEXT_PUBLIC_GITHUB_PROFILE}.png`;
+  const feedWithSource = {
+    intervals: {
+      label: 'Intervals',
+      profilePicture: 'https://example.com/intervals.jpg',
+      summary: '10 km',
+      activity: [{ label: 'Run', value: '5 km', url: '' }],
+    },
+  };
+
+  async function expectGithubFallback() {
+    await waitFor(() => expect(screen.getByTestId('markdown')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('img', { name: 'ME!' })).toHaveAttribute('src', GITHUB_PIC));
+    expect(screen.queryByText('This week\'s metrics')).not.toBeInTheDocument();
+  }
+
+  it('uses the GitHub picture and hides metrics when the feed fails', async () => {
+    axiosMock.onGet(FEED).reply(500);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed times out', async () => {
+    axiosMock.onGet(FEED).timeout();
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed is invalid JSON', async () => {
+    axiosMock.onGet(FEED).reply(200, '<html>oops');
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed has no usable sources', async () => {
+    axiosMock.onGet(FEED).reply(200, { github: { label: 'GitHub', activity: [] } });
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('shows the source picture and metrics when the feed returns sources', async () => {
+    axiosMock.onGet(FEED).reply(200, feedWithSource);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    expect(await screen.findByText('This week\'s metrics')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Intervals' })).toHaveAttribute('src', 'https://example.com/intervals.jpg');
+  });
+
   it('keeps this week behind an accordion until it is opened', async () => {
+    axiosMock.onGet(FEED).reply(200, feedWithSource);
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
     const summary = await screen.findByText('This week\'s metrics');
