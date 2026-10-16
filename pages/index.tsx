@@ -10,7 +10,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
-import { SourceMetrics, useActivitySources } from '../components/ActivitySource';
+import { SourceMetrics, fallbackPicture, useActivitySources } from '../components/ActivitySource';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -36,6 +36,7 @@ function Homepage({ className = '' }: HomepageProps) {
   const sources = useActivitySources();
   const [sourceIndex, setSourceIndex] = useState(0);
   const activeSource = sources?.[sourceIndex] ?? null;
+  const showMetrics = Boolean(activeSource);
   const cycleSource = () => {
     if (!sources || sources.length < 2) return;
     setSourceIndex((index) => (index + 1) % sources.length);
@@ -126,9 +127,11 @@ function Homepage({ className = '' }: HomepageProps) {
                 login={activeSource ? undefined : githubProfile}
                 src={activeSource?.profilePicture || undefined}
                 label={activeSource?.label}
+                fallbackSrc={fallbackPicture(sources, githubProfile)}
                 onCycle={sources && sources.length > 1 ? cycleSource : undefined}
               />
             )}
+            {showMetrics && (
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
                 <svg
@@ -151,6 +154,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 <SourceMetrics source={activeSource} />
               </div>
             </details>
+            )}
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section

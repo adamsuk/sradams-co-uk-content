@@ -16,4 +16,17 @@ describe('ProfilePhoto', () => {
     expect(image.className).toContain('opacity-100');
     expect(screen.getByTestId('profile-skeleton')).toHaveClass('hidden');
   });
+
+  it('swaps to the fallback picture when a source picture fails to load', () => {
+    render(<ProfilePhoto src="https://images.gr-assets.com/users/1/1.jpg" fallbackSrc="https://github.com/adamsuk.png" label="Reading" />);
+    const image = screen.getByRole('img', { name: 'Reading' });
+    expect(image).toHaveAttribute('src', 'https://images.gr-assets.com/users/1/1.jpg');
+    fireEvent.error(image);
+    expect(screen.getByRole('img', { name: 'Reading' })).toHaveAttribute('src', 'https://github.com/adamsuk.png');
+  });
+
+  it('uses the fallback picture when a source has none', () => {
+    render(<ProfilePhoto fallbackSrc="https://github.com/adamsuk.png" label="Training" />);
+    expect(screen.getByRole('img', { name: 'Training' })).toHaveAttribute('src', 'https://github.com/adamsuk.png');
+  });
 });

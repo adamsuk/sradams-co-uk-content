@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
@@ -59,7 +61,111 @@ describe('Homepage', () => {
     capturedComponents = undefined;
   });
 
+  const FEED = 'https://activities.sradams.co.uk/feed.json';
+  const GITHUB_PIC = `https://github.com/${env.NEXT_PUBLIC_GITHUB_PROFILE}.png`;
+  const feedWithSource = {
+    intervals: {
+      label: 'Intervals',
+      profilePicture: 'https://example.com/intervals.jpg',
+      summary: '10 km',
+      activity: [{ label: 'Run', value: '5 km', url: '' }],
+    },
+  };
+
+  async function expectGithubFallback() {
+    await waitFor(() => expect(screen.getByTestId('markdown')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('img', { name: 'ME!' })).toHaveAttribute('src', GITHUB_PIC));
+    expect(screen.queryByText('This week\'s metrics')).not.toBeInTheDocument();
+  }
+
+  it('uses the GitHub picture and hides metrics when the feed fails', async () => {
+    axiosMock.onGet(FEED).reply(500);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed times out', async () => {
+    axiosMock.onGet(FEED).timeout();
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed is invalid JSON', async () => {
+    axiosMock.onGet(FEED).reply(200, '<html>oops');
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  it('uses the GitHub picture and hides metrics when the feed has no usable sources', async () => {
+    axiosMock.onGet(FEED).reply(200, { github: { label: 'GitHub', activity: [] } });
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    await expectGithubFallback();
+  });
+
+  // Scott's live feed from 16 Oct: Intervals picture is "" and nothing is flagged as the fallback.
+  const liveFeed = {
+    updatedAt: '2026-10-16T11:00:58.741Z',
+    github: {
+      label: 'GitHub',
+      profileUrl: 'https://github.com/adamsuk',
+      profilePicture: 'https://github.com/adamsuk.png',
+      summary: '',
+      activity: [{ label: 'Personal', value: '40 commits · 33 PRs · 34 reviews · 2 issues', url: 'https://github.com/adamsuk' }],
+      updatedAt: '2026-10-16T11:00:58.206Z',
+    },
+    intervals: {
+      label: 'Training',
+      profileUrl: 'https://intervals.icu/',
+      profilePicture: '',
+      summary: '17.2 km · 3 sessions · 2h 3m',
+      activity: [{ label: '15 Oct · Football', value: '5.9 km · 1h 0m', url: 'https://intervals.icu/activities/i197749007' }],
+      updatedAt: '2026-10-16T11:00:58.741Z',
+    },
+    goodreads: {
+      label: 'Reading',
+      profileUrl: 'https://www.goodreads.com/user/show/176915360',
+      profilePicture: 'https://images.gr-assets.com/users/1792145984p5/176915360.jpg',
+      summary: '',
+      activity: [{ label: 'Strange Pictures', value: 'Finished · 11 Oct', url: 'https://www.goodreads.com/book/show/222291395' }],
+      updatedAt: '2026-10-16T11:00:58.206Z',
+    },
+  };
+
+  it('shows the GitHub picture, not a letter, for Training when its picture is empty', async () => {
+    axiosMock.onGet(FEED).reply(200, liveFeed);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    fireEvent.click(await screen.findByRole('button', { name: /next source after GitHub/ }));
+    expect(screen.getByRole('img', { name: 'Training' })).toHaveAttribute('src', GITHUB_PIC);
+    expect(screen.queryByText('T')).not.toBeInTheDocument();
+  });
+
+  it('swaps a source picture that fails to load for the GitHub picture', async () => {
+    const feed = { ...liveFeed, intervals: { ...liveFeed.intervals, profilePicture: 'https://example.com/broken.jpg' } };
+    axiosMock.onGet(FEED).reply(200, feed);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    fireEvent.click(await screen.findByRole('button', { name: /next source after GitHub/ }));
+    const img = screen.getByRole('img', { name: 'Training' });
+    expect(img).toHaveAttribute('src', 'https://example.com/broken.jpg');
+    fireEvent.error(img);
+    await waitFor(() => expect(screen.getByRole('img', { name: 'Training' })).toHaveAttribute('src', GITHUB_PIC));
+  });
+
+  it('shows the source picture and metrics when the feed returns sources', async () => {
+    axiosMock.onGet(FEED).reply(200, feedWithSource);
+    axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
+    render(<Homepage />);
+    expect(await screen.findByText('This week\'s metrics')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Intervals' })).toHaveAttribute('src', 'https://example.com/intervals.jpg');
+  });
+
   it('keeps this week behind an accordion until it is opened', async () => {
+    axiosMock.onGet(FEED).reply(200, feedWithSource);
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
     const summary = await screen.findByText('This week\'s metrics');

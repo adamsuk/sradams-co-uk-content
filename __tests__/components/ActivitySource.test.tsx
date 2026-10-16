@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { SourceMetrics, sourcesFromFeed } from '../../components/ActivitySource';
+import { SourceMetrics, fallbackPicture, sourcesFromFeed } from '../../components/ActivitySource';
 
 const feed = {
   updatedAt: '2026-10-16T10:00:00.000Z',
@@ -61,5 +61,20 @@ describe('activity sources', () => {
     await userEvent.click(screen.getByRole('button', { name: /next source/i }));
     expect(screen.getByText('5.5 km · 1 session · 31m')).toBeInTheDocument();
     expect(screen.queryByText('12 commits')).not.toBeInTheDocument();
+  });
+});
+
+describe('fallbackPicture', () => {
+  it('picks the flagged source picture, else the GitHub login picture', () => {
+    const sources = sourcesFromFeed({
+      intervals: { label: 'Training', profilePicture: 'https://storage.googleapis.com/x', activity: [] },
+      github: {
+        label: 'GitHub', profilePicture: 'https://github.com/adamsuk.png', fallbackPicture: true, activity: [],
+      },
+    });
+    expect(sources.find((s) => s.id === 'github')?.fallbackPicture).toBe(true);
+    expect(sources.find((s) => s.id === 'intervals')?.fallbackPicture).toBe(false);
+    expect(fallbackPicture(sources, 'other')).toBe('https://github.com/adamsuk.png');
+    expect(fallbackPicture([], 'adamsuk')).toBe('https://github.com/adamsuk.png');
   });
 });

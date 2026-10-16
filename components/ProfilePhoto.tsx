@@ -4,14 +4,22 @@ interface ProfilePhotoProps {
   login?: string;
   src?: string;
   label?: string;
+  /** Shown when src is missing or fails to load. */
+  fallbackSrc?: string;
   onCycle?: () => void;
 }
 
 function ProfilePhoto({
-  login, src, label = '', onCycle,
+  login, src, label = '', fallbackSrc, onCycle,
 }: ProfilePhotoProps) {
-  const imageSrc = src || (login ? `https://github.com/${login}.png` : '');
+  const primary = src || fallbackSrc || (login ? `https://github.com/${login}.png` : '');
+  const [failed, setFailed] = useState(false);
+  const imageSrc = failed && fallbackSrc && fallbackSrc !== primary ? fallbackSrc : primary;
   const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [primary]);
 
   useEffect(() => {
     setLoaded(!imageSrc);
@@ -30,6 +38,10 @@ function ProfilePhoto({
           className={`absolute inset-0 h-full w-full rounded-full object-cover ${loaded ? 'opacity-100' : 'opacity-0'}`}
           src={imageSrc}
           onLoad={() => setLoaded(true)}
+          onError={() => {
+            if (imageSrc !== fallbackSrc && fallbackSrc) setFailed(true);
+            else setLoaded(true);
+          }}
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center rounded-full bg-gray-200 text-2xl font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-100">
