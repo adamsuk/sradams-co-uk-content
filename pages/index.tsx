@@ -121,19 +121,21 @@ function Homepage({ className = '' }: HomepageProps) {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
         {previewMode && <div>{previewBanner}</div>}
         <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
-          <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 lg:landscape:mx-0">
+          <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 sm:max-w-none sm:flex-row sm:items-start sm:gap-6 lg:landscape:mx-0 lg:landscape:max-w-[16rem] lg:landscape:flex-col lg:landscape:gap-4">
             {githubProfile && (
-              <ProfilePhoto
-                login={activeSource ? undefined : githubProfile}
-                src={activeSource?.profilePicture || undefined}
-                label={activeSource?.label}
-                fallbackSrc={fallbackPicture(sources, githubProfile)}
-                onCycle={sources && sources.length > 1 ? cycleSource : undefined}
-              />
+              <div className="w-full shrink-0 sm:w-48 lg:landscape:w-full">
+                <ProfilePhoto
+                  login={activeSource ? undefined : githubProfile}
+                  src={activeSource?.profilePicture || undefined}
+                  label={activeSource?.label}
+                  fallbackSrc={fallbackPicture(sources, githubProfile)}
+                  onCycle={sources && sources.length > 1 ? cycleSource : undefined}
+                />
+              </div>
             )}
             {showMetrics && (
-            <details className="group">
-              <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
+            <details className="group min-w-0 sm:flex-1 sm:text-right lg:landscape:text-left">
+              <summary className="flex cursor-pointer sm:justify-end lg:landscape:justify-start list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 20 20"
