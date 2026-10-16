@@ -10,10 +10,9 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
-import GithubWeek from '../components/GithubWeek';
+import { SourceMetrics, useActivitySources } from '../components/ActivitySource';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
-import RecentActivity from '../components/RecentActivity';
 
 interface HomepageProps {
   className?: string;
@@ -34,6 +33,13 @@ function Homepage({ className = '' }: HomepageProps) {
   const [renderReady, setRenderReady] = useState(false);
   const [photoReady, setPhotoReady] = useState(false);
   const latestPost = useLatestPost();
+  const sources = useActivitySources();
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const activeSource = sources?.[sourceIndex] ?? null;
+  const cycleSource = () => {
+    if (!sources || sources.length < 2) return;
+    setSourceIndex((index) => (index + 1) % sources.length);
+  };
 
   const isPreview = useCallback(() => {
     if (router.query.githubProfile) {
@@ -115,7 +121,14 @@ function Homepage({ className = '' }: HomepageProps) {
         {previewMode && <div>{previewBanner}</div>}
         <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
           <div className="mx-auto flex w-full max-w-[16rem] flex-col gap-4 lg:landscape:mx-0">
-            {githubProfile && <ProfilePhoto login={githubProfile} />}
+            {githubProfile && (
+              <ProfilePhoto
+                login={activeSource ? undefined : githubProfile}
+                src={activeSource?.profilePicture || undefined}
+                label={activeSource?.label}
+                onCycle={sources && sources.length > 1 ? cycleSource : undefined}
+              />
+            )}
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
                 <svg
@@ -135,8 +148,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 {'This week\'s metrics'}
               </summary>
               <div className="mt-4 space-y-4">
-                <RecentActivity plain />
-                <GithubWeek plain />
+                <SourceMetrics source={activeSource} />
               </div>
             </details>
           </div>
