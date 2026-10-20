@@ -121,37 +121,108 @@ export function useActivitySources(): ActivitySource[] | null {
   return sources;
 }
 
+const SEP = ' · ';
+
+/** "36 commits", "8 issues": a whole number and a word. */
+const STAT = /^(\d[\d,]*)\s+(\S.*)$/;
+/** Starts with a number: a count, a distance, a duration or a date ("20 Oct"). */
+const NUMERIC = /^\d/;
+
+export interface MetricRow {
+  /** Small muted line above the title, e.g. "Top track" or "19 Oct". */
+  kicker: string;
+  title: string;
+  /** The rest of the value, e.g. the artist. */
+  secondary: string;
+  /** A short trailing number or date, right-aligned, e.g. "2 plays". */
+  suffix: string;
+  /** Two or more "number word" parts become a small grid of stats. */
+  stats: Array<{ value: string; label: string }>;
+  url: string;
+}
+
+/**
+ * Turns a feed row ("Top track · Song", "Artist · 2 plays") into parts that stack in a
+ * narrow card. The feed stays generic; this only splits on its " · " separator.
+ */
+export function metricRow(row: SourceActivity): MetricRow {
+  const labelParts = row.label.split(SEP);
+  const kicker = labelParts.length > 1 ? labelParts[0] : '';
+  const title = labelParts.length > 1 ? labelParts.slice(1).join(SEP) : row.label;
+  const parts = row.value.split(SEP).map((part) => part.trim()).filter(Boolean);
+  const base = {
+    kicker, title, secondary: '', suffix: '', stats: [] as MetricRow['stats'], url: row.url,
+  };
+  if (parts.length >= 2 && parts.every((part) => STAT.test(part))) {
+    return {
+      ...base,
+      stats: parts.map((part) => {
+        const [, value, label] = part.match(STAT) as RegExpMatchArray;
+        return { value, label };
+      }),
+    };
+  }
+  if (parts.every((part) => NUMERIC.test(part))) return { ...base, suffix: parts.join(SEP) };
+  const last = parts[parts.length - 1] ?? '';
+  if (parts.length > 1 && NUMERIC.test(last)) {
+    return { ...base, secondary: parts.slice(0, -1).join(SEP), suffix: last };
+  }
+  return { ...base, secondary: parts.join(SEP) };
+}
+
 interface SourceMetricsProps {
   source: ActivitySource | null;
   /** Leave the label out when the surrounding card already shows it. */
   hideLabel?: boolean;
 }
 
+const muted = 'text-gray-500 dark:text-gray-400';
+
 export function SourceMetrics({ source, hideLabel = false }: SourceMetricsProps) {
   if (!source) return null;
 
   return (
-    <section aria-label={source.label} className="text-left text-sm text-gray-800 dark:text-gray-100">
+    <section aria-label={source.label} className="min-w-0 break-words text-left text-sm text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">
       {hideLabel ? null : (
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+        <p className={`text-xs font-medium uppercase tracking-wide ${muted}`}>
           {source.label}
         </p>
       )}
-      {source.summary ? <p className={`${hideLabel ? '' : 'mt-1 '}tabular-nums`}>{source.summary}</p> : null}
+      {source.summary ? <p className={`${hideLabel ? '' : 'mt-1 '}font-medium tabular-nums`}>{source.summary}</p> : null}
       {source.activity.length === 0 ? (
-        <p className="mt-3 text-gray-500 dark:text-gray-400">Nothing to show.</p>
+        <p className={`mt-3 ${muted}`}>Nothing to show.</p>
       ) : (
-        <ul className="mt-3 divide-y divide-gray-200 dark:divide-gray-700">
-          {source.activity.map((row) => (
-            <li key={`${row.label}-${row.url}`} className="flex items-baseline justify-between gap-3 py-1.5">
-              {row.url ? (
-                <a href={row.url} className="hover:underline" rel="noopener noreferrer" target="_blank">
-                  {row.label}
-                </a>
-              ) : <span>{row.label}</span>}
-              <span className="min-w-0 text-right tabular-nums sm:whitespace-nowrap lg:landscape:whitespace-normal">{row.value}</span>
-            </li>
-          ))}
+        <ul className={`${source.summary || !hideLabel ? 'mt-2 ' : ''}divide-y divide-gray-200 dark:divide-gray-700`}>
+          {source.activity.map((activity) => {
+            const row = metricRow(activity);
+            return (
+              <li key={`${activity.label}-${activity.url}`} className="min-w-0 py-2">
+                {row.kicker && <p className={`text-xs ${muted}`}>{row.kicker}</p>}
+                <div className="flex items-baseline justify-between gap-3">
+                  {row.url ? (
+                    <a href={row.url} className="min-w-0 font-medium hover:underline" rel="noopener noreferrer" target="_blank">
+                      {row.title}
+                    </a>
+                  ) : <span className="min-w-0 font-medium">{row.title}</span>}
+                  {row.suffix && (
+                    <span className={`shrink-0 whitespace-nowrap text-xs tabular-nums ${muted}`}>{row.suffix}</span>
+                  )}
+                </div>
+                {row.secondary && <p className={`text-xs ${muted}`}>{row.secondary}</p>}
+                {row.stats.length > 0 && (
+                  <dl className="mt-1 grid grid-cols-2 gap-x-3 gap-y-1">
+                    {row.stats.map((stat) => (
+                      <div key={stat.label} className="flex items-baseline gap-1">
+                        <dt className="sr-only">{stat.label}</dt>
+                        <dd className="text-base font-semibold tabular-nums">{stat.value}</dd>
+                        <span aria-hidden="true" className={`text-xs ${muted}`}>{stat.label}</span>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

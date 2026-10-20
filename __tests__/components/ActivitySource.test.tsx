@@ -2,7 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { SourceMetrics, fallbackPicture, sourcesFromFeed } from '../../components/ActivitySource';
+import {
+  SourceMetrics, fallbackPicture, metricRow, sourcesFromFeed,
+} from '../../components/ActivitySource';
 
 const feed = {
   updatedAt: '2026-10-16T10:00:00.000Z',
@@ -76,5 +78,48 @@ describe('fallbackPicture', () => {
     expect(sources.find((s) => s.id === 'intervals')?.fallbackPicture).toBe(false);
     expect(fallbackPicture(sources, 'other')).toBe('https://github.com/adamsuk.png');
     expect(fallbackPicture([], 'adamsuk')).toBe('https://github.com/adamsuk.png');
+  });
+});
+
+describe('metric rows for a narrow card', () => {
+  it('splits a music row into kicker, title, artist and a short count', () => {
+    expect(metricRow({ label: 'Top track · Like You Did Before', value: 'Circa Waves · 2 plays', url: '' }))
+      .toMatchObject({
+        kicker: 'Top track', title: 'Like You Did Before', secondary: 'Circa Waves', suffix: '2 plays', stats: [],
+      });
+    expect(metricRow({ label: 'Top artist · Fontaines D.C.', value: '15 plays', url: '' }))
+      .toMatchObject({ kicker: 'Top artist', title: 'Fontaines D.C.', suffix: '15 plays' });
+  });
+
+  it('turns GitHub counts into a stat grid', () => {
+    const row = metricRow({ label: 'Personal', value: '36 commits · 35 PRs · 24 reviews · 8 issues', url: '' });
+    expect(row.title).toBe('Personal');
+    expect(row.stats).toEqual([
+      { value: '36', label: 'commits' },
+      { value: '35', label: 'PRs' },
+      { value: '24', label: 'reviews' },
+      { value: '8', label: 'issues' },
+    ]);
+    expect(metricRow({ label: 'Work', value: '55 contributions', url: '' }).suffix).toBe('55 contributions');
+  });
+
+  it('keeps training and reading values short and right-aligned', () => {
+    expect(metricRow({ label: '19 Oct · Run', value: '6.2 km · 34m', url: '' }))
+      .toMatchObject({
+        kicker: '19 Oct', title: 'Run', suffix: '6.2 km · 34m', secondary: '',
+      });
+    expect(metricRow({ label: 'Q. E. D.', value: 'Reading · 16 Oct', url: '' }))
+      .toMatchObject({
+        kicker: '', title: 'Q. E. D.', secondary: 'Reading', suffix: '16 Oct',
+      });
+  });
+
+  it('renders the stacked layout with a stat grid', () => {
+    const [github] = sourcesFromFeed({
+      github: { label: 'GitHub', activity: [{ label: 'Personal', value: '36 commits · 8 issues', url: '' }] },
+    });
+    render(<SourceMetrics source={github} hideLabel />);
+    expect(screen.getByText('36')).toBeInTheDocument();
+    expect(screen.getByText('commits', { selector: 'dt' })).toBeInTheDocument();
   });
 });

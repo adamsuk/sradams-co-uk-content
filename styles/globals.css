@@ -18,9 +18,32 @@
   }
 }
 
-html {
-  /* Keep the viewport width stable so the nav does not shift when a scrollbar appears. */
+/* The window never scrolls: <main> does (see components/ScrollArea.tsx). */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-shell {
+  height: 100vh; /* fallback for browsers without dvh */
+  height: 100dvh;
+}
+
+#main {
+  /* Keep the content width stable when the scrollbar appears. */
   scrollbar-gutter: stable;
+}
+
+@media print {
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+  }
+  .app-shell {
+    height: auto;
+  }
 }
 
 html,

@@ -23,11 +23,13 @@ const NavBar = ({ className = "" }: NavBarProps) => {
       title: "Email",
       url: "mailto:sra405@protonmail.com",
       img: "/Navbar/email.png",
+      invert: true,
     },
     {
       title: "Phone",
       url: "tel:+447840579704",
       img: "/Navbar/phone.webp",
+      invert: true,
     },
   ];
 
@@ -35,15 +37,16 @@ const NavBar = ({ className = "" }: NavBarProps) => {
     <footer
       className={cn(
         className,
-        "z-20 w-full bg-white/50 backdrop-blur-lg backdrop-filter dark:bg-white/5",
+        // Always in view under the scrolling page, and clear of the iOS home indicator.
+        "z-20 w-full shrink-0 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] dark:border-gray-800 dark:bg-gray-950 print:border-0",
       )}
     >
-      <div className="mx-auto flex max-w-7xl justify-evenly py-2 print:py-1">
+      <nav aria-label="Contact" className="mx-auto flex max-w-7xl justify-evenly py-[0.25rem] print:py-1">
         {menuItems.map((item) => (
           <div key={item.title}>
-            <a href={item.url} className="print:hidden">
+            <a href={item.url} className="inline-flex p-[0.25rem] print:hidden">
               <img
-                className={cn("h-6", item.invert && "dark:invert")}
+                className={cn("h-[1.5rem] w-auto sm:h-[1.75rem]", item.invert && "dark:invert")}
                 src={item.img}
                 alt={item.title}
               />
@@ -51,7 +54,7 @@ const NavBar = ({ className = "" }: NavBarProps) => {
             <p className="hidden print:block print:text-2xs">{item.url}</p>
           </div>
         ))}
-      </div>
+      </nav>
     </footer>
   );
 };

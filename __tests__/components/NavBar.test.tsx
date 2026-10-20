@@ -39,11 +39,11 @@ describe('NavBar', () => {
     expect(footer).toHaveClass('test-class');
   });
 
-  it('only inverts the GitHub mark in dark mode', () => {
+  it('inverts the black glyphs (GitHub, email, phone) in dark mode but not the LinkedIn logo', () => {
     render(<NavBar />);
     expect(screen.getByAltText('Github')).toHaveClass('dark:invert');
     expect(screen.getByAltText('LinkedIn')).not.toHaveClass('dark:invert');
-    expect(screen.getByAltText('Email')).not.toHaveClass('dark:invert');
-    expect(screen.getByAltText('Phone')).not.toHaveClass('dark:invert');
+    expect(screen.getByAltText('Email')).toHaveClass('dark:invert');
+    expect(screen.getByAltText('Phone')).toHaveClass('dark:invert');
   });
 });
