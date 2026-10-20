@@ -122,7 +122,7 @@ function Homepage({ className = '' }: HomepageProps) {
 
   return (
     <div className={className}>
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-8 pt-4">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-4 pt-4">
         {previewMode && <div>{previewBanner}</div>}
         <div className="flex flex-col gap-6 lg:landscape:grid lg:landscape:grid-cols-[16rem_minmax(0,1fr)] lg:landscape:items-start lg:landscape:gap-x-4">
           <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6 lg:landscape:max-w-[16rem] lg:landscape:flex-col lg:landscape:gap-4">
