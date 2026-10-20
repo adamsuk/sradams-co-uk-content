@@ -1,0 +1,207 @@
+import React from 'react';
+
+export interface FeaturedRoute {
+  width: number;
+  height: number;
+  points: Array<[number, number]>;
+}
+
+export interface Featured {
+  heading: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  url: string;
+  image: string;
+  details: string[];
+  route?: FeaturedRoute;
+  link?: { label: string; detail: string; url: string };
+  video?: { youtubeId: string; title: string };
+}
+
+function clean(value: unknown, max: number): string {
+  if (typeof value !== 'string') return '';
+  return value.replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function https(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' ? url.toString() : '';
+  } catch {
+    return '';
+  }
+}
+
+function routeFrom(value: unknown): FeaturedRoute | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const row = value as Record<string, unknown>;
+  const width = Number(row.width);
+  const height = Number(row.height);
+  if (!(width > 0 && width <= 1000 && height > 0 && height <= 1000)) return undefined;
+  if (!Array.isArray(row.points)) return undefined;
+  const points = row.points.flatMap((point): Array<[number, number]> => {
+    if (!Array.isArray(point) || point.length !== 2) return [];
+    const [x, y] = point.map(Number);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return [];
+    return [[Math.min(Math.max(x, 0), width), Math.min(Math.max(y, 0), height)]];
+  }).slice(0, 300);
+  return points.length >= 2 ? { width, height, points } : undefined;
+}
+
+/** Re-checks the feed's optional card. Anything unexpected is dropped, never rendered. */
+export function featuredFromFeed(value: unknown): Featured | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const row = value as Record<string, unknown>;
+  const title = clean(row.title, 160);
+  if (!title) return null;
+  const featured: Featured = {
+    heading: clean(row.heading, 40),
+    title,
+    subtitle: clean(row.subtitle, 160),
+    description: clean(row.description, 280),
+    url: https(row.url),
+    image: https(row.image),
+    details: Array.isArray(row.details)
+      ? row.details.map((detail) => clean(detail, 60)).filter(Boolean).slice(0, 4)
+      : [],
+  };
+  const route = routeFrom(row.route);
+  if (route) featured.route = route;
+  if (row.link && typeof row.link === 'object') {
+    const link = row.link as Record<string, unknown>;
+    const label = clean(link.label, 160);
+    if (label) featured.link = { label, detail: clean(link.detail, 120), url: https(link.url) };
+  }
+  if (row.video && typeof row.video === 'object') {
+    const video = row.video as Record<string, unknown>;
+    if (typeof video.youtubeId === 'string' && /^[A-Za-z0-9_-]{11}$/.test(video.youtubeId)) {
+      featured.video = { youtubeId: video.youtubeId, title: clean(video.title, 160) };
+    }
+  }
+  return featured;
+}
+
+function RouteMap({ route, label }: { route: FeaturedRoute; label: string }) {
+  const points = route.points.map(([x, y]) => `${x},${y}`).join(' ');
+  const [startX, startY] = route.points[0];
+  const [endX, endY] = route.points[route.points.length - 1];
+  return (
+    <svg
+      role="img"
+      aria-label={`Route of ${label}`}
+      viewBox={`0 0 ${route.width} ${route.height}`}
+      preserveAspectRatio="xMidYMid meet"
+      className="h-full w-full"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
+      />
+      <circle cx={startX} cy={startY} r="4" className="fill-emerald-500" />
+      <circle cx={endX} cy={endY} r="4" className="fill-rose-500" />
+    </svg>
+  );
+}
+
+function Visual({ featured }: { featured: Featured }) {
+  const frame = 'flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:landscape:h-32 lg:landscape:w-32';
+  if (featured.route) {
+    return (
+      <div className={`${frame} p-2 text-orange-600 dark:text-orange-400`} data-testid="featured-route">
+        <RouteMap route={featured.route} label={featured.title} />
+      </div>
+    );
+  }
+  if (featured.image) {
+    return (
+      <div className={frame}>
+        <img
+          src={featured.image}
+          alt={featured.title}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          className="h-full w-full object-cover"
+        />
+      </div>
+    );
+  }
+  return null;
+}
+
+const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
+
+/** The cycled source's featured card. Renders nothing when the source has none. */
+interface FeaturedItemProps {
+  featured: Featured | null | undefined;
+  source?: string;
+}
+
+function FeaturedItem({ featured, source }: FeaturedItemProps) {
+  if (!featured) return null;
+  const heading = [featured.heading || 'Featured', source].filter(Boolean).join(' · ');
+  return (
+    <section aria-label={heading} className={`${shell} shadow-sm`} data-testid="featured-item">
+      <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+        {heading}
+      </p>
+      <div className="mt-3 flex items-start gap-4">
+        <Visual featured={featured} />
+        <div className="min-w-0 flex-1">
+          <h2 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+            {featured.url ? (
+              <a href={featured.url} className="hover:underline" rel="noopener noreferrer" target="_blank">
+                {featured.title}
+              </a>
+            ) : featured.title}
+          </h2>
+          {featured.subtitle && (
+            <p className="mt-0.5 truncate text-sm text-gray-600 dark:text-gray-400">{featured.subtitle}</p>
+          )}
+          {featured.description && (
+            <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400 lg:landscape:line-clamp-3">
+              {featured.description}
+            </p>
+          )}
+          {featured.details.length > 0 && (
+            <p className="mt-2 text-xs tabular-nums text-gray-500 dark:text-gray-400">
+              {featured.details.join(' · ')}
+            </p>
+          )}
+          {featured.link && (
+            <p className="mt-2 text-sm">
+              {featured.link.url ? (
+                <a href={featured.link.url} className="font-medium hover:underline" rel="noopener noreferrer" target="_blank">
+                  {featured.link.label}
+                </a>
+              ) : <span className="font-medium">{featured.link.label}</span>}
+              {featured.link.detail && (
+                <span className="text-gray-500 dark:text-gray-400">{` · ${featured.link.detail}`}</span>
+              )}
+            </p>
+          )}
+        </div>
+      </div>
+      {featured.video && (
+        <div className="mt-4 hidden aspect-video w-full overflow-hidden rounded-xl sm:block">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${featured.video.youtubeId}`}
+            title={featured.video.title || featured.title}
+            loading="lazy"
+            allow="encrypted-media; picture-in-picture"
+            allowFullScreen
+            className="h-full w-full"
+          />
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default FeaturedItem;

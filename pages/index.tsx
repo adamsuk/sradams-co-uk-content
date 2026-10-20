@@ -11,6 +11,7 @@ import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
 import { SourceMetrics, fallbackPicture, useActivitySources } from '../components/ActivitySource';
+import FeaturedItem from '../components/FeaturedItem';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -184,6 +185,7 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
+            <FeaturedItem featured={activeSource?.featured} source={activeSource?.label} />
             <LatestPost post={latestPost} />
           </div>
         </div>
