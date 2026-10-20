@@ -11,6 +11,7 @@ import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
 import { SourceMetrics, fallbackPicture, useActivitySources } from '../components/ActivitySource';
+import FeaturedItem from '../components/FeaturedItem';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -157,6 +158,12 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             </details>
             )}
+            <FeaturedItem
+              featured={activeSource?.featured}
+              source={activeSource?.label}
+              stacked
+              className="hidden lg:landscape:block"
+            />
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section
@@ -184,6 +191,11 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
+            <FeaturedItem
+              featured={activeSource?.featured}
+              source={activeSource?.label}
+              className="lg:landscape:hidden"
+            />
             <LatestPost post={latestPost} />
           </div>
         </div>

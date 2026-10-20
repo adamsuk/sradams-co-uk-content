@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { FEED_URL } from './RecentActivity';
+import { Featured, featuredFromFeed } from './FeaturedItem';
 
 export const SOURCE_ORDER = ['github', 'intervals', 'goodreads'];
 
@@ -20,6 +21,8 @@ export interface ActivitySource {
   fallbackPicture: boolean;
   summary: string;
   activity: SourceActivity[];
+  /** Optional card shown beside the metrics. */
+  featured: Featured | null;
 }
 
 function clean(value: unknown, max: number): string {
@@ -65,6 +68,7 @@ export function sourcesFromFeed(body: unknown): ActivitySource[] {
       fallbackPicture: source.fallbackPicture === true,
       summary: clean(source.summary, 160),
       activity,
+      featured: featuredFromFeed(source.featured),
     }];
   });
 }
