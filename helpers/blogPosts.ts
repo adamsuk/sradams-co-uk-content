@@ -40,3 +40,26 @@ export const parsePost = (post: BlogPost): BlogPost => {
 };
 
 export default parsePost;
+
+/** The post slug for a `/blog/<slug>` path (ignoring query, hash and a trailing slash). */
+export const blogSlugFromPath = (path?: string): string | null => {
+  if (!path) {
+    return null;
+  }
+
+  const match = path.split(/[?#]/)[0].match(/^\/blog\/([^/]+?)(?:\.html)?\/?$/);
+  return match ? decodeURIComponent(match[1]) : null;
+};
+
+/** The public post with the given slug, if the CMS has one. */
+const isPublicPostWithSlug = (post: BlogPost, slug: string): boolean => {
+  if (!post.meta || post.meta.public === false || !post.slug) {
+    return false;
+  }
+  return normalizeBlogSlug(post.slug) === slug;
+};
+
+export const findPublicPost = (
+  posts: BlogPost[] | undefined,
+  slug: string,
+): BlogPost | undefined => (posts || []).find((post) => isPublicPostWithSlug(post, slug));
