@@ -23,11 +23,13 @@ const NavBar = ({ className = "" }: NavBarProps) => {
       title: "Email",
       url: "mailto:sra405@protonmail.com",
       img: "/Navbar/email.png",
+      invert: true,
     },
     {
       title: "Phone",
       url: "tel:+447840579704",
       img: "/Navbar/phone.webp",
+      invert: true,
     },
   ];
 
