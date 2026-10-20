@@ -110,12 +110,13 @@ function RouteMap({ route, label }: { route: FeaturedRoute; label: string }) {
   );
 }
 
-function Visual({ featured, stacked }: { featured: Featured; stacked: boolean }) {
-  // The site's spacing scale is custom, so sizes are explicit.
-  const frame = `flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 ${stacked ? 'w-full' : 'w-[6rem]'}`;
+function Visual({ featured }: { featured: Featured }) {
+  // The site's spacing scale is custom, so sizes are explicit. A small square beside the
+  // title on phones and tablets; full width above it in the narrow desktop sidebar.
+  const frame = 'flex w-[6rem] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:landscape:w-full';
   if (featured.route) {
     return (
-      <div className={`${frame} ${stacked ? 'aspect-square p-2' : 'h-[6rem] p-1'} text-orange-600 dark:text-orange-400`} data-testid="featured-route">
+      <div className={`${frame} h-[6rem] p-1 text-orange-600 dark:text-orange-400 lg:landscape:aspect-square lg:landscape:h-auto lg:landscape:p-2`} data-testid="featured-route">
         <RouteMap route={featured.route} label={featured.title} />
       </div>
     );
@@ -128,7 +129,7 @@ function Visual({ featured, stacked }: { featured: Featured; stacked: boolean })
           alt={featured.title}
           loading="lazy"
           referrerPolicy="no-referrer"
-          className={`block h-auto w-full object-contain ${stacked ? 'max-h-[20rem]' : 'max-h-[9rem]'}`}
+          className="block h-auto max-h-[9rem] w-full object-contain lg:landscape:max-h-[20rem]"
         />
       </div>
     );
@@ -136,39 +137,25 @@ function Visual({ featured, stacked }: { featured: Featured; stacked: boolean })
   return null;
 }
 
-const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
-
 const HIDE_SUBTITLE = new Set(['intervals']);
 
-/** The cycled source's featured card. Renders nothing when the source has none. */
-interface FeaturedItemProps {
-  featured: Featured | null | undefined;
-  source?: string;
-  /** Feed id of the source, for example "intervals". */
-  sourceId?: string;
-  /** Picture above the text, for the narrow desktop sidebar. */
-  stacked?: boolean;
-  className?: string;
+/** "Currently reading · Reading" says it twice, so the source label only adds new words. */
+export function featuredHeading(featured: Featured, source?: string): string {
+  const title = featured.heading || 'Featured';
+  const repeats = source && title.toLowerCase().includes(source.toLowerCase().replace(/s$/, ''));
+  return source && !repeats ? `${title} · ${source}` : title;
 }
 
-function FeaturedItem({
-  featured, source, sourceId, stacked = false, className = '',
-}: FeaturedItemProps) {
-  if (!featured) return null;
-  const title = featured.heading || 'Featured';
-  // "Currently reading · Reading" says it twice, so the source label only adds new words.
-  const repeats = source && title.toLowerCase().includes(source.toLowerCase().replace(/s$/, ''));
-  const heading = source && !repeats ? `${title} · ${source}` : title;
-  // Kept minimal: the visual and its title line. Dates, distances, plays and the top
-  // track are already in "This week's metrics". An activity's subtitle is that kind of line.
+/**
+ * The visual and its title line. Dates, distances, plays and the top track live in the
+ * metrics view, and an activity's subtitle is that kind of line, so it is left out.
+ */
+export function FeaturedBody({ featured, sourceId }: { featured: Featured; sourceId?: string }) {
   const showSubtitle = Boolean(featured.subtitle) && !HIDE_SUBTITLE.has(sourceId ?? '');
   return (
-    <section aria-label={heading} className={`${shell} shadow-sm ${stacked ? 'p-4' : 'p-5'} ${className}`} data-testid="featured-item">
-      <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-        {heading}
-      </p>
-      <div className={`mt-3 flex gap-3 ${stacked ? 'flex-col' : 'items-start'}`}>
-        <Visual featured={featured} stacked={stacked} />
+    <>
+      <div className="flex items-start gap-3 lg:landscape:flex-col">
+        <Visual featured={featured} />
         <div className="min-w-0 flex-1">
           <h2 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">
             {featured.url ? (
@@ -194,6 +181,32 @@ function FeaturedItem({
           />
         </div>
       )}
+    </>
+  );
+}
+
+export const cardShell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-4 text-left text-gray-800 shadow-sm dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
+
+interface FeaturedItemProps {
+  featured: Featured | null | undefined;
+  source?: string;
+  /** Feed id of the source, for example "intervals". */
+  sourceId?: string;
+  className?: string;
+}
+
+/** A standalone featured card. Renders nothing when the source has none. */
+function FeaturedItem({
+  featured, source, sourceId, className = '',
+}: FeaturedItemProps) {
+  if (!featured) return null;
+  const heading = featuredHeading(featured, source);
+  return (
+    <section aria-label={heading} className={`${cardShell} ${className}`} data-testid="featured-item">
+      <p className="mb-3 text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+        {heading}
+      </p>
+      <FeaturedBody featured={featured} sourceId={sourceId} />
     </section>
   );
 }

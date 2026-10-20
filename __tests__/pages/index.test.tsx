@@ -75,7 +75,7 @@ describe('Homepage', () => {
   async function expectGithubFallback() {
     await waitFor(() => expect(screen.getByTestId('markdown')).toBeInTheDocument());
     await waitFor(() => expect(screen.getByRole('img', { name: 'ME!' })).toHaveAttribute('src', GITHUB_PIC));
-    expect(screen.queryByText('This week\'s metrics')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('source-card')).not.toBeInTheDocument();
   }
 
   it('uses the GitHub picture and hides metrics when the feed fails', async () => {
@@ -156,20 +156,47 @@ describe('Homepage', () => {
     await waitFor(() => expect(screen.getByRole('img', { name: 'Training' })).toHaveAttribute('src', GITHUB_PIC));
   });
 
-  it('shows the source picture and metrics when the feed returns sources', async () => {
+  it('shows the source picture and its metrics when the source has no featured item', async () => {
     axiosMock.onGet(FEED).reply(200, feedWithSource);
     axiosMock.onGet(/raw\.githubusercontent\.com/).reply(200, README_CONTENT);
     render(<Homepage />);
-    expect(await screen.findByText('This week\'s metrics')).toBeInTheDocument();
+    expect(await screen.findByText('Intervals · This week')).toBeInTheDocument();
+    expect(screen.getByText('10 km')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'This week\'s metrics' })).not.toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Intervals' })).toHaveAttribute('src', 'https://example.com/intervals.jpg');
   });
 
-  it('keeps this week behind an accordion until it is opened', async () => {
-    axiosMock.onGet(FEED).reply(200, feedWithSource);
+  it('starts on the featured item, toggles to metrics, and keeps them open across cycles', async () => {
+    axiosMock.onGet(FEED).reply(200, {
+      github: {
+        label: 'GitHub',
+        profilePicture: 'https://example.com/gh.png',
+        activity: [{ label: 'Personal', value: '3 commits', url: '' }],
+        featured: { heading: 'Latest PR', title: 'Add a thing', subtitle: 'adamsuk/x #1' },
+      },
+      goodreads: {
+        label: 'Reading',
+        profilePicture: 'https://example.com/gr.png',
+        activity: [{ label: 'A book', value: 'Reading · 16 Oct', url: '' }],
+        featured: { heading: 'Currently reading', title: 'A book', subtitle: 'An author' },
+      },
+    });
     axiosMock.onGet().reply(200, README_CONTENT);
     render(<Homepage />);
-    const summary = await screen.findByText('This week\'s metrics');
-    expect(summary.closest('details')).not.toHaveAttribute('open');
+    expect(await screen.findByText('Add a thing')).toBeInTheDocument();
+    expect(screen.queryByText('3 commits')).not.toBeInTheDocument();
+    const toggle = screen.getByRole('button', { name: 'This week\'s metrics' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(document.getElementById(toggle.getAttribute('aria-controls') ?? '')).not.toBeNull();
+    fireEvent.click(toggle);
+    expect(screen.getByText('3 commits')).toBeInTheDocument();
+    expect(screen.queryByText('Add a thing')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.click(screen.getByRole('button', { name: /Show the next source/ }));
+    expect(await screen.findByText('Reading · 16 Oct')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByText('A book', { selector: 'a, h2' })).toBeInTheDocument();
+    expect(screen.queryByText('Reading · 16 Oct')).not.toBeInTheDocument();
   });
 
   it('shows the pacman loader while the profile is still loading', () => {

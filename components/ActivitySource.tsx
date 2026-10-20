@@ -121,15 +121,23 @@ export function useActivitySources(): ActivitySource[] | null {
   return sources;
 }
 
-export function SourceMetrics({ source }: { source: ActivitySource | null }) {
+interface SourceMetricsProps {
+  source: ActivitySource | null;
+  /** Leave the label out when the surrounding card already shows it. */
+  hideLabel?: boolean;
+}
+
+export function SourceMetrics({ source, hideLabel = false }: SourceMetricsProps) {
   if (!source) return null;
 
   return (
     <section aria-label={source.label} className="text-left text-sm text-gray-800 dark:text-gray-100">
-      <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
-        {source.label}
-      </p>
-      {source.summary ? <p className="mt-1 tabular-nums">{source.summary}</p> : null}
+      {hideLabel ? null : (
+        <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          {source.label}
+        </p>
+      )}
+      {source.summary ? <p className={`${hideLabel ? '' : 'mt-1 '}tabular-nums`}>{source.summary}</p> : null}
       {source.activity.length === 0 ? (
         <p className="mt-3 text-gray-500 dark:text-gray-400">Nothing to show.</p>
       ) : (

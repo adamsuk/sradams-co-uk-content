@@ -10,8 +10,8 @@ import rehypeSanitize from 'rehype-sanitize';
 import env from '../default-env';
 import Loader from '../components/Loader';
 import LatestPost, { useLatestPost } from '../components/LatestPost';
-import { SourceMetrics, fallbackPicture, useActivitySources } from '../components/ActivitySource';
-import FeaturedItem from '../components/FeaturedItem';
+import { fallbackPicture, useActivitySources } from '../components/ActivitySource';
+import SourceCard from '../components/SourceCard';
 import MarkdownImg from '../components/MarkdownImg';
 import ProfilePhoto from '../components/ProfilePhoto';
 
@@ -38,6 +38,9 @@ function Homepage({ className = '' }: HomepageProps) {
   const [sourceIndex, setSourceIndex] = useState(0);
   const activeSource = sources?.[sourceIndex] ?? null;
   const showMetrics = Boolean(activeSource);
+  // The metrics view stays open across cycles: someone who opened it is comparing weeks
+  // across sources. Cycling is only ever a click on the photo, so nothing moves on its own.
+  const [metricsOpen, setMetricsOpen] = useState(false);
   const cycleSource = () => {
     if (!sources || sources.length < 2) return;
     setSourceIndex((index) => (index + 1) % sources.length);
@@ -135,36 +138,13 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             )}
             {showMetrics && (
-            <details className="group w-full min-w-0 sm:w-auto sm:max-w-[500px] sm:flex-1 sm:text-right lg:landscape:max-w-none lg:landscape:text-left">
-              <summary className="flex cursor-pointer sm:justify-end lg:landscape:justify-start list-none items-center gap-2 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 20 20"
-                  className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-90 dark:text-gray-400"
-                >
-                  <path
-                    d="M7 5l6 5-6 5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                {'This week\'s metrics'}
-              </summary>
-              <div className="mt-4 space-y-4">
-                <SourceMetrics source={activeSource} />
-              </div>
-            </details>
+              <SourceCard
+                source={activeSource}
+                showMetrics={metricsOpen}
+                onToggle={() => setMetricsOpen((open) => !open)}
+                className="min-w-0 sm:max-w-[500px] sm:flex-1 lg:landscape:max-w-none"
+              />
             )}
-            <FeaturedItem
-              featured={activeSource?.featured}
-              source={activeSource?.label}
-              sourceId={activeSource?.id}
-              stacked
-              className="hidden lg:landscape:block"
-            />
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section
@@ -192,12 +172,6 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
-            <FeaturedItem
-              featured={activeSource?.featured}
-              source={activeSource?.label}
-              sourceId={activeSource?.id}
-              className="lg:landscape:hidden"
-            />
             <LatestPost post={latestPost} />
           </div>
         </div>
