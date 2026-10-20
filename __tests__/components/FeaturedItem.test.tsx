@@ -45,6 +45,7 @@ describe('featured item', () => {
     render(
       <FeaturedItem
         source="Training"
+        sourceId="intervals"
         featured={featuredFromFeed({
           heading: 'Latest activity',
           title: 'Evening run',
@@ -58,15 +59,19 @@ describe('featured item', () => {
     expect(screen.getByText('Latest activity · Training')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Evening run' })).toHaveAttribute('href', 'https://intervals.icu/activities/i1');
     expect(screen.getByRole('img', { name: 'Route of Evening run' })).toBeInTheDocument();
-    expect(screen.getByText('6.2 km · 34m')).toBeInTheDocument();
+    // Only the map and the activity name; the rest lives in "This week's metrics".
+    expect(screen.queryByText('6.2 km · 34m')).not.toBeInTheDocument();
+    expect(screen.queryByText('Run · 19 Oct')).not.toBeInTheDocument();
   });
 
-  it('renders a cover image, a secondary link and a video when given', () => {
+  it('renders a cover with its title and artist, but no plays or top track', () => {
     render(
       <FeaturedItem
         featured={featuredFromFeed({
           heading: 'Top album this week',
           title: 'Dopamine Chamber',
+          subtitle: 'Fontaines D.C.',
+          details: ['9 plays'],
           image: 'https://lastfm.freetls.fastly.net/i/u/300x300/a.png',
           link: { label: 'Top track · Song', detail: 'Band', url: 'https://www.last.fm/x' },
           video: { youtubeId: 'dQw4w9WgXcQ', title: 'Band – Song' },
@@ -74,8 +79,29 @@ describe('featured item', () => {
       />,
     );
     expect(screen.getByRole('img', { name: 'Dopamine Chamber' })).toHaveAttribute('src', 'https://lastfm.freetls.fastly.net/i/u/300x300/a.png');
-    expect(screen.getByRole('link', { name: 'Top track · Song' })).toBeInTheDocument();
+    expect(screen.queryByText(/Top track/)).not.toBeInTheDocument();
+    expect(screen.queryByText('9 plays')).not.toBeInTheDocument();
+    expect(screen.getByText('Fontaines D.C.')).toBeInTheDocument();
     expect(screen.getByTitle('Band – Song')).toHaveAttribute('src', 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ');
+  });
+
+  it('keeps a GitHub card to the PR title and repo', () => {
+    render(
+      <FeaturedItem
+        sourceId="github"
+        featured={featuredFromFeed({
+          heading: 'Latest PR',
+          title: 'Add featured items',
+          subtitle: 'adamsuk/activity-feed #10',
+          description: 'A long description of the change',
+          details: ['Merged', 'Merged 20 Oct'],
+        })}
+      />,
+    );
+    expect(screen.getByText('Add featured items')).toBeInTheDocument();
+    expect(screen.getByText('adamsuk/activity-feed #10')).toBeInTheDocument();
+    expect(screen.queryByText(/long description/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Merged/)).not.toBeInTheDocument();
   });
 
   it('renders nothing without a card', () => {

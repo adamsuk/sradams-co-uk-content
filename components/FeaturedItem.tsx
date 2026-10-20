@@ -138,23 +138,30 @@ function Visual({ featured, stacked }: { featured: Featured; stacked: boolean })
 
 const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
 
+const HIDE_SUBTITLE = new Set(['intervals']);
+
 /** The cycled source's featured card. Renders nothing when the source has none. */
 interface FeaturedItemProps {
   featured: Featured | null | undefined;
   source?: string;
+  /** Feed id of the source, for example "intervals". */
+  sourceId?: string;
   /** Picture above the text, for the narrow desktop sidebar. */
   stacked?: boolean;
   className?: string;
 }
 
 function FeaturedItem({
-  featured, source, stacked = false, className = '',
+  featured, source, sourceId, stacked = false, className = '',
 }: FeaturedItemProps) {
   if (!featured) return null;
   const title = featured.heading || 'Featured';
   // "Currently reading · Reading" says it twice, so the source label only adds new words.
   const repeats = source && title.toLowerCase().includes(source.toLowerCase().replace(/s$/, ''));
   const heading = source && !repeats ? `${title} · ${source}` : title;
+  // Kept minimal: the visual and its title line. Dates, distances, plays and the top
+  // track are already in "This week's metrics". An activity's subtitle is that kind of line.
+  const showSubtitle = Boolean(featured.subtitle) && !HIDE_SUBTITLE.has(sourceId ?? '');
   return (
     <section aria-label={heading} className={`${shell} shadow-sm ${stacked ? 'p-4' : 'p-5'} ${className}`} data-testid="featured-item">
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -170,30 +177,8 @@ function FeaturedItem({
               </a>
             ) : featured.title}
           </h2>
-          {featured.subtitle && (
+          {showSubtitle && (
             <p className="mt-1 truncate text-sm text-gray-600 dark:text-gray-400">{featured.subtitle}</p>
-          )}
-          {featured.description && (
-            <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400 lg:landscape:line-clamp-3">
-              {featured.description}
-            </p>
-          )}
-          {featured.details.length > 0 && (
-            <p className="mt-2 text-xs tabular-nums text-gray-500 dark:text-gray-400">
-              {featured.details.join(' · ')}
-            </p>
-          )}
-          {featured.link && (
-            <p className="mt-2 text-sm">
-              {featured.link.url ? (
-                <a href={featured.link.url} className="font-medium hover:underline" rel="noopener noreferrer" target="_blank">
-                  {featured.link.label}
-                </a>
-              ) : <span className="font-medium">{featured.link.label}</span>}
-              {featured.link.detail && (
-                <span className="text-gray-500 dark:text-gray-400">{` · ${featured.link.detail}`}</span>
-              )}
-            </p>
           )}
         </div>
       </div>
