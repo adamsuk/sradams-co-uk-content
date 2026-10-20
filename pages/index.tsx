@@ -161,6 +161,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <FeaturedItem
               featured={activeSource?.featured}
               source={activeSource?.label}
+              sourceId={activeSource?.id}
               stacked
               className="hidden lg:landscape:block"
             />
@@ -194,6 +195,7 @@ function Homepage({ className = '' }: HomepageProps) {
             <FeaturedItem
               featured={activeSource?.featured}
               source={activeSource?.label}
+              sourceId={activeSource?.id}
               className="lg:landscape:hidden"
             />
             <LatestPost post={latestPost} />
