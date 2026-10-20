@@ -9,6 +9,7 @@ import "../styles/globals.css";
 import Head from "next/head";
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
+import ScrollArea from "../components/ScrollArea";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -31,18 +32,19 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Scott Adams</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        {/* Full-height shell: header on top, contact bar at the bottom, the page scrolls between. */}
         <div
           key="generic"
-          className="flex flex-col min-h-dvh"
+          className="app-shell flex flex-col overflow-hidden print:h-auto print:overflow-visible"
         >
           <Header />
-          <main className="flex flex-1 flex-col">
+          <ScrollArea>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} setLoading={setLoading} loading={loading} />
-          </main>
+          </ScrollArea>
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <NavBar {...pageProps} />
         </div>

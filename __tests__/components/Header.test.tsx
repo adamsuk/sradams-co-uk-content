@@ -29,7 +29,8 @@ describe('Header', () => {
   it('stays in view without covering the page', () => {
     const { container } = render(<Header />);
     const header = container.querySelector('header');
-    expect(header).toHaveClass('sticky');
+    // The page scrolls inside <main>, so the header is a fixed-size row of the shell.
+    expect(header).toHaveClass('shrink-0');
     expect(header).not.toHaveClass('fixed');
   });
 

@@ -25,7 +25,7 @@ function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-20 w-full border-b border-gray-200 bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100 print:hidden">
+    <header className="z-20 w-full shrink-0 border-b pt-[env(safe-area-inset-top)] border-gray-200 bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100 print:hidden">
       <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:gap-4">
         <Link href="/" className="shrink-0 text-xl font-bold tracking-tighter">
           <span className="md:hidden">SA</span>

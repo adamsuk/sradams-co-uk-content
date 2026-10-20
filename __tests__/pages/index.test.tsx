@@ -193,10 +193,11 @@ describe('Homepage', () => {
     expect(screen.queryByText('Add a thing')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Back' })).toHaveAttribute('aria-expanded', 'true');
     fireEvent.click(screen.getByRole('button', { name: /Show the next source/ }));
-    expect(await screen.findByText('Reading · 16 Oct')).toBeInTheDocument();
+    expect(await screen.findByText('16 Oct')).toBeInTheDocument();
+    expect(screen.getByText('Reading')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Back' }));
     expect(screen.getByText('A book', { selector: 'a, h2' })).toBeInTheDocument();
-    expect(screen.queryByText('Reading · 16 Oct')).not.toBeInTheDocument();
+    expect(screen.queryByText('16 Oct')).not.toBeInTheDocument();
   });
 
   it('shows the pacman loader while the profile is still loading', () => {

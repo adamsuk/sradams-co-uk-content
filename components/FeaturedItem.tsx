@@ -154,10 +154,10 @@ export function FeaturedBody({ featured, sourceId }: { featured: Featured; sourc
   const showSubtitle = Boolean(featured.subtitle) && !HIDE_SUBTITLE.has(sourceId ?? '');
   return (
     <>
-      <div className="flex items-start gap-3 lg:landscape:flex-col">
+      <div className="flex items-start gap-3 lg:landscape:flex-col lg:landscape:items-stretch">
         <Visual featured={featured} />
         <div className="min-w-0 flex-1">
-          <h2 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <h2 className="line-clamp-3 break-words text-base font-semibold [overflow-wrap:anywhere] text-gray-900 dark:text-gray-100">
             {featured.url ? (
               <a href={featured.url} className="hover:underline" rel="noopener noreferrer" target="_blank">
                 {featured.title}
@@ -165,7 +165,7 @@ export function FeaturedBody({ featured, sourceId }: { featured: Featured; sourc
             ) : featured.title}
           </h2>
           {showSubtitle && (
-            <p className="mt-1 truncate text-sm text-gray-600 dark:text-gray-400">{featured.subtitle}</p>
+            <p className="mt-1 break-words text-sm text-gray-600 [overflow-wrap:anywhere] dark:text-gray-400">{featured.subtitle}</p>
           )}
         </div>
       </div>
