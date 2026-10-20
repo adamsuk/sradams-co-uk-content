@@ -3,6 +3,11 @@ import { render, screen } from '@testing-library/react';
 
 import Custom404 from '../../pages/404';
 
+jest.mock('react-markdown', () => ({
+  __esModule: true,
+  default: ({ children }: { children: string }) => <div data-testid="markdown">{children}</div>,
+}));
+
 describe('Custom404', () => {
   it('renders without crashing', () => {
     render(<Custom404 />);
