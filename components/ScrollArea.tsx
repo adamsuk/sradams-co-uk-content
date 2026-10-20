@@ -27,7 +27,15 @@ export function useMainScroll(ref: React.RefObject<HTMLElement>) {
       if (target) {
         target.scrollIntoView();
       } else if (popped.current) {
-        main.scrollTop = positions.current.get(url) ?? 0;
+        // The page may still be growing (lists, images), so keep trying for a moment.
+        const goal = positions.current.get(url) ?? 0;
+        let tries = 0;
+        const restore = () => {
+          main.scrollTop = goal;
+          tries += 1;
+          if (Math.abs(main.scrollTop - goal) > 1 && tries < 90) requestAnimationFrame(restore);
+        };
+        restore();
       } else {
         main.scrollTop = 0;
       }
