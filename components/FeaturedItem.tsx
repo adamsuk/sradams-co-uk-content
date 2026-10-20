@@ -110,11 +110,12 @@ function RouteMap({ route, label }: { route: FeaturedRoute; label: string }) {
   );
 }
 
-function Visual({ featured }: { featured: Featured }) {
-  const frame = 'flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:landscape:h-32 lg:landscape:w-32';
+function Visual({ featured, stacked }: { featured: Featured; stacked: boolean }) {
+  // The site's spacing scale is custom, so sizes are explicit.
+  const frame = `flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 ${stacked ? 'w-full' : 'w-[6rem]'}`;
   if (featured.route) {
     return (
-      <div className={`${frame} p-2 text-orange-600 dark:text-orange-400`} data-testid="featured-route">
+      <div className={`${frame} ${stacked ? 'aspect-square p-2' : 'h-[6rem] p-1'} text-orange-600 dark:text-orange-400`} data-testid="featured-route">
         <RouteMap route={featured.route} label={featured.title} />
       </div>
     );
@@ -127,7 +128,7 @@ function Visual({ featured }: { featured: Featured }) {
           alt={featured.title}
           loading="lazy"
           referrerPolicy="no-referrer"
-          className="h-full w-full object-cover"
+          className={`block h-auto w-full object-contain ${stacked ? 'max-h-[20rem]' : 'max-h-[9rem]'}`}
         />
       </div>
     );
@@ -135,24 +136,32 @@ function Visual({ featured }: { featured: Featured }) {
   return null;
 }
 
-const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
+const shell = 'block w-full rounded-2xl border border-gray-200 bg-gray-50 text-left text-gray-800 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-100';
 
 /** The cycled source's featured card. Renders nothing when the source has none. */
 interface FeaturedItemProps {
   featured: Featured | null | undefined;
   source?: string;
+  /** Picture above the text, for the narrow desktop sidebar. */
+  stacked?: boolean;
+  className?: string;
 }
 
-function FeaturedItem({ featured, source }: FeaturedItemProps) {
+function FeaturedItem({
+  featured, source, stacked = false, className = '',
+}: FeaturedItemProps) {
   if (!featured) return null;
-  const heading = [featured.heading || 'Featured', source].filter(Boolean).join(' · ');
+  const title = featured.heading || 'Featured';
+  // "Currently reading · Reading" says it twice, so the source label only adds new words.
+  const repeats = source && title.toLowerCase().includes(source.toLowerCase().replace(/s$/, ''));
+  const heading = source && !repeats ? `${title} · ${source}` : title;
   return (
-    <section aria-label={heading} className={`${shell} shadow-sm`} data-testid="featured-item">
+    <section aria-label={heading} className={`${shell} shadow-sm ${stacked ? 'p-4' : 'p-5'} ${className}`} data-testid="featured-item">
       <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
         {heading}
       </p>
-      <div className="mt-3 flex items-start gap-4">
-        <Visual featured={featured} />
+      <div className={`mt-3 flex gap-3 ${stacked ? 'flex-col' : 'items-start'}`}>
+        <Visual featured={featured} stacked={stacked} />
         <div className="min-w-0 flex-1">
           <h2 className="line-clamp-2 text-base font-semibold text-gray-900 dark:text-gray-100">
             {featured.url ? (
@@ -162,7 +171,7 @@ function FeaturedItem({ featured, source }: FeaturedItemProps) {
             ) : featured.title}
           </h2>
           {featured.subtitle && (
-            <p className="mt-0.5 truncate text-sm text-gray-600 dark:text-gray-400">{featured.subtitle}</p>
+            <p className="mt-1 truncate text-sm text-gray-600 dark:text-gray-400">{featured.subtitle}</p>
           )}
           {featured.description && (
             <p className="mt-1 line-clamp-2 text-sm text-gray-600 dark:text-gray-400 lg:landscape:line-clamp-3">
@@ -189,7 +198,7 @@ function FeaturedItem({ featured, source }: FeaturedItemProps) {
         </div>
       </div>
       {featured.video && (
-        <div className="mt-4 hidden aspect-video w-full overflow-hidden rounded-xl sm:block">
+        <div className="mt-3 hidden aspect-video w-full overflow-hidden rounded-xl sm:block">
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${featured.video.youtubeId}`}
             title={featured.video.title || featured.title}

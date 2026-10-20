@@ -158,6 +158,12 @@ function Homepage({ className = '' }: HomepageProps) {
               </div>
             </details>
             )}
+            <FeaturedItem
+              featured={activeSource?.featured}
+              source={activeSource?.label}
+              stacked
+              className="hidden lg:landscape:block"
+            />
           </div>
           <div className="flex min-w-0 flex-col gap-4">
             <section
@@ -185,7 +191,11 @@ function Homepage({ className = '' }: HomepageProps) {
                 </div>
               )}
             </section>
-            <FeaturedItem featured={activeSource?.featured} source={activeSource?.label} />
+            <FeaturedItem
+              featured={activeSource?.featured}
+              source={activeSource?.label}
+              className="lg:landscape:hidden"
+            />
             <LatestPost post={latestPost} />
           </div>
         </div>
