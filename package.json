@@ -23,7 +23,7 @@
     "dotenv": "^16.0.3",
     "factory-sim-viz": "github:adamsuk/factory-sim#v0.2.4",
     "gray-matter": "^4.0.3",
-    "js-cookie": "^3.0.5",
+    "js-cookie": "^3.0.8",
     "lodash": "^4.17.21",
     "mathjs": "^15.2.0",
     "megachess-viz": "github:adamsuk/megaChess#v0.4.3",
