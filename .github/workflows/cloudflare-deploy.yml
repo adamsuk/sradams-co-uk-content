@@ -58,6 +58,52 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+  e2e:
+    # Smoke + visual tests of the static export (playwright.config.ts, e2e/). Runs in the
+    # pinned Playwright image so screenshots match the committed baselines (fonts etc.).
+    # A missing baseline fails the run and the actual image is uploaded in the
+    # e2e-results artifact (e2e/__screenshots__) to be reviewed and committed.
+    needs: check-content
+    if: needs.check-content.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Playwright tests
+        run: npx playwright test
+        env:
+          HOME: /root
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            playwright-report/
+            test-results/
+            e2e/__screenshots__/
+          if-no-files-found: ignore
+          retention-days: 14
+
   deploy:
     needs: check-content
     if: needs.check-content.outputs.changed == 'true'

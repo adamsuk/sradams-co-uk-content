@@ -6,6 +6,8 @@ const createJestConfig = nextJest({ dir: "./" });
 const customJestConfig = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testEnvironment: "jest-environment-jsdom",
+  // Playwright specs run separately (npm run test:e2e).
+  testPathIgnorePatterns: ["/node_modules/", "/e2e/"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
