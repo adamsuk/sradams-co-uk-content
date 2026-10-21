@@ -36,3 +36,5 @@ yarn-error.log*
 .eslintcache
 /cms-content.sha256
 /.cms/
+/test-results/
+/playwright-report/
