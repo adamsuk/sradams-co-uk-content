@@ -1,8 +1,10 @@
 # Weekly version updates for npm (the only package.json/lockfile is at the root) and
 # GitHub Actions. Mirrors touchlineHQ/clubsPlatform's conventions: grouped families that
 # must move together, and framework majors held back for a manual upgrade.
-# Dependabot PRs within policy are merged by .github/workflows/dependabot-auto-merge.yml
-# once CI is green; GitHub Actions bumps stay manual (they edit .github/workflows/).
+# Dependabot PRs within policy (patch/minor only) are merged by
+# .github/workflows/dependabot-auto-merge.yml once CI is green; majors and GitHub Actions
+# bumps stay manual. Groups only collect patch/minor updates, so a major always arrives
+# as its own PR instead of turning a whole group into a major.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -17,33 +19,39 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+        update-types: ["minor", "patch"]
       next:
         patterns:
           - "next"
           - "eslint-config-next"
+        update-types: ["minor", "patch"]
       testing:
         patterns:
           - "jest"
           - "jest-environment-jsdom"
           - "@types/jest"
           - "@testing-library/*"
+        update-types: ["minor", "patch"]
       eslint:
         patterns:
           - "eslint"
           - "eslint-plugin-*"
           - "eslint-config-airbnb*"
           - "@typescript-eslint/*"
+        update-types: ["minor", "patch"]
       css:
         patterns:
           - "tailwindcss"
           - "@tailwindcss/*"
           - "postcss"
           - "autoprefixer"
+        update-types: ["minor", "patch"]
       markdown:
         patterns:
           - "react-markdown"
           - "rehype-*"
           - "remark-*"
+        update-types: ["minor", "patch"]
     ignore:
       # Framework majors need a deliberate migration (static export, Tailwind v4 config,
       # React 19, ESLint flat config); tests and the build would not catch every break.

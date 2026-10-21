@@ -1,6 +1,7 @@
 name: Dependabot auto-merge
 
 # Merges Dependabot pull requests once CI has passed, up to a semver ceiling.
+# Kept DISABLED until Scott re-enables it (gh workflow enable dependabot-auto-merge.yml).
 # A self-contained copy of the touchlineHQ shared workflow used by
 # touchlineHQ/clubsPlatform (touchlineHQ/.github/.github/workflows/dependabot-auto-merge.yml
 # @ b226a1565c7b9bc39da2941494d63f23888325c4), with the same policy, so this personal repo
@@ -33,10 +34,9 @@ on:
 permissions: {}
 
 env:
-  # Same policy as clubsPlatform: merge every classified semver bump (majors of the
-  # frameworks are already held back in .github/dependabot.yml), merge unclassified
-  # security updates, and leave GitHub Actions bumps for a manual merge.
-  ALLOWED_UPDATES: major
+  # Patch and minor only. Majors (including a grouped PR containing one) are left for a
+  # manual merge: CI can't see every visual or runtime break on this site.
+  ALLOWED_UPDATES: minor
   ALLOW_UNCLASSIFIED: "true"
   SKIP_ECOSYSTEMS: github_actions
   # Check-run names (the job names in cloudflare-deploy.yml), one per line.
