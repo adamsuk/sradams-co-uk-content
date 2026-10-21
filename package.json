@@ -42,7 +42,7 @@
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^4.0.0",
     "tailwindcss": "^3.4.19",
-    "webpack": "^5.104.1"
+    "webpack": "^5.112.0"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
