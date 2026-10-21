@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/cms-snapshot.js && CMS_SNAPSHOT=.cms/blog.json next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",

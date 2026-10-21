@@ -19,7 +19,6 @@ on:
     types: [blog-published]
 
 env:
-  CMS_URL: https://blog.sradams.co.uk/api
   SITE_URL: https://sradams.co.uk
 
 jobs:
@@ -29,17 +28,25 @@ jobs:
     outputs:
       changed: ${{ steps.compare.outputs.changed }}
     steps:
+      - name: Checkout
+        if: github.event_name == 'schedule'
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
       - name: Compare CMS content with the live build
         id: compare
+        shell: bash
         env:
           EVENT: ${{ github.event_name }}
         run: |
+          set -euo pipefail
           if [ "$EVENT" != "schedule" ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          if ! cms=$(curl -fsS --retry 3 "$CMS_URL/blog" | jq -cS . | sha256sum | cut -d' ' -f1); then
-            echo "CMS unreachable; skipping this run"
+          # Same hash (raw /blog body) that the build publishes as /cms-content.sha256.
+          if ! cms=$(node scripts/cms-snapshot.js --hash-only); then
+            echo "CMS unreachable or returned no posts; skipping this run"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -132,17 +139,19 @@ jobs:
               body: `## 🧪 Test Results\n\n${testSummary}\n\n### 📊 Coverage Report\n\n${coverageTable}`,
             });
 
-      - name: Snapshot CMS content hash
-        run: |
-          curl -fsS --retry 3 "$CMS_URL/blog" | jq -cS . | sha256sum | cut -d' ' -f1 \
-            > cms-content.sha256 || echo "unavailable" > cms-content.sha256
-          cat cms-content.sha256
-
       - name: Build
+        # npm run build snapshots the CMS blog list first (scripts/cms-snapshot.js) and
+        # fails if the CMS is unreachable or returns no public posts, so a CMS outage can
+        # never publish a blog-less site.
         run: npm run build
 
       - name: Publish CMS content hash
-        run: cp cms-content.sha256 out/cms-content.sha256
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .cms/blog.sha256
+          cp .cms/blog.sha256 out/cms-content.sha256
+          cat out/cms-content.sha256
 
       - name: Create GitHub Deployment
         if: github.actor != 'dependabot[bot]'
