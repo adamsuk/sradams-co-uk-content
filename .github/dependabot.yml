@@ -1,0 +1,67 @@
+# Weekly version updates for npm (the only package.json/lockfile is at the root) and
+# GitHub Actions. Mirrors touchlineHQ/clubsPlatform's conventions: grouped families that
+# must move together, and framework majors held back for a manual upgrade.
+# Dependabot PRs within policy are merged by .github/workflows/dependabot-auto-merge.yml
+# once CI is green; GitHub Actions bumps stay manual (they edit .github/workflows/).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+      testing:
+        patterns:
+          - "jest"
+          - "jest-environment-jsdom"
+          - "@types/jest"
+          - "@testing-library/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-plugin-*"
+          - "eslint-config-airbnb*"
+          - "@typescript-eslint/*"
+      css:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "postcss"
+          - "autoprefixer"
+      markdown:
+        patterns:
+          - "react-markdown"
+          - "rehype-*"
+          - "remark-*"
+    ignore:
+      # Framework majors need a deliberate migration (static export, Tailwind v4 config,
+      # React 19, ESLint flat config); tests and the build would not catch every break.
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

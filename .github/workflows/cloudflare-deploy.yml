@@ -55,6 +55,10 @@ jobs:
     needs: check-content
     if: needs.check-content.outputs.changed == 'true'
     runs-on: ubuntu-latest
+    # Dependabot-triggered runs get no Actions secrets and a read-only GITHUB_TOKEN, so
+    # they test and build only: the Cloudflare preview, GitHub Deployment and PR comment
+    # steps are skipped for github.actor dependabot[bot]. Once merged, the auto-merge
+    # workflow dispatches this workflow on main to deploy production.
     concurrency:
       group: deploy-${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
       cancel-in-progress: false
@@ -80,7 +84,7 @@ jobs:
         run: npm run test:coverage -- --json --outputFile=test-results.json
 
       - name: Comment test and coverage summary on PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
         uses: actions/github-script@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -141,6 +145,7 @@ jobs:
         run: cp cms-content.sha256 out/cms-content.sha256
 
       - name: Create GitHub Deployment
+        if: github.actor != 'dependabot[bot]'
         id: deployment
         uses: actions/github-script@v7
         env:
@@ -161,6 +166,7 @@ jobs:
             return deployment.data.id;
 
       - name: Publish to Cloudflare Pages
+        if: github.actor != 'dependabot[bot]'
         id: cloudflare
         uses: cloudflare/wrangler-action@v4
         with:
@@ -169,7 +175,7 @@ jobs:
           command: pages deploy out --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }} --branch=${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
 
       - name: Update Deployment Status (Success)
-        if: success()
+        if: success() && github.actor != 'dependabot[bot]'
         uses: actions/github-script@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -211,7 +217,7 @@ jobs:
             });
 
       - name: Comment on PR
-        if: github.event_name == 'pull_request' && success()
+        if: github.event_name == 'pull_request' && success() && github.actor != 'dependabot[bot]'
         uses: actions/github-script@v7
         env:
           CLOUDFLARE_URL: ${{ steps.cloudflare.outputs.deployment-url }}
