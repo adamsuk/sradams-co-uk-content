@@ -113,7 +113,7 @@ function RouteMap({ route, label }: { route: FeaturedRoute; label: string }) {
 function Visual({ featured }: { featured: Featured }) {
   // The site's spacing scale is custom, so sizes are explicit. A small square beside the
   // title on phones and tablets; full width above it in the narrow desktop sidebar.
-  const frame = 'flex w-[6rem] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:landscape:w-full';
+  const frame = 'flex w-[6rem] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white m-auto dark:border-gray-700 dark:bg-gray-800 lg:landscape:w-fit';
   if (featured.route) {
     return (
       <div className={`${frame} h-[6rem] p-1 text-orange-600 dark:text-orange-400 lg:landscape:aspect-square lg:landscape:h-auto lg:landscape:p-2`} data-testid="featured-route">
