@@ -137,11 +137,12 @@ const Cv = () => {
           <h1 className="text-center text-3xl print:text-xl print:pt-1 print:text-black">
             {meta?.meta?.title}
           </h1>
-          <div className="overflow-hidden">
+          <div className="overflow-hidden print:overflow-visible">
             {githubProfile && (
+              // In print, pulled up level with the title so it clears the TL;DR text
               <img
                 alt="ME!"
-                className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] print:w-[70px] print:h-[70px] print:ml-2 print:mb-1 rounded-full"
+                className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] print:w-[80px] print:h-[80px] print:-mt-[44px] print:ml-2 print:mb-[0px] rounded-full"
                 src={`https://github.com/${githubProfile}.png`}
               />
             )}
