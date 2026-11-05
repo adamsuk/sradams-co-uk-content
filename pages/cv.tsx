@@ -141,7 +141,7 @@ const Cv = () => {
             {githubProfile && (
               <img
                 alt="ME!"
-                className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] rounded-full print:hidden"
+                className="float-right ml-4 mb-2 w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] print:w-[70px] print:h-[70px] print:ml-2 print:mb-1 rounded-full"
                 src={`https://github.com/${githubProfile}.png`}
               />
             )}
