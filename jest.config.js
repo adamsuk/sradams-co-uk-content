@@ -19,8 +19,8 @@ const customJestConfig = {
   collectCoverageFrom: [
     "pages/**/*.{ts,tsx}",
     "components/**/*.{ts,tsx}",
+    "helpers/**/*.{ts,tsx}",
     "default-env.ts",
-    "!pages/_app.tsx",
     "!pages/_document.tsx",
     // MediaPlayer is commented out and not integrated into the app
     "!components/sandbox/MediaPlayer.tsx",

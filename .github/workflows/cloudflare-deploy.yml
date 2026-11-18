@@ -191,9 +191,12 @@ jobs:
         # never publish a blog-less site.
         # NEXT_PUBLIC_SENTRY_DSN is inlined into the static client bundle at build
         # time. Leave the secret unset and the Sentry SDK will not initialise.
+        # NEXT_PUBLIC_SENTRY_ENVIRONMENT distinguishes PR previews from production
+        # because next build always inlines NODE_ENV as "production".
         run: npm run build
         env:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
 
       - name: Publish CMS content hash
         shell: bash

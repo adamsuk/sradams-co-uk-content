@@ -51,4 +51,12 @@ value as a repository secret named `NEXT_PUBLIC_SENTRY_DSN`
 (Settings → Secrets and variables → Actions). Cloudflare Pages environment
 variables are not used at build time and will not reach the client bundle.
 The deploy workflow passes the secret into the production/preview `npm run build`
-step; CI tests and Playwright runs do not receive it.
+step; CI tests and Playwright runs do not receive it. The same step sets
+`NEXT_PUBLIC_SENTRY_ENVIRONMENT` to `preview` on pull requests and
+`production` otherwise, because `next build` always inlines `NODE_ENV` as
+`production`.
+
+To confirm ingest after a deploy, run
+`Sentry.captureMessage("test")` in the site's browser console.
+`window.Sentry` only exposes `captureMessage`, which is enough for that check
+and lets unused SDK exports be tree-shaken.
