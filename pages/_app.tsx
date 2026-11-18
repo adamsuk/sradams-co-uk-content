@@ -10,6 +10,9 @@ import Head from "next/head";
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
 import ScrollArea from "../components/ScrollArea";
+import { initSentry } from "../helpers/initSentry";
+
+initSentry();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
