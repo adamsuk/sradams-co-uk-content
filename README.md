@@ -56,7 +56,14 @@ step; CI tests and Playwright runs do not receive it. The same step sets
 `production` otherwise, because `next build` always inlines `NODE_ENV` as
 `production`.
 
-To confirm ingest after a deploy, run
-`Sentry.captureMessage("test")` in the site's browser console.
+<!-- coderabbit-ai-generated:v1 -->
+
+<!-- coderabbit-ai-generated-section:v1:2d98dadc057a3d73089171dc6ebf25ae50f93786bf0d73ba006450ddc6f99997 -->
+
+After setting the secret, manually run the **Deploy to Cloudflare Pages** workflow
+in GitHub Actions and wait for the deployment to complete. Then confirm ingest by
+running `Sentry.captureMessage("test")` in the deployed site's browser console.
+
+<!-- /coderabbit-ai-generated:v1 -->
 `window.Sentry` only exposes `captureMessage`, which is enough for that check
 and lets unused SDK exports be tree-shaken.
