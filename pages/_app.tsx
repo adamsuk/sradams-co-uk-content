@@ -10,6 +10,10 @@ import Head from "next/head";
 import NavBar from "../components/NavBar";
 import Header from "../components/Header";
 import ScrollArea from "../components/ScrollArea";
+import SentryErrorBoundary from "../components/SentryErrorBoundary";
+import { initSentry } from "../helpers/initSentry";
+
+initSentry();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -42,8 +46,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           <Header />
           <ScrollArea>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Component {...pageProps} setLoading={setLoading} loading={loading} />
+            <SentryErrorBoundary resetKey={router.asPath}>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              <Component {...pageProps} setLoading={setLoading} loading={loading} />
+            </SentryErrorBoundary>
           </ScrollArea>
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <NavBar {...pageProps} />
