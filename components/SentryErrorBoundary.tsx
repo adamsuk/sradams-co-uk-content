@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import NextError from 'next/error';
-import { captureException } from '@sentry/browser';
+import reportRenderError from '../helpers/reportRenderError';
 
 interface SentryErrorBoundaryProps {
   children: ReactNode;
@@ -56,7 +56,7 @@ class SentryErrorBoundary
   }
 
   componentDidCatch(error: unknown, info: ErrorInfo) {
-    captureException(error, {
+    reportRenderError(error, {
       contexts: {
         react: {
           componentStack: info.componentStack,
