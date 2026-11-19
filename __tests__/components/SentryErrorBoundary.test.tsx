@@ -16,6 +16,12 @@ function Boom() {
   throw new Error('render crashed');
 }
 
+function FalsyBoom(): never {
+  // Truthiness cannot select the fallback: undefined is still a thrown failure.
+  const thrown: unknown = undefined;
+  throw thrown;
+}
+
 describe('SentryErrorBoundary', () => {
   const consoleError = console.error;
 
@@ -50,6 +56,20 @@ describe('SentryErrorBoundary', () => {
     expect(captureExceptionMock).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'render crashed' }),
     );
+    expect(
+      screen.getByText(/Application error: a client-side exception has occurred/i),
+    ).toBeInTheDocument();
+  });
+
+  it('reports a falsy thrown value and still shows the error page', () => {
+    render(
+      <SentryErrorBoundary>
+        <FalsyBoom />
+      </SentryErrorBoundary>,
+    );
+
+    expect(captureExceptionMock).toHaveBeenCalledTimes(1);
+    expect(captureExceptionMock).toHaveBeenCalledWith(undefined);
     expect(
       screen.getByText(/Application error: a client-side exception has occurred/i),
     ).toBeInTheDocument();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { initSentry } from '../../helpers/initSentry';
 
@@ -45,6 +45,8 @@ jest.mock('../../components/ScrollArea', () => ({
 // Import after mocks so the module-scope initSentry() call is the mock.
 // eslint-disable-next-line import/first
 import MyApp from '../../pages/_app';
+// eslint-disable-next-line import/first
+import Sandbox from '../../pages/sandbox';
 
 describe('MyApp', () => {
   it('initialises Sentry when the app module loads', () => {
@@ -99,6 +101,58 @@ describe('route error recovery', () => {
       expect(screen.getByText('header')).toBe(header);
     } finally {
       consoleError.mockRestore();
+      jest.mocked(useRouter).mockReturnValue(originalRouter);
+    }
+  });
+});
+
+describe('sandbox state across shallow routes', () => {
+  it('keeps quiz answers when switching to Calculator and back', () => {
+    const originalRouter = useRouter();
+    const router = {
+      ...originalRouter,
+      pathname: '/sandbox',
+      asPath: '/sandbox/?component=quiz',
+      query: { component: 'quiz' },
+    };
+    jest.mocked(useRouter).mockReturnValue(router);
+
+    try {
+      const { rerender } = render(
+        <MyApp Component={Sandbox} pageProps={{}} router={{} as never} />,
+      );
+      fireEvent.change(screen.getByLabelText('First Name'), {
+        target: { value: 'Ada' },
+      });
+      expect(screen.getByTestId('quiz-output')).toHaveTextContent(/"name": "Ada"/);
+
+      fireEvent.change(screen.getByLabelText('Experiment'), {
+        target: { value: 'calculator' },
+      });
+      jest.mocked(useRouter).mockReturnValue({
+        ...router,
+        asPath: '/sandbox/?component=calculator',
+        query: { component: 'calculator' },
+      });
+      rerender(
+        <MyApp Component={Sandbox} pageProps={{}} router={{} as never} />,
+      );
+      expect(screen.getByRole('button', { name: '7' })).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText('Experiment'), {
+        target: { value: 'quiz' },
+      });
+      jest.mocked(useRouter).mockReturnValue({
+        ...router,
+        asPath: '/sandbox/?component=quiz',
+        query: { component: 'quiz' },
+      });
+      rerender(
+        <MyApp Component={Sandbox} pageProps={{}} router={{} as never} />,
+      );
+      expect(screen.getByLabelText('First Name')).toHaveValue('Ada');
+      expect(screen.getByTestId('quiz-output')).toHaveTextContent(/"name": "Ada"/);
+    } finally {
       jest.mocked(useRouter).mockReturnValue(originalRouter);
     }
   });

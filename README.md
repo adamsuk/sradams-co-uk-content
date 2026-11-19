@@ -44,7 +44,8 @@ initialise, so local development, tests and e2e runs send nothing.
 
 The DSN is the one shown on the application's Ingest tab in Better Stack.
 Do not commit the real value. For local testing, copy `.env.local.example` to
-`.env.local` and fill it in.
+`.env.local`, uncomment the `NEXT_PUBLIC_SENTRY_DSN` assignment, and fill in
+its value so Next.js loads the DSN for local reporting.
 
 Because this site is statically exported in GitHub Actions, set the production
 value as a repository secret named `NEXT_PUBLIC_SENTRY_DSN`

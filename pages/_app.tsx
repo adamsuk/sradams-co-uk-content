@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           <Header />
           <ScrollArea>
-            <SentryErrorBoundary key={router.asPath}>
+            <SentryErrorBoundary resetKey={router.asPath}>
               {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <Component {...pageProps} setLoading={setLoading} loading={loading} />
             </SentryErrorBoundary>
