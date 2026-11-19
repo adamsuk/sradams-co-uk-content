@@ -13,6 +13,7 @@ import { getSentryDsn, initSentry } from '../helpers/initSentry';
 describe('initSentry', () => {
   const originalDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
   const originalEnvironment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
+  const originalRelease = process.env.NEXT_PUBLIC_SENTRY_RELEASE;
 
   afterEach(() => {
     initMock.mockClear();
@@ -27,6 +28,11 @@ describe('initSentry', () => {
       delete process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
     } else {
       process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT = originalEnvironment;
+    }
+    if (originalRelease === undefined) {
+      delete process.env.NEXT_PUBLIC_SENTRY_RELEASE;
+    } else {
+      process.env.NEXT_PUBLIC_SENTRY_RELEASE = originalRelease;
     }
   });
 
@@ -55,6 +61,7 @@ describe('initSentry', () => {
   it('initialises the SDK when a DSN is provided', () => {
     const dsn = 'https://token@ingest.example.test/1';
     process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT = 'preview';
+    delete process.env.NEXT_PUBLIC_SENTRY_RELEASE;
     expect(initSentry(dsn)).toBe(true);
     expect(initMock).toHaveBeenCalledTimes(1);
     const options = initMock.mock.calls[0][0];
@@ -64,6 +71,7 @@ describe('initSentry', () => {
       replaysSessionSampleRate: 0,
       replaysOnErrorSampleRate: 0,
       environment: 'preview',
+      release: undefined,
       dataCollection: {
         userInfo: false,
         cookies: false,
@@ -91,5 +99,26 @@ describe('initSentry', () => {
         environment: process.env.NODE_ENV,
       }),
     );
+  });
+
+  it('sends the trimmed release so uploaded source maps match the client', () => {
+    process.env.NEXT_PUBLIC_SENTRY_RELEASE = '  abc123def  ';
+    expect(initSentry('https://token@ingest.example.test/1')).toBe(true);
+    expect(initMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        release: 'abc123def',
+      }),
+    );
+  });
+
+  it('omits release when NEXT_PUBLIC_SENTRY_RELEASE is unset or blank', () => {
+    delete process.env.NEXT_PUBLIC_SENTRY_RELEASE;
+    expect(initSentry('https://token@ingest.example.test/1')).toBe(true);
+    expect(initMock.mock.calls[0][0].release).toBeUndefined();
+
+    initMock.mockClear();
+    process.env.NEXT_PUBLIC_SENTRY_RELEASE = '   ';
+    expect(initSentry('https://token@ingest.example.test/1')).toBe(true);
+    expect(initMock.mock.calls[0][0].release).toBeUndefined();
   });
 });

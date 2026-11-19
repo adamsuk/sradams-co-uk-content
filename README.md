@@ -55,7 +55,45 @@ The deploy workflow passes the secret into the production/preview `npm run build
 step; CI tests and Playwright runs do not receive it. The same step sets
 `NEXT_PUBLIC_SENTRY_ENVIRONMENT` to `preview` on pull requests and
 `production` otherwise, because `next build` always inlines `NODE_ENV` as
-`production`.
+`production`. It also sets `NEXT_PUBLIC_SENTRY_RELEASE` from `github.sha`.
+`Sentry.init` sends that value as `release` when it is non-empty. Leave it
+unset locally.
+
+Readable stack traces need the client source maps on Better Stack. The
+deploy job, after `next build` and before the Cloudflare Pages deploy, runs
+`sentry-cli sourcemaps inject` and then `sourcemaps upload` on
+`out/_next/static`. The upload uses the same commit SHA as
+`SENTRY_RELEASE`, so the maps line up with the release the browser reports.
+The four values come from the application's Advanced settings in Better
+Stack. Set the names below in GitHub Actions
+(Settings → Secrets and variables → Actions). Do not commit the values.
+
+- `SENTRY_AUTH_TOKEN` — repository secret (Telemetry API token)
+- `SENTRY_URL` — repository variable (source-map endpoint)
+- `SENTRY_ORG` — repository variable
+- `SENTRY_PROJECT` — repository variable
+
+`SENTRY_URL`, `SENTRY_ORG`, and `SENTRY_PROJECT` may instead be repository
+secrets of the same name. A variable wins when both are set. The token is
+only a secret.
+
+If `SENTRY_AUTH_TOKEN` is unset, the upload is skipped and the workflow still
+succeeds, including on forks. After the upload or the skip, the job deletes
+every `.map` file under `out/` and fails if any remain, so maps are never
+published. Better Stack does not support publicly hosted maps.
+
+After a local `npm run build`, strip maps the same way before treating
+`out/` as deployable:
+
+```bash
+find out -type f -name '*.map' -delete
+map_count="$(find out -type f -name '*.map' | wc -l)"
+map_count="${map_count//[[:space:]]/}"
+if [ "$map_count" != "0" ]; then
+  echo "Refusing to deploy: ${map_count} .map file(s) remain in out/" >&2
+  exit 1
+fi
+```
 
 <!-- coderabbit-ai-generated:v1 -->
 
