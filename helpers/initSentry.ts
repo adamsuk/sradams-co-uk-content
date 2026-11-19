@@ -25,6 +25,16 @@ function getSentryEnvironment(
   return trimmed || process.env.NODE_ENV || 'production';
 }
 
+// Git commit SHA in CI (NEXT_PUBLIC_SENTRY_RELEASE). The deploy upload passes
+// the same value as SENTRY_RELEASE so Better Stack can match events to maps.
+// Unset locally and in tests, which leaves events without a release.
+function getSentryRelease(
+  value: string | undefined = process.env.NEXT_PUBLIC_SENTRY_RELEASE,
+): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed || undefined;
+}
+
 export function initSentry(dsn?: string): boolean {
   const resolved = getSentryDsn(dsn ?? process.env.NEXT_PUBLIC_SENTRY_DSN);
   if (!resolved || typeof window === 'undefined') {
@@ -44,6 +54,7 @@ export function initSentry(dsn?: string): boolean {
       defaults.filter((integration) => integration.name !== 'BrowserSession')
     ),
     environment: getSentryEnvironment(),
+    release: getSentryRelease(),
     // Still send errors. Do not collect user info, cookies, headers, bodies,
     // URL query params, or stack-frame local variables.
     dataCollection: {

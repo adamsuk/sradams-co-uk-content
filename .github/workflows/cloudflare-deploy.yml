@@ -193,10 +193,13 @@ jobs:
         # time. Leave the secret unset and the Sentry SDK will not initialise.
         # NEXT_PUBLIC_SENTRY_ENVIRONMENT distinguishes PR previews from production
         # because next build always inlines NODE_ENV as "production".
+        # NEXT_PUBLIC_SENTRY_RELEASE is the git SHA. The source-map upload
+        # passes the same value as SENTRY_RELEASE.
         run: npm run build
         env:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
           NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+          NEXT_PUBLIC_SENTRY_RELEASE: ${{ github.sha }}
 
       - name: Publish CMS content hash
         shell: bash
@@ -205,6 +208,50 @@ jobs:
           test -s .cms/blog.sha256
           cp .cms/blog.sha256 out/cms-content.sha256
           cat out/cms-content.sha256
+
+      - name: Upload source maps to Better Stack
+        # Inject debug IDs, then upload out/_next/static. Skipped when the
+        # token secret is unset so forks and Dependabot still pass. The token
+        # is read from the environment and is never printed.
+        shell: bash
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: ${{ vars.SENTRY_URL || secrets.SENTRY_URL }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG || secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT || secrets.SENTRY_PROJECT }}
+          SENTRY_RELEASE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SENTRY_AUTH_TOKEN:-}" ]; then
+            echo "SENTRY_AUTH_TOKEN is unset; skipping source map upload"
+            exit 0
+          fi
+          for name in SENTRY_URL SENTRY_ORG SENTRY_PROJECT SENTRY_RELEASE; do
+            if [ -z "${!name:-}" ]; then
+              echo "Source map upload requires ${name} when SENTRY_AUTH_TOKEN is set" >&2
+              exit 1
+            fi
+          done
+          test -d out/_next/static
+          ./node_modules/.bin/sentry-cli sourcemaps inject out/_next/static
+          ./node_modules/.bin/sentry-cli sourcemaps upload --release "${SENTRY_RELEASE}" out/_next/static
+
+      - name: Remove source maps from the deploy output
+        # Runs after a successful upload or a clean skip, and before Pages
+        # deploy. Better Stack does not support publicly hosted maps.
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d out
+          find out -type f -name '*.map' -delete
+          map_count="$(find out -type f -name '*.map' | wc -l)"
+          map_count="${map_count//[[:space:]]/}"
+          if [ "$map_count" != "0" ]; then
+            echo "Refusing to deploy: ${map_count} .map file(s) remain in out/" >&2
+            find out -type f -name '*.map' >&2
+            exit 1
+          fi
+          echo "No .map files remain in out/"
 
       - name: Create GitHub Deployment
         if: github.actor != 'dependabot[bot]'
