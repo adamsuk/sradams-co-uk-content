@@ -61,6 +61,36 @@ describe('SentryErrorBoundary', () => {
     ).toBeInTheDocument();
   });
 
+  it.each([
+    ['two errors', new Error('first lifecycle crash'), new Error('second lifecycle crash')],
+    ['an undefined error', undefined, new Error('sibling lifecycle crash')],
+  ])('reports each sibling lifecycle exception separately with %s', (_label, first, second) => {
+    class LifecycleBoom extends React.Component<{ error: unknown }> {
+      componentDidMount() {
+        const { error } = this.props;
+        throw error;
+      }
+
+      render() {
+        return null;
+      }
+    }
+
+    render(
+      <SentryErrorBoundary>
+        <LifecycleBoom error={first} />
+        <LifecycleBoom error={second} />
+      </SentryErrorBoundary>,
+    );
+
+    expect(captureExceptionMock).toHaveBeenCalledTimes(2);
+    expect(captureExceptionMock).toHaveBeenNthCalledWith(1, first);
+    expect(captureExceptionMock).toHaveBeenNthCalledWith(2, second);
+    expect(
+      screen.getByText(/Application error: a client-side exception has occurred/i),
+    ).toBeInTheDocument();
+  });
+
   it('reports a falsy thrown value and still shows the error page', () => {
     render(
       <SentryErrorBoundary>

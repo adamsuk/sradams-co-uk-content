@@ -10,7 +10,6 @@ interface SentryErrorBoundaryProps {
 
 interface SentryErrorBoundaryState {
   hasError: boolean;
-  error: unknown;
   resetKey?: string;
 }
 
@@ -21,8 +20,8 @@ interface SentryErrorBoundaryState {
  * the page component keeps the existing Header/NavBar chrome.
  *
  * Failure is `hasError`, not the thrown value's truthiness. The value is
- * kept as `unknown`. Pass `resetKey` (the route) to clear a failure after
- * navigation while leaving a healthy page mounted.
+ * reported directly from componentDidCatch. Pass `resetKey` (the route) to
+ * clear a failure after navigation while leaving a healthy page mounted.
  */
 class SentryErrorBoundary
   extends Component<SentryErrorBoundaryProps, SentryErrorBoundaryState> {
@@ -30,15 +29,12 @@ class SentryErrorBoundary
     super(props);
     this.state = {
       hasError: false,
-      error: undefined,
       resetKey: props.resetKey,
     };
   }
 
-  static getDerivedStateFromError(
-    error: unknown,
-  ): Pick<SentryErrorBoundaryState, 'hasError' | 'error'> {
-    return { hasError: true, error };
+  static getDerivedStateFromError(): Pick<SentryErrorBoundaryState, 'hasError'> {
+    return { hasError: true };
   }
 
   static getDerivedStateFromProps(
@@ -55,13 +51,11 @@ class SentryErrorBoundary
     return {
       resetKey: props.resetKey,
       hasError: false,
-      error: undefined,
     };
   }
 
   componentDidCatch(error: unknown) {
-    const { hasError, error: retained } = this.state;
-    captureException(hasError ? retained : error);
+    captureException(error);
   }
 
   render() {
