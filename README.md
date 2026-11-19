@@ -59,6 +59,24 @@ step; CI tests and Playwright runs do not receive it. The same step sets
 `Sentry.init` sends that value as `release` when it is non-empty. Leave it
 unset locally.
 
+Better Stack real-user monitoring (web vitals, analytics, session replays and
+front-end errors) loads on every page when `NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN`
+is set. The token is a public client-side value. It is inlined at build time
+from a GitHub Actions repository variable of the same name
+(Settings → Secrets and variables → Actions → Variables), not from a secret.
+Research Scout / Scott will set `NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN`. If the
+variable is unset or blank, the tag is not rendered, so local development,
+tests, e2e and forks send nothing. Do not commit a token. Leave the
+placeholder in `.env.local.example` empty.
+
+The tag calls `betterstack('init')` with the same environment and release as
+the Sentry SDK: `NEXT_PUBLIC_SENTRY_ENVIRONMENT` (`preview` on pull requests
+and `production` otherwise) and `NEXT_PUBLIC_SENTRY_RELEASE` (the commit SHA).
+`release` is omitted when that variable is unset. The deploy workflow passes
+the token only into the deploy job's `npm run build` step. Jest and
+Playwright do not receive it. Masking, replay and sampling are set in the
+Better Stack Frontend tab, not in this repository.
+
 Readable stack traces need the client source maps on Better Stack. The
 deploy job, after `next build` and before the Cloudflare Pages deploy, runs
 `sentry-cli sourcemaps inject` and then `sourcemaps upload` on
