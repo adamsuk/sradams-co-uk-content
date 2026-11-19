@@ -10,10 +10,14 @@ jest.mock('@sentry/browser', () => ({
 // eslint-disable-next-line import/first
 import { getSentryDsn, initSentry } from '../helpers/initSentry';
 
+const FAKE_DSN = 'https://token@ingest.example.test/1';
+const FAKE_RUM_TOKEN = 'fake-betterstack-rum-token';
+
 describe('initSentry', () => {
   const originalDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
   const originalEnvironment = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT;
   const originalRelease = process.env.NEXT_PUBLIC_SENTRY_RELEASE;
+  const originalRumToken = process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN;
 
   afterEach(() => {
     initMock.mockClear();
@@ -34,6 +38,17 @@ describe('initSentry', () => {
     } else {
       process.env.NEXT_PUBLIC_SENTRY_RELEASE = originalRelease;
     }
+    if (originalRumToken === undefined) {
+      delete process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN;
+    } else {
+      process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN = originalRumToken;
+    }
+  });
+
+  beforeEach(() => {
+    // DSN-only cases describe today's client. A token inherited from the
+    // environment would take the tag path instead.
+    delete process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN;
   });
 
   it('skips init when the DSN is unset', () => {
@@ -58,8 +73,30 @@ describe('initSentry', () => {
     expect(window.Sentry).toBeUndefined();
   });
 
+  it('does not start the standalone SDK while the Better Stack tag is on', () => {
+    process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN = `  ${FAKE_RUM_TOKEN}  `;
+    process.env.NEXT_PUBLIC_SENTRY_DSN = FAKE_DSN;
+    expect(initSentry()).toBe(false);
+    expect(initSentry(FAKE_DSN)).toBe(false);
+    expect(initMock).not.toHaveBeenCalled();
+    expect(window.Sentry).toBeUndefined();
+  });
+
+  it('still initialises when the RUM token is unset or blank and a DSN is set', () => {
+    delete process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN;
+    expect(initSentry(FAKE_DSN)).toBe(true);
+    expect(initMock).toHaveBeenCalledTimes(1);
+
+    initMock.mockClear();
+    delete window.Sentry;
+    process.env.NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN = '   ';
+    expect(initSentry(FAKE_DSN)).toBe(true);
+    expect(initMock).toHaveBeenCalledTimes(1);
+    expect(window.Sentry).toBeDefined();
+  });
+
   it('initialises the SDK when a DSN is provided', () => {
-    const dsn = 'https://token@ingest.example.test/1';
+    const dsn = FAKE_DSN;
     process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT = 'preview';
     delete process.env.NEXT_PUBLIC_SENTRY_RELEASE;
     expect(initSentry(dsn)).toBe(true);

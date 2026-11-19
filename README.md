@@ -38,9 +38,12 @@ Hosted on **Cloudflare Pages** with a direct GitHub integration — pushes to `m
 
 ## Error tracking
 
-Front-end errors are sent to Better Stack with the Sentry browser SDK when
-`NEXT_PUBLIC_SENTRY_DSN` is set. If the variable is unset, the SDK does not
-initialise, so local development, tests and e2e runs send nothing.
+Front-end errors are sent to Better Stack. When
+`NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN` is unset or blank, the standalone
+`@sentry/browser` client sends them: `pages/_app.tsx` calls `initSentry()`,
+which initialises the SDK when `NEXT_PUBLIC_SENTRY_DSN` is set. If the DSN is
+unset, the SDK does not initialise, so local development, tests and e2e runs
+send nothing.
 
 The DSN is the one shown on the application's Ingest tab in Better Stack.
 Do not commit the real value. For local testing, copy `.env.local.example` to
@@ -76,6 +79,17 @@ and `production` otherwise) and `NEXT_PUBLIC_SENTRY_RELEASE` (the commit SHA).
 the token only into the deploy job's `npm run build` step. Jest and
 Playwright do not receive it. Masking, replay and sampling are set in the
 Better Stack Frontend tab, not in this repository.
+
+The JavaScript tag and the standalone `@sentry/browser` client are mutually
+exclusive. The tag embeds Sentry's browser SDK, and both would share
+`window.Sentry`. When `NEXT_PUBLIC_BETTERSTACK_RUM_TOKEN` is set, the tag
+handles front-end errors and the standalone client is not initialised. The
+tag already calls `betterstack('init')` with the same environment and release
+(`NEXT_PUBLIC_SENTRY_ENVIRONMENT` and `NEXT_PUBLIC_SENTRY_RELEASE`), so the
+source maps uploaded by the deploy job still match. When the token is unset
+or blank, Sentry behaves as it does today: `initSentry()` runs from
+`pages/_app.tsx`, does nothing without a DSN, and initialises when a DSN is
+present.
 
 Readable stack traces need the client source maps on Better Stack. The
 deploy job, after `next build` and before the Cloudflare Pages deploy, runs
@@ -122,5 +136,7 @@ in GitHub Actions and wait for the deployment to complete. Then confirm ingest b
 running `Sentry.captureMessage("test")` in the deployed site's browser console.
 
 <!-- /coderabbit-ai-generated:v1 -->
-`window.Sentry` only exposes `captureMessage`, which is enough for that check
-and lets unused SDK exports be tree-shaken.
+When the standalone client initialises, `window.Sentry` only exposes
+`captureMessage`, which is enough for that check and lets unused SDK exports
+be tree-shaken. When the RUM token is set, the JavaScript tag owns error
+reporting and the standalone client is not initialised.

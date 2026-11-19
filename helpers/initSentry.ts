@@ -1,5 +1,7 @@
 import { init, captureMessage } from '@sentry/browser';
 
+import { getBetterStackRumToken } from './betterStackRum';
+
 declare global {
   interface Window {
     Sentry?: { captureMessage: typeof captureMessage };
@@ -36,6 +38,12 @@ function getSentryRelease(
 }
 
 export function initSentry(dsn?: string): boolean {
+  // The JavaScript tag embeds Sentry. A second client would share window.Sentry.
+  // getBetterStackRumToken matches the tag: unset or blank keeps the DSN path.
+  if (getBetterStackRumToken()) {
+    return false;
+  }
+
   const resolved = getSentryDsn(dsn ?? process.env.NEXT_PUBLIC_SENTRY_DSN);
   if (!resolved || typeof window === 'undefined') {
     return false;
