@@ -1,10 +1,13 @@
-import { init, captureMessage } from '@sentry/browser';
+import { init, captureMessage, captureException } from '@sentry/browser';
 
 import { getBetterStackRumToken } from './betterStackRum';
 
 declare global {
   interface Window {
-    Sentry?: { captureMessage: typeof captureMessage };
+    Sentry?: {
+      captureMessage: typeof captureMessage;
+      captureException?: typeof captureException;
+    };
   }
 }
 

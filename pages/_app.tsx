@@ -15,7 +15,8 @@ import { getBetterStackRumToken } from "../helpers/betterStackRum";
 import { initSentry } from "../helpers/initSentry";
 
 // The b.js tag embeds Sentry. Skip the standalone client while that token is
-// set so both do not share window.Sentry. An unset or blank token still calls
+// set so both do not share window.Sentry. The boundary retains errors until
+// the tag client is available. An unset or blank token still calls
 // initSentry(), which no-ops without a DSN and initialises when one is set.
 if (!getBetterStackRumToken()) {
   initSentry();
