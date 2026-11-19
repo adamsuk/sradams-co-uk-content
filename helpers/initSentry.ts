@@ -44,6 +44,16 @@ export function initSentry(dsn?: string): boolean {
       defaults.filter((integration) => integration.name !== 'BrowserSession')
     ),
     environment: getSentryEnvironment(),
+    // Still send errors. Do not collect user info, cookies, headers, bodies,
+    // URL query params, or stack-frame local variables.
+    dataCollection: {
+      userInfo: false,
+      cookies: false,
+      httpHeaders: false,
+      httpBodies: [],
+      urlQueryParams: false,
+      stackFrameVariables: false,
+    },
   });
 
   // So the Better Stack ingest check can be run from the browser console:

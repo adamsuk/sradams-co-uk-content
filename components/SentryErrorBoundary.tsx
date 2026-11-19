@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import NextError from 'next/error';
 import { captureException } from '@sentry/browser';
 
@@ -20,8 +20,9 @@ interface SentryErrorBoundaryState {
  * the page component keeps the existing Header/NavBar chrome.
  *
  * Failure is `hasError`, not the thrown value's truthiness. The value is
- * reported directly from componentDidCatch. Pass `resetKey` (the route) to
- * clear a failure after navigation while leaving a healthy page mounted.
+ * reported directly from componentDidCatch, with React's component stack
+ * attached as context. Pass `resetKey` (the route) to clear a failure after
+ * navigation while leaving a healthy page mounted.
  */
 class SentryErrorBoundary
   extends Component<SentryErrorBoundaryProps, SentryErrorBoundaryState> {
@@ -54,8 +55,14 @@ class SentryErrorBoundary
     };
   }
 
-  componentDidCatch(error: unknown) {
-    captureException(error);
+  componentDidCatch(error: unknown, info: ErrorInfo) {
+    captureException(error, {
+      contexts: {
+        react: {
+          componentStack: info.componentStack,
+        },
+      },
+    });
   }
 
   render() {

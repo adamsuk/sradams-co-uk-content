@@ -64,6 +64,14 @@ describe('initSentry', () => {
       replaysSessionSampleRate: 0,
       replaysOnErrorSampleRate: 0,
       environment: 'preview',
+      dataCollection: {
+        userInfo: false,
+        cookies: false,
+        httpHeaders: false,
+        httpBodies: [],
+        urlQueryParams: false,
+        stackFrameVariables: false,
+      },
     }));
     expect(options.integrations([
       { name: 'BrowserSession' },

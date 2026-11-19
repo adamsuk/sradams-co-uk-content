@@ -55,6 +55,13 @@ describe('SentryErrorBoundary', () => {
     expect(captureExceptionMock).toHaveBeenCalledTimes(1);
     expect(captureExceptionMock).toHaveBeenCalledWith(
       expect.objectContaining({ message: 'render crashed' }),
+      {
+        contexts: {
+          react: {
+            componentStack: expect.stringContaining('Boom'),
+          },
+        },
+      },
     );
     expect(
       screen.getByText(/Application error: a client-side exception has occurred/i),
@@ -84,8 +91,20 @@ describe('SentryErrorBoundary', () => {
     );
 
     expect(captureExceptionMock).toHaveBeenCalledTimes(2);
-    expect(captureExceptionMock).toHaveBeenNthCalledWith(1, first);
-    expect(captureExceptionMock).toHaveBeenNthCalledWith(2, second);
+    expect(captureExceptionMock).toHaveBeenNthCalledWith(1, first, {
+      contexts: {
+        react: {
+          componentStack: expect.stringContaining('LifecycleBoom'),
+        },
+      },
+    });
+    expect(captureExceptionMock).toHaveBeenNthCalledWith(2, second, {
+      contexts: {
+        react: {
+          componentStack: expect.stringContaining('LifecycleBoom'),
+        },
+      },
+    });
     expect(
       screen.getByText(/Application error: a client-side exception has occurred/i),
     ).toBeInTheDocument();
@@ -99,7 +118,13 @@ describe('SentryErrorBoundary', () => {
     );
 
     expect(captureExceptionMock).toHaveBeenCalledTimes(1);
-    expect(captureExceptionMock).toHaveBeenCalledWith(undefined);
+    expect(captureExceptionMock).toHaveBeenCalledWith(undefined, {
+      contexts: {
+        react: {
+          componentStack: expect.stringContaining('FalsyBoom'),
+        },
+      },
+    });
     expect(
       screen.getByText(/Application error: a client-side exception has occurred/i),
     ).toBeInTheDocument();
