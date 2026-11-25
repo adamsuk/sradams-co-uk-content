@@ -22,7 +22,7 @@
     "@tailwindcss/typography": "^0.5.20",
     "axios": "^1.21.1",
     "classnames": "^2.5.1",
-    "dotenv": "^16.0.3",
+    "dotenv": "^18.0.10",
     "factory-sim-viz": "github:adamsuk/factory-sim#v0.2.4",
     "gray-matter": "^4.0.3",
     "js-cookie": "^3.0.5",
